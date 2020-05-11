@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -44,6 +45,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.txtIP = new IPAddressControlLib.IPAddressControl();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.cmdScan = new System.Windows.Forms.Button();
             this.cmdStop = new System.Windows.Forms.Button();
@@ -51,7 +53,6 @@
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsBtnSettings = new System.Windows.Forms.ToolStripButton();
-            this.txtIP = new IPAddressControlLib.IPAddressControl();
             this.statusStrip.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -101,13 +102,13 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblError, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 31);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 27);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75.70755F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.29245F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 393);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 397);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // listVAddr
@@ -124,7 +125,7 @@
             this.listVAddr.Location = new System.Drawing.Point(4, 22);
             this.listVAddr.Margin = new System.Windows.Forms.Padding(4);
             this.listVAddr.Name = "listVAddr";
-            this.listVAddr.Size = new System.Drawing.Size(792, 275);
+            this.listVAddr.Size = new System.Drawing.Size(792, 278);
             this.listVAddr.TabIndex = 2;
             this.listVAddr.UseCompatibleStateImageBehavior = false;
             this.listVAddr.View = System.Windows.Forms.View.Details;
@@ -157,12 +158,12 @@
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 301);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 304);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(800, 92);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(800, 93);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // tableLayoutPanel4
@@ -178,8 +179,8 @@
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 91F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(560, 92);
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(560, 93);
             this.tableLayoutPanel4.TabIndex = 9;
             // 
             // panel1
@@ -191,7 +192,7 @@
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(94, 86);
+            this.panel1.Size = new System.Drawing.Size(94, 87);
             this.panel1.TabIndex = 5;
             // 
             // label1
@@ -222,8 +223,24 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(100, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(457, 86);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(457, 87);
             this.flowLayoutPanel1.TabIndex = 6;
+            // 
+            // txtIP
+            // 
+            this.txtIP.AllowInternalTab = false;
+            this.txtIP.AutoHeight = true;
+            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
+            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIP.Location = new System.Drawing.Point(4, 4);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtIP.MinimumSize = new System.Drawing.Size(84, 22);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.ReadOnly = false;
+            this.txtIP.Size = new System.Drawing.Size(111, 22);
+            this.txtIP.TabIndex = 1;
+            this.txtIP.Text = "..";
             // 
             // tableLayoutPanel3
             // 
@@ -239,7 +256,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.54945F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.45055F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(240, 92);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(240, 93);
             this.tableLayoutPanel3.TabIndex = 8;
             // 
             // cmdScan
@@ -248,7 +265,7 @@
             this.cmdScan.Location = new System.Drawing.Point(4, 4);
             this.cmdScan.Margin = new System.Windows.Forms.Padding(4);
             this.cmdScan.Name = "cmdScan";
-            this.cmdScan.Size = new System.Drawing.Size(232, 38);
+            this.cmdScan.Size = new System.Drawing.Size(232, 39);
             this.cmdScan.TabIndex = 0;
             this.cmdScan.Text = "Scan";
             this.cmdScan.UseVisualStyleBackColor = true;
@@ -258,7 +275,7 @@
             // 
             this.cmdStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdStop.Enabled = false;
-            this.cmdStop.Location = new System.Drawing.Point(4, 50);
+            this.cmdStop.Location = new System.Drawing.Point(4, 51);
             this.cmdStop.Margin = new System.Windows.Forms.Padding(4);
             this.cmdStop.Name = "cmdStop";
             this.cmdStop.Size = new System.Drawing.Size(232, 38);
@@ -292,7 +309,7 @@
             this.tsBtnSettings});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 31);
+            this.toolStrip1.Size = new System.Drawing.Size(800, 27);
             this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -302,25 +319,9 @@
             this.tsBtnSettings.Image = global::NTNN.Properties.Resources.settings;
             this.tsBtnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnSettings.Name = "tsBtnSettings";
-            this.tsBtnSettings.Size = new System.Drawing.Size(29, 28);
+            this.tsBtnSettings.Size = new System.Drawing.Size(29, 24);
             this.tsBtnSettings.Text = "toolStripButton1";
             this.tsBtnSettings.Click += new System.EventHandler(this.tsBtnSettings_Click);
-            // 
-            // txtIP
-            // 
-            this.txtIP.AllowInternalTab = false;
-            this.txtIP.AutoHeight = true;
-            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
-            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtIP.Location = new System.Drawing.Point(4, 4);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.txtIP.MinimumSize = new System.Drawing.Size(84, 22);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.ReadOnly = false;
-            this.txtIP.Size = new System.Drawing.Size(111, 22);
-            this.txtIP.TabIndex = 1;
-            this.txtIP.Text = "..";
             // 
             // Form1
             // 
@@ -330,6 +331,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
