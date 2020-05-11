@@ -73,6 +73,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundWorkerObject.cs" />
+    <Compile Include="ChartStats.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChartStats.Designer.cs">
+      <DependentUpon>ChartStats.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extension\ControlExtenstions.cs" />
     <Compile Include="Extension\ExtendedPing.cs">
       <SubType>Component</SubType>
@@ -105,6 +111,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChartStats.resx">
+      <DependentUpon>ChartStats.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

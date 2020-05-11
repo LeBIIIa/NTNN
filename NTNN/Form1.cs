@@ -34,6 +34,40 @@ namespace NTNN
 
         }
 
+        private bool CheckSettings( out string failMessage )
+        {
+            bool result = true;
+            try
+            {
+                failMessage = "Settings incomplete.  Please setup the settings for: \n";
+                if (string.IsNullOrEmpty(Properties.Settings.Default.SelectedAdapter))
+                {
+                    failMessage += " Adapter \n";
+                    result = false;
+                }
+                if (Properties.Settings.Default.Timeout < Helper.TimeoutMin ||
+                    Properties.Settings.Default.Timeout > Helper.TimeoutMax)
+                {
+                    failMessage += " Timeout \n";
+                    result = false;
+                }
+                if (Properties.Settings.Default.Attempts < Helper.AttemptsMin ||
+                                    Properties.Settings.Default.Attempts > Helper.AttemptsMax)
+                {
+                    failMessage += " Attempts \n";
+                    result = false;
+                }
+                if (result)
+                    failMessage = "";
+            }
+            catch (Exception ex)
+            {
+                LoggingHelper.LogEntry(SystemPriority.High, SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                result = false;
+                failMessage = "Internal Error! Check log file";
+            }
+            return result;
+        }
         private BackgroundWorkerObject CreateBackgroundWorker()
         {
             BackgroundWorkerObject obj = new BackgroundWorkerObject(SynchronizationContext.Current);
@@ -56,7 +90,7 @@ namespace NTNN
             }
             bwo.Subnet = txtIP.ToString();
             bwo.Container = new Extension.Container();
-            listVAddr.Clear();
+            listVAddr.Items.Clear();
             backgroundWorker.RunWorkerAsync(bwo);
         }
         private void cmdStop_Click( object sender, EventArgs e )
@@ -171,39 +205,23 @@ namespace NTNN
                 MessageBox.Show("Internal error! Check log file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private bool CheckSettings( out string failMessage )
+
+        private void statsToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            bool result = true;
-            try
+            if (backgroundWorker.IsBusy)
             {
-                failMessage = "Settings incomplete.  Please setup the settings for: \n";
-                if (string.IsNullOrEmpty(Properties.Settings.Default.SelectedAdapter))
-                {
-                    failMessage += " Adapter \n";
-                    result = false;
-                }
-                if (Properties.Settings.Default.Timeout < Helper.TimeoutMin || 
-                    Properties.Settings.Default.Timeout > Helper.TimeoutMax)
-                {
-                    failMessage += " Timeout \n";
-                    result = false;
-                }
-                if (Properties.Settings.Default.Attempts < Helper.AttemptsMin ||
-                                    Properties.Settings.Default.Attempts > Helper.AttemptsMax)
-                {
-                    failMessage += " Attempts \n";
-                    result = false;
-                }
-                if (result)
-                    failMessage = "";
+                MessageBox.Show("Wait to complete the operation!");
+                return;
             }
-            catch (Exception ex)
+
+            if (listVAddr.SelectedItems.Count > 0)
             {
-                LoggingHelper.LogEntry(SystemPriority.High, SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
-                result = false;
-                failMessage = "Internal Error! Check log file";
+                var item = listVAddr.SelectedItems[0].SubItems[0].Text;
+                using (ChartStats chart = new ChartStats(item))
+                {
+                    chart.Show();
+                }
             }
-            return result;
         }
     }
 }
