@@ -1,4 +1,4 @@
-﻿using NTNN.Extension;
+﻿using NTNN.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,33 +23,13 @@ namespace NTNN
             numericAttempts.Minimum = Helper.AttemptsMin;
             numericAttempts.Maximum = Helper.AttemptsMax;
 
-            FillAdapters();
-
             LoadSettings();
-
-
-        }
-
-        public void FillAdapters()
-        {
-            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface adapter in adapters.Where(a => a.OperationalStatus == OperationalStatus.Up))
-            {
-                if (adapter.NetworkInterfaceType != NetworkInterfaceType.Unknown)
-                {
-                    cbAdapters.Items.Add($"{adapter.Description}");
-                }
-            }
         }
 
         
         private void LoadSettings()
         {
             Properties.Settings.Default.Reload();
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.SelectedAdapter))
-            {
-                cbAdapters.SelectedItem = Properties.Settings.Default.SelectedAdapter;
-            }
             if (Properties.Settings.Default.Timeout > numericTimeout.Minimum && 
                 Properties.Settings.Default.Timeout < numericTimeout.Maximum)
             {
@@ -68,7 +48,6 @@ namespace NTNN
             {
                 Properties.Settings.Default.Attempts = (int)numericAttempts.Value;
                 Properties.Settings.Default.Timeout = (int)numericTimeout.Value;
-                Properties.Settings.Default.SelectedAdapter = cbAdapters.SelectedItem?.ToString();
                 Properties.Settings.Default.Save();
                 this.DialogResult = DialogResult.OK;
             }

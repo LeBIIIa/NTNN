@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTNN", "NTNN\NTNN.csproj", "{5406EAF1-D2F7-44C0-AC7A-6E3B9D9B5017}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GN3-API", "GN3-API\GN3-API.csproj", "{5D227EFB-F041-420A-9CC7-D0FD552DF069}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5406EAF1-D2F7-44C0-AC7A-6E3B9D9B5017}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5406EAF1-D2F7-44C0-AC7A-6E3B9D9B5017}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5406EAF1-D2F7-44C0-AC7A-6E3B9D9B5017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D227EFB-F041-420A-9CC7-D0FD552DF069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D227EFB-F041-420A-9CC7-D0FD552DF069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D227EFB-F041-420A-9CC7-D0FD552DF069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D227EFB-F041-420A-9CC7-D0FD552DF069}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

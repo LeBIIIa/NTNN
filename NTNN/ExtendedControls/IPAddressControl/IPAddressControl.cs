@@ -36,7 +36,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Linq;
 
-namespace IPAddressControlLib
+namespace NTNN.ExtendedControls.IPAddressControl
 {
   [DefaultEvent("TextChanged")]
   [DesignerAttribute(typeof(IpAddressControlDesigner))]

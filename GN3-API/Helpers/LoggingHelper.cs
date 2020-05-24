@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NTNN.Extension
+namespace GNS3_API.Helpers
 {
     public static class LoggingHelper
     {
         private static log4net.Repository.ILoggerRepository _repository = LogManager.GetRepository();
-        public static void LogEntry( SystemPriority priority, SystemCategories[] categories, string message )
+        public static void LogEntry(SystemCategories[] categories, string message )
         {
             log4net.Config.XmlConfigurator.Configure();
             ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -20,9 +20,9 @@ namespace NTNN.Extension
             }
         }
 
-        public static void LogEntry( SystemPriority priority, SystemCategories category, string message )
+        public static void LogEntry( SystemCategories category, string message )
         {
-            LogEntry(priority, new SystemCategories[] { category }, message);
+            LogEntry(new SystemCategories[] { category }, message);
         }
     }
 
@@ -33,13 +33,5 @@ namespace NTNN.Extension
         GeneralWarning,
         GeneralError,
         GeneralUnknown
-    }
-
-    public enum SystemPriority
-    {
-        Low,
-        Medium,
-        High,
-        Urgent
     }
 }

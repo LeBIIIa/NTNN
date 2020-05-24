@@ -26,7 +26,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace IPAddressControlLib
+namespace NTNN.ExtendedControls.IPAddressControl
 {
   internal class NativeMethods
   {

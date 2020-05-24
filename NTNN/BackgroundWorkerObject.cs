@@ -1,4 +1,6 @@
-﻿using NTNN.Extension;
+﻿using GNS3_API.Helpers;
+using NTNN.ExtendedControls;
+using NTNN.Helpers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -74,6 +76,7 @@ namespace NTNN
         }
         public void Scan()
         {
+            new ExtendedControls.IPAddressControl.IPAddressControl();
             try
             {
                 CreateSource();
@@ -105,14 +108,15 @@ namespace NTNN
                     var task = Task.Factory.StartNew(() => Ping(ping_var, Container.Attempts, Container.Timeout, ct), ct);
                     taskIPs.Add(task);
                 }
-                Task.WaitAll(taskIPs.ToArray());
+                Task.WaitAll(taskIPs.ToArray(), ct);
                 ClearProgress(InitProgressBar, SetTextLabel1, 0, "Finish");
                 ClearProgress(InitProgressBar, SetTextLabel2, 0, $"Found {foundDevices} device(s)");
             }
-            catch(Exception ex)
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
             {
                 ShowMessage(ex.Message);
-                LoggingHelper.LogEntry(SystemPriority.Urgent, SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
             }
         }
         private void Ping( string host, int attempts, int timeout, CancellationToken ct)
@@ -139,7 +143,7 @@ namespace NTNN
                         }
                         catch (Exception ex)
                         {
-                            LoggingHelper.LogEntry(SystemPriority.High, SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                            LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
                         }
                     });
                     th.Start();
@@ -186,7 +190,7 @@ namespace NTNN
             }
             catch (SocketException ex)
             {
-                LoggingHelper.LogEntry(SystemPriority.High, SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
             }
 
             return null;

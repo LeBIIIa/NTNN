@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NTNN.Extension
+namespace NTNN.ExtendedControls
 {
     class ExtendedPing : Ping
     {

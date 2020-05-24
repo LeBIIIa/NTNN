@@ -1,8 +1,10 @@
-﻿using LiveCharts;
+﻿using GNS3_API.Helpers;
+using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using LiveCharts.Wpf.Charts.Base;
-using NTNN.Extension;
+using NTNN.ExtendedControls;
+using NTNN.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -103,7 +105,7 @@ namespace NTNN
 
         private async void backgroundWorker_DoWork( object sender, DoWorkEventArgs e )
         {
-            int i = 0;
+            int i = MAXItems - 1;
             while (true)
             {
                 try
@@ -130,9 +132,11 @@ namespace NTNN
                 }
                 catch (Exception ex)
                 {
-                    LoggingHelper.LogEntry(SystemPriority.High, SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                    LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
                 }
-                i = ( i + 1 ) % MAXItems;
+                --i;
+                if (i < 0)
+                    i = MAXItems - 1;
                 if (backgroundWorker.CancellationPending)
                 {
                     e.Cancel = true;
@@ -145,5 +149,6 @@ namespace NTNN
         {
             backgroundWorker.CancelAsync();
         }
+
     }
 }

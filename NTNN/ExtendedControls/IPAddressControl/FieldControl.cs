@@ -30,7 +30,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 
-namespace IPAddressControlLib
+namespace NTNN.ExtendedControls.IPAddressControl
 {
   internal class FieldControl : TextBox
   {
