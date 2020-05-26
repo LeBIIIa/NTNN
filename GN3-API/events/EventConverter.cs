@@ -43,7 +43,7 @@ namespace GN3_API.events
                     ret.Event = obj.ToObject<PingEvent>();
                     break;
                 default:
-                    LoggingHelper.LogEntry(SystemCategories.GeneralWarning, $"Not implemented event: {ret.Action}");
+                    //LoggingHelper.LogEntry(SystemCategories.GeneralWarning, $"Not implemented event: {ret.Action}");
                     break;
             }
             return ret;
