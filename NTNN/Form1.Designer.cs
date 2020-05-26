@@ -285,7 +285,7 @@
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(546, 106);
             this.tableLayoutPanel4.TabIndex = 9;
             // 
@@ -410,7 +410,7 @@
             this.tabGNS3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabGNS3.Name = "tabGNS3";
             this.tabGNS3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabGNS3.Size = new System.Drawing.Size(792, 475);
+            this.tabGNS3.Size = new System.Drawing.Size(792, 479);
             this.tabGNS3.TabIndex = 1;
             this.tabGNS3.Text = "GNS3 Simulation";
             this.tabGNS3.UseVisualStyleBackColor = true;
@@ -433,7 +433,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 471);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 475);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // flowLayoutPanel2
@@ -631,7 +631,7 @@
             this.lstNodes.Location = new System.Drawing.Point(4, 76);
             this.lstNodes.Margin = new System.Windows.Forms.Padding(4);
             this.lstNodes.Name = "lstNodes";
-            this.lstNodes.Size = new System.Drawing.Size(778, 147);
+            this.lstNodes.Size = new System.Drawing.Size(778, 151);
             this.lstNodes.TabIndex = 1;
             this.lstNodes.UseCompatibleStateImageBehavior = false;
             this.lstNodes.View = System.Windows.Forms.View.Details;
@@ -698,7 +698,7 @@
             // rtbConsole
             // 
             this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbConsole.Location = new System.Drawing.Point(4, 264);
+            this.rtbConsole.Location = new System.Drawing.Point(4, 268);
             this.rtbConsole.Margin = new System.Windows.Forms.Padding(4);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
@@ -720,7 +720,7 @@
             this.tableLayoutPanel6.Controls.Add(this.btnReloadStatus, 2, 0);
             this.tableLayoutPanel6.Controls.Add(this.btnGraphics, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 227);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 231);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
@@ -778,6 +778,7 @@
             // 
             this.bwListener.WorkerSupportsCancellation = true;
             this.bwListener.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwListener_DoWork);
+            this.bwListener.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwListener_RunWorkerCompleted);
             // 
             // toolStrip1
             // 

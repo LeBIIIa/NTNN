@@ -69,11 +69,6 @@ namespace NTNN
             try
             {
                 failMessage = "Settings incomplete.  Please setup the settings for: \n";
-                if (string.IsNullOrEmpty(Properties.Settings.Default.SelectedAdapter))
-                {
-                    failMessage += " Adapter \n";
-                    result = false;
-                }
                 if (Properties.Settings.Default.Timeout < Helper.TimeoutMin ||
                     Properties.Settings.Default.Timeout > Helper.TimeoutMax)
                 {
@@ -173,8 +168,6 @@ namespace NTNN
         {
             try
             {
-                btnStartStop.Enabled = true;
-                lstNodes.Enabled = true;
                 btnStartStop.Text = StartText;
                 lstNodes.Items.Clear();
                 var projectName = txtProjectName.Text;
@@ -387,6 +380,7 @@ namespace NTNN
 
         private void bwListener_DoWork( object sender, DoWorkEventArgs e )
         {
+            btnFind.ControlInvokeAction(b => b.Enabled = false);
             Regex regex = new Regex("{|}|\"", RegexOptions.Compiled);
             WebSocket ws = null;
             var wait = TimeSpan.FromSeconds(5);
@@ -421,6 +415,10 @@ namespace NTNN
             {
                 LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message);
             }
+        }
+        private void bwListener_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+        {
+            btnFind.ControlInvokeAction(b => b.Enabled = true);
         }
         #endregion
 
@@ -467,5 +465,6 @@ namespace NTNN
         {
             e.Cancel = IsWorkingBW();
         }
+
     }
 }
