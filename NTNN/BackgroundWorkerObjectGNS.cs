@@ -114,7 +114,7 @@ namespace NTNN
                     case "tsReload":
                         Handler.ReloadNode(selectedNode);
                         break;
-                    case "tsSuspend":
+                    case "tsSuspend" when selectedNode is Router || selectedNode is Switch:
                         Handler.SuspendNode(selectedNode);
                         break;
                     default:

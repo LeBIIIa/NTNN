@@ -77,7 +77,7 @@ namespace NTNN
                 chartPackages.AxisY.Add(new Axis
                 {
                     Title = "Load, %",
-                    Separator = new Separator() { Step = 5 },
+                    Separator = new Separator() { Step = 10 },
                     MaxValue = 100,
                     MinValue = 0
                 });
@@ -116,7 +116,7 @@ namespace NTNN
                 chartSpeed.AxisY.Add(new Axis
                 {
                     Title = "Load, %",
-                    Separator = new Separator() { Step = 5},
+                    Separator = new Separator() { Step = 10 },
                     MaxValue = 100,
                     MinValue = 0
                 });
