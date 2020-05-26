@@ -41,9 +41,9 @@ namespace GNS3_API
         /// <param name="_name">Name of the node stablished in the project</param>
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
-        internal OpenWRT(string _consoleHost, ushort _port, string _name, string _id, Status status,
+        internal OpenWRT(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
             Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, _ports){}
+            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
 
         /// <summary>
         /// Constructor that replicates a router from another node
@@ -95,9 +95,9 @@ namespace GNS3_API
             string[] in_txt = null;
 
             if(IP != null && !Aux.IsIP(IP)) {
-                Console.Error.WriteLine($"{IP} is not a valid IP");
-            } else if(netmask != null && !Aux.IsNetmask(netmask)){ 
-                Console.Error.WriteLine($"{netmask} is not a valid netmask");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
+            } else if(netmask != null && !Aux.IsNetmask(netmask)){
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{netmask} is not a valid netmask");
             } else{
                 ActivateTerminal();
                 if (IP == null && netmask == null)
@@ -124,9 +124,9 @@ namespace GNS3_API
 
             ActivateTerminal();
             if (!Aux.IsIP(destination))
-                Console.Error.WriteLine($"{destination} is not a valid IP");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{destination} is not a valid IP");
             else if (!Aux.IsIP(gateway))
-                Console.Error.WriteLine($"{gateway} is not a valid gateway");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{gateway} is not a valid gateway");
             else{
                 Send($"route add -net {destination} netmask {netmask} gw {gateway}");
                 in_txt = Receive();
@@ -187,7 +187,7 @@ namespace GNS3_API
                 }
             } else{
                 table = null;
-                Console.Error.WriteLine("Impossible to analyze the routing table");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Impossible to analyze the routing table");
             }
 
             return table;

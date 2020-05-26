@@ -32,9 +32,9 @@ namespace GNS3_API
         /// <param name="_name">Name of the node stablished in the project</param>
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
-        internal EthernetSwitch(string _consoleHost, ushort _port, string _name, string _id, Status status,
+        internal EthernetSwitch(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
             Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, _ports){}
+            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
 
         /// <summary>
         /// Constructor that replicates a switch from another node

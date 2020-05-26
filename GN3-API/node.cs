@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+using GNS3_API.Helpers;
 
 namespace GNS3_API
 {
@@ -111,6 +112,8 @@ namespace GNS3_API
             }
         }
 
+        public GNS3sharp Parent { get; set; }
+
         ///////////////////////////// Constructors ////////////////////////////////////////
 
         /// <summary>
@@ -129,12 +132,13 @@ namespace GNS3_API
         /// <param name="_name">Name of the node stablished in the project</param>
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
-        internal Node(string _consoleHost, ushort? _port, string _name, string _id, Status status,
+        internal Node(string _consoleHost, ushort? _port, string _name, string _id, Status status, GNS3sharp parent,
             Dictionary<string,dynamic>[] _ports){
 
             this.consoleHost = _consoleHost; this.port = _port; this.name = _name; this.id = _id;
             this.ports = _ports;
             this.Status = status;
+            this.Parent = parent;
             (this.tcpConnection, this.netStream) = this.Connect();
         }
 
@@ -188,7 +192,7 @@ namespace GNS3_API
                 newStream = newConnection.GetStream();
                 newStream.ReadTimeout = timeout; newStream.WriteTimeout = timeout;
             } catch(Exception err){
-                Console.Error.WriteLine("Impossible to connect to the node {0}: {1}", this.name, err.Message);
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Impossible to connect to the node {name}: {err.Message}");
                 newConnection = null;
             }
             return (newConnection, newStream);
@@ -208,9 +212,9 @@ namespace GNS3_API
             if (this.tcpConnection == null)
                 (this.tcpConnection, this.netStream) = this.Connect();
             if (this.tcpConnection == null)
-                Console.Error.WriteLine("The connection couldn't be stablished and so the message can not be sent");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "The connection couldn't be stablished and so the message can not be sent");
             else if (!this.netStream.CanWrite)
-                Console.Error.WriteLine("Impossible to send any messages right now");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Impossible to send any messages right now");
             else{
                 try{
                     // We need to convert the string into a bytes array first
@@ -218,21 +222,20 @@ namespace GNS3_API
                     this.netStream.Write(buffer: out_txt, offset: 0, size: out_txt.Length);
                     this.netStream.Flush();
                 } catch(ObjectDisposedException err1){
-                    Console.Error.WriteLine("Impossible to send anything, connection closed: {0}", err1.Message);
+                    Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Impossible to send anything, connection closed: {err1.Message}");
                 } catch(NullReferenceException){
-                    Console.Error.WriteLine("Connection value is null. Probably it was not possible to initialize it");
+                    Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Connection value is null. Probably it was not possible to initialize it");
                 } catch(IOException err2){
-                    Console.Error.WriteLine("Time to write expired: {0}", err2.Message);
+                    Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Time to write expired: {err2.Message}");
                 } catch(Exception err3){
-                    Console.Error.WriteLine(
-                        "Some error occured while sending '{0}': {1}",
-                        message, err3.Message
+                    Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError,
+                        $"Some error occured while sending '{message}': {err3.Message}"
                     );
                 }
             }
 
         }
-        
+
         /// <summary>
         /// Receive messages from the buffer of the node network stream
         /// </summary>
@@ -243,7 +246,7 @@ namespace GNS3_API
         /// <example>
         /// <code>
         /// foreach(string line in PC.Receive())
-        ///     Console.WriteLine("${line}");
+        ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "${line}");
         /// </code>
         /// </example>
         public string[] Receive(int timeBetweenReads = 2){
@@ -269,11 +272,11 @@ namespace GNS3_API
                             numberOfBytesRead = this.netStream.Read(buffer: in_bytes, offset: 0, size: in_bytes.Length);
                             in_txt = $"{in_txt}{Encoding.Default.GetString(in_bytes, 0, numberOfBytesRead)}";
                         } catch(NullReferenceException){
-                            Console.Error.WriteLine("Connection is null. Probably it was not possible to initialize it");
+                            Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Connection is null. Probably it was not possible to initialize it");
                         } catch(IOException err1){
-                            Console.Error.WriteLine("Time to write expired: {0}", err1.Message);
+                            Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Time to write expired: {err1.Message}");
                         } catch(Exception err2){
-                            Console.Error.WriteLine("Some error occured while receiving text: {0}", err2.Message);
+                            Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Some error occured while receiving text: {err2.Message}");
                         }
                     } while (this.netStream.DataAvailable);
                     // We need to wait for the server to process our messages
@@ -285,7 +288,7 @@ namespace GNS3_API
             }
             return in_txt_split;
         }
-        
+
         /// <summary>
         /// Send Ping to a certain IP
         /// </summary>
@@ -295,7 +298,7 @@ namespace GNS3_API
         /// <example>
         /// <code>
         /// foreach(string line in PC.Ping("192.168.30.5"))
-        ///     Console.WriteLine($"{line}");
+        ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{line}");
         /// </code>
         /// </example>
         public virtual string[] Ping(string IP, ushort count=5){
@@ -311,7 +314,7 @@ namespace GNS3_API
         /// <example>
         /// <code>
         /// foreach(string line in PC.Ping("192.168.30.5"))
-        ///     Console.WriteLine($"{line}");
+        ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{line}");
         /// </code>
         /// </example>
         protected string[] Ping(
@@ -323,7 +326,7 @@ namespace GNS3_API
                 Send($"ping {IP} {additionalParameters}");
                 in_txt = Receive();
             } else{
-                Console.Error.WriteLine($"{IP} is not a valid IP");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
             }
 
             // Return the response
@@ -338,7 +341,7 @@ namespace GNS3_API
         /// <example>
         /// <code>
         /// if (PC.PingResult(PC.Ping("192.168.30.5")))
-        ///     Console.WriteLine("The ping went ok");
+        ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "The ping went ok");
         /// </code>
         /// </example>
         public virtual bool PingResult(string[] pingMessage){

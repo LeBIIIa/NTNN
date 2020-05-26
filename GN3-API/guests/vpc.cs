@@ -35,9 +35,9 @@ namespace GNS3_API
         /// <param name="_name">Name of the node stablished in the project</param>
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
-        internal VPC(string _consoleHost, ushort _port, string _name, string _id, Status status,
+        internal VPC(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
             Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, _ports){}
+            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
 
         /// <summary>
         /// Constructor that replicates a guest from another node
@@ -79,7 +79,7 @@ namespace GNS3_API
                 Send($"clear {parameter}");
                 in_txt = Receive();
             } else{
-                Console.Error.WriteLine("Invalid parameter to send");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Invalid parameter to send");
             }
             // Return the response
             return in_txt;
@@ -136,7 +136,7 @@ namespace GNS3_API
             short netmaskInt = Aux.NetmaskCIDR(netmask);
 
             if (netmaskInt == -1){
-                Console.Error.WriteLine($"{netmask} is not a valid netmask");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{netmask} is not a valid netmask");
             } else if(Aux.IsIP(IP) && gateway == null) {
                 Send($"ip {IP}/{netmaskInt}");
                 in_txt = Receive();
@@ -144,10 +144,10 @@ namespace GNS3_API
                 if (Aux.IsIP(gateway)){
                     Send($"ip {IP}/{netmaskInt} {gateway}");
                 } else{
-                    Console.Error.WriteLine($"{gateway} is not a valid gateway");
+                    Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{gateway} is not a valid gateway");
                 }
             } else {
-                Console.Error.WriteLine($"{IP} is not a valid IP");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError,  $"{IP} is not a valid IP");
             }
             // Return the response
             return in_txt;
@@ -180,7 +180,7 @@ namespace GNS3_API
         /// <example>
         /// <code>
         /// if (PC.PingResult(PC.Ping("192.168.30.5")))
-        ///     Console.WriteLine("The ping went ok");
+        ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "The ping went ok");
         /// </code>
         /// </example>
         public override bool PingResult(string[] pingMessage){
@@ -216,7 +216,7 @@ namespace GNS3_API
                 Send($"trace {IP}");
                 in_txt = Receive();
             } else{
-                Console.Error.WriteLine($"{IP} is not a valid IP");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
             }
             // Return the response
             return in_txt;

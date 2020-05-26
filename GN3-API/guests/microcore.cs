@@ -34,9 +34,9 @@ namespace GNS3_API
         /// <param name="_name">Name of the node stablished in the project</param>
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
-        internal MicroCore(string _consoleHost, ushort _port, string _name, string _id, Status status,
+        internal MicroCore(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
             Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, _ports){}
+            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
 
         /// <summary>
         /// Constructor that replicates a guest from another node
@@ -60,11 +60,11 @@ namespace GNS3_API
             string[] in_txt = null;
 
             if(!Aux.IsIP(IP)) {
-                Console.Error.WriteLine($"{IP} is not a valid IP");
-            } else if(!Aux.IsNetmask(netmask)){ 
-                Console.Error.WriteLine($"{netmask} is not a valid netmask");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
+            } else if(!Aux.IsNetmask(netmask)){
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{netmask} is not a valid netmask");
             } else{
-                Send($"sudo ifconfig eth{adapterNumber.ToString()} {IP} netmask {netmask}");
+                Send($"sudo ifconfig eth{adapterNumber} {IP} netmask {netmask}");
                 in_txt = Receive();
                 if (gateway != null) {
                     // If we choose to set a gateway
@@ -89,7 +89,7 @@ namespace GNS3_API
                 Send($"sudo route add default gw {gateway}");
                 in_txt = Receive();
             } else{
-                Console.Error.WriteLine($"{gateway} is not a valid gateway");
+                Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{gateway} is not a valid gateway");
             }
             // Return the response
             return in_txt;

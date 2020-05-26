@@ -149,6 +149,11 @@ namespace GNS3_API {
 
         ///////////////////////////////// Methods ////////////////////////////////////////////
         
+        public void InvokeLogEvent(SystemCategories sc, string msg)
+        {
+            LogEvent?.Invoke(sc, msg);
+        }
+        
         /// <summary>
         /// Set credentials with user and password
         /// </summary>
@@ -423,6 +428,7 @@ namespace GNS3_API {
                                 node["name"]?.ToString(),
                                 node["node_id"]?.ToString(),
                                 status,
+                                this,
                                 GetNodeListOfPorts(node)
                             }
                         );

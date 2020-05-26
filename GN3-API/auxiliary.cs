@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using GNS3_API.Helpers;
 
 namespace GNS3_API
 {
@@ -243,7 +244,7 @@ namespace GNS3_API
                     destination, gateway, netmask, iface, metric
                 ));
             } else{
-                Console.Error.WriteLine("Impossible to add the new row: some of the parameters were not valid");
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, "Impossible to add the new row: some of the parameters were not valid");
             }
         }
     }
