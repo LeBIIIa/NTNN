@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JsonSubTypes, Version=1.7.0.0, Culture=neutral, PublicKeyToken=ee75fc290dbc1176, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonSubTypes.1.7.0\lib\net47\JsonSubTypes.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -48,6 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="auxiliary.cs" />
+    <Compile Include="events\EventConverter.cs" />
+    <Compile Include="events\IEvent.cs" />
+    <Compile Include="events\Notification.cs" />
+    <Compile Include="events\PingEvent.cs" />
     <Compile Include="gsn3sharp.cs" />
     <Compile Include="guests\guest.cs" />
     <Compile Include="guests\microcore.cs" />
@@ -67,5 +74,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

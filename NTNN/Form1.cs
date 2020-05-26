@@ -1,5 +1,8 @@
-﻿using GNS3_API;
+﻿using GN3_API.events;
+using GNS3_API;
 using GNS3_API.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NTNN.Helpers;
 using System;
 using System.Collections.Generic;
@@ -23,22 +26,21 @@ namespace NTNN
 {
     public partial class Form1 : Form
     {
+        BackgroundWorkerObjectGNS bwoGNS;
         BackgroundWorkerObject bwo;
-        GNS3sharp handler;
 
-        string projectId, host;
-        ushort port;
-
-        private static readonly string StartText = "Start";
-        private static readonly string StopText = "Stop";
+        public static readonly string StartText = "Start";
+        public static readonly string StopText = "Stop";
 
         public Form1()
         {
             InitializeComponent();
-            bwo = CreateBackgroundWorker();
+            (bwo, bwoGNS) = CreateBackgroundWorker();
 
+            btnReloadStatus.Enabled = false;
             btnStartStop.Enabled = false;
             lstNodes.Enabled = false;
+            btnGraphics.Enabled = false;
 
             if (!CheckSettings(out _))
             {
@@ -95,7 +97,7 @@ namespace NTNN
             }
             return result;
         }
-        private BackgroundWorkerObject CreateBackgroundWorker()
+        private (BackgroundWorkerObject, BackgroundWorkerObjectGNS) CreateBackgroundWorker()
         {
             BackgroundWorkerObject obj = new BackgroundWorkerObject(SynchronizationContext.Current);
             obj.InitProgressBar += InitProgressBar;
@@ -105,7 +107,31 @@ namespace NTNN
             obj.SetAutoIP += SetAutoIP;
             obj.AddDevice += AddDevice;
             obj.ShowMessageBox += ShowMessageBox;
-            return obj;
+
+            BackgroundWorkerObjectGNS gns = new BackgroundWorkerObjectGNS(SynchronizationContext.Current, bwListener);
+            gns.InitProgressBar += InitProgressBar;
+            gns.SetTextLabel1 += SetTextLabel1;
+            gns.SetTextLabel2 += SetTextLabel2;
+            gns.UpdateProgressBar += UpdateProgressBar;
+            gns.ShowMessageBoxWithResult += ShowMessageBoxWithResult;
+            gns.SetNodeStatus += SetNodeStatus;
+            gns.UpdateNodesTable += UpdateNodesTable;
+            gns.StartProject += StartProject;
+            gns.StopProject += StopProject;
+            gns.GetSelectedNodeName += GetSelectedNodeName;
+
+            return (obj, gns);
+        }
+
+        private bool IsWorkingBW( bool showMsg = true )
+        {
+            if (backgroundWorker.IsBusy || bwGNS3_API.IsBusy || bwListener.IsBusy)
+            {
+                if (showMsg)
+                    MessageBox.Show("There is running operation!");
+                return true;
+            }
+            return false;
         }
 
         #region Tab1
@@ -134,7 +160,7 @@ namespace NTNN
             if (listVAddr.SelectedItems.Count > 0)
             {
                 var item = listVAddr.SelectedItems[0].SubItems[0].Text;
-                using (ChartStats chart = new ChartStats(item))
+                using (ChartStats chart = new ChartStats(item, TypeOfGraph.RealSimulation))
                 {
                     chart.ShowDialog();
                 }
@@ -173,9 +199,7 @@ namespace NTNN
                     MessageBox.Show($"Project with name {projectName} isn't found!");
                     return;
                 }
-                this.host = host;
-                this.port = port;
-                this.projectId = projectId;
+                bwoGNS.SetGns3Data(projectName, projectId, host, port);
                 bwGNS3_API.RunWorkerAsync(sender);
             }
             catch (Exception ex)
@@ -199,14 +223,12 @@ namespace NTNN
         {
             bwGNS3_API.RunWorkerAsync(sender);
         }
-        private void UpdateNodesTable()
+        private void btnGraphics_Click( object sender, EventArgs e )
         {
-            lstNodes.ControlInvokeAction(lst => lst.Items.Clear());
-            if (handler != null)
-                foreach (Node n in handler.Nodes)
-                {
-                    lstNodes.ControlInvokeAction(lst => lst.Items.Add(new ListViewItem(new[] { n.ConsoleHost, n.Port.ToString(), n.Name, n.GetType().Name.ToString(), n.GetStatus })));
-                }
+            using (ChartStats chart = new ChartStats(bwoGNS.Handler.NotificationUrlListener, TypeOfGraph.GNS3Simulation))
+            {
+                chart.ShowDialog();
+            }
         }
         #endregion
 
@@ -219,6 +241,11 @@ namespace NTNN
         private void SetTextLabel1( string text )
         {
             lblStatus1.ToolStripStatusInvokeAction(t => t.Text = text);
+        }
+        private void SetTextLabel2( SystemCategories category, string text )
+        {
+            lblStatus2.ToolStripStatusInvokeAction(t => t.Text = text);
+            LoggingHelper.LogEntry(category, text);
         }
         private void SetTextLabel2( string text )
         {
@@ -249,9 +276,53 @@ namespace NTNN
         {
             listVAddr.ControlInvokeAction(l => l.Items.Add(new ListViewItem(items)));
         }
+
         private void ShowMessageBox( string text )
         {
             MessageBox.Show(text);
+        }
+        private bool ShowMessageBoxWithResult( string text )
+        {
+            return MessageBox.Show(text, "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes;
+        }
+
+        private void UpdateNodesTable()
+        {
+            lstNodes.ControlInvokeAction(lst => lst.Items.Clear());
+            if (bwoGNS.Handler != null)
+                foreach (Node n in bwoGNS.Handler.Nodes)
+                {
+                    lstNodes.ControlInvokeAction(lst => lst.Items.Add(new ListViewItem(new[] { n.ConsoleHost, n.Port?.ToString(), n.Name, n.GetType().Name.ToString(), n.GetStatus })));
+                }
+        }
+        private void SetNodeStatus(string status)
+        {
+            lstNodes.ControlInvokeAction(lst => lst.SelectedItems[0].SubItems[4].Text = status);
+        }
+        private string GetSelectedNodeName()
+        {
+            string name = null;
+            this.Invoke(new MethodInvoker(() => name = lstNodes.SelectedItems[0].SubItems[2].Text));
+            return name;
+        } 
+
+        private void StartProject(Button btn)
+        {
+            btn.ControlInvokeAction(b =>
+            {
+                b.BackColor = Color.IndianRed;
+                b.Text = StopText;
+                rtbConsole.Visible = true;
+            });
+        }
+        private void StopProject(Button btn)
+        {
+            btn.ControlInvokeAction(b =>
+            {
+                b.BackColor = Color.LightGreen;
+                b.Text = StartText;
+                rtbConsole.Visible = false;
+            });
         }
 
         private void AddLine(string text)
@@ -259,6 +330,8 @@ namespace NTNN
             rtbConsole.ControlInvokeAction(console => console.AppendText($"{text}\r\n"));
         }
         #endregion
+
+        #region background workers
 
         private void backgroundWorker_DoWork( object sender, DoWorkEventArgs e )
         {
@@ -285,6 +358,71 @@ namespace NTNN
                 InitProgressBar(0);
             }
         }
+        private void bwGNS3_API_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+        {
+            btnFind.Enabled = true;
+            if (bwoGNS.Handler == null)
+            {
+                btnReloadStatus.Enabled = false;
+                btnStartStop.Enabled = false;
+                lstNodes.Enabled = false;
+                btnGraphics.Enabled = false;
+            }
+            else
+            {
+                btnReloadStatus.Enabled = true;
+                btnStartStop.Enabled = true;
+                lstNodes.Enabled = true;
+                btnGraphics.Enabled = true;
+            }
+        }
+
+        private void bwGNS3_API_DoWork( object sender, DoWorkEventArgs e )
+        {
+            btnFind.ControlInvokeAction(b => b.Enabled = false);
+            btnReloadStatus.ControlInvokeAction(b => b.Enabled = false);
+            btnStartStop.ControlInvokeAction(b => b.Enabled = false);
+            bwoGNS.DoWork(e.Argument);
+        }
+
+        private void bwListener_DoWork( object sender, DoWorkEventArgs e )
+        {
+            Regex regex = new Regex("{|}|\"", RegexOptions.Compiled);
+            WebSocket ws = null;
+            var wait = TimeSpan.FromSeconds(5);
+            try
+            {
+                using (ws = new WebSocket($"ws://{bwoGNS.Handler.NotificationUrlListener}"))
+                {
+                    Notification notify;
+                    ws.WaitTime = wait;
+                    ws.OnMessage += ( s, ev ) =>
+                    {
+                        notify = JsonConvert.DeserializeObject<Notification>(ev.Data);
+                        if (notify.Event is PingEvent)
+                            Helper.CheckHighLoad(notify, !string.IsNullOrEmpty(bwoGNS.ProjectName) ? bwoGNS.ProjectName : bwoGNS.Handler.ProjectID );
+                        Helper.LogEvent(notify, Helper.SPLogEvent);
+                        var text = regex.Replace(ev.Data, "");
+                        AddLine($"> {text}");
+                    };
+                    ws.Connect();
+                    while (true)
+                    {
+                        if (bwListener.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                        Thread.Sleep(wait);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message);
+            }
+        }
+        #endregion
 
         private void Form1_FormClosing( object sender, FormClosingEventArgs e )
         {
@@ -328,142 +466,6 @@ namespace NTNN
         private void tabControl_Selecting( object sender, TabControlCancelEventArgs e )
         {
             e.Cancel = IsWorkingBW();
-        }
-
-        private bool IsWorkingBW( bool showMsg = true )
-        {
-            if (backgroundWorker.IsBusy || bwGNS3_API.IsBusy || bwListener.IsBusy)
-            {
-                if (showMsg)
-                    MessageBox.Show("There is running operation!");
-                return true;
-            }
-            return false;
-        }
-
-        private void bwGNS3_API_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
-        {
-            btnFind.Enabled = true;
-            if (handler == null)
-            {
-                btnReloadStatus.Enabled = false;
-                btnStartStop.Enabled = false;
-                lstNodes.Enabled = false;
-            }
-            else
-            {
-                btnReloadStatus.Enabled = true;
-                btnStartStop.Enabled = true;
-                lstNodes.Enabled = true;
-            }
-        }
-
-        private void bwGNS3_API_DoWork( object sender, DoWorkEventArgs e )
-        {
-            btnFind.ControlInvokeAction(b => b.Enabled = false);
-            btnReloadStatus.ControlInvokeAction(b => b.Enabled = false);
-            btnStartStop.ControlInvokeAction(b => b.Enabled = false);
-            if (e.Argument is Button btn)
-            {
-                switch (btn.Name)
-                {
-                    case "btnFind":
-                        handler = new GNS3sharp(projectId, SetTextLabel1, host, port);
-                        UpdateNodesTable();
-                        break;
-                    case "btnReloadStatus":
-                        handler.UpdateProject();
-                        UpdateNodesTable();
-                        break;
-                    case "btnStartStop":
-                        string text = "";
-                        this.Invoke(new MethodInvoker(() => text = btn.Text));
-                        if (text == StartText)
-                        {
-                            handler.StartProject();
-                            btn.ControlInvokeAction(b =>
-                            {
-                                b.BackColor = Color.IndianRed;
-                                b.Text = StopText;
-                                rtbConsole.Visible = true;
-                            });
-                            bwListener.RunWorkerAsync();
-                        }
-                        else if (text == StopText)
-                        {
-                            handler.StopProject();
-                            btn.ControlInvokeAction(b =>
-                            {
-                                b.BackColor = Color.LightGreen;
-                                b.Text = StartText;
-                                rtbConsole.Visible = false;
-                            });
-                            bwListener.CancelAsync();
-                        }
-                        UpdateNodesTable();
-                        break;
-                }
-            }
-            else if (e.Argument is ToolStripItem tsi)
-            {
-                string item = "";
-                this.Invoke(new MethodInvoker(() => item = lstNodes.SelectedItems[0].SubItems[2].Text ));
-                var selectedNode = handler.GetNodeByName(item);
-                switch (tsi.Name)
-                {
-                    case "tsStart":
-                        handler.StartNode(selectedNode);
-                        break;
-                    case "tsStop":
-                        handler.StopNode(selectedNode);
-                        break;
-                    case "tsReload":
-                        handler.ReloadNode(selectedNode);
-                        break;
-                    case "tsSuspend":
-                        handler.SuspendNode(selectedNode);
-                        break;
-                    default:
-                        MessageBox.Show("Incorrect menu item selected!");
-                        break;
-                }
-                lstNodes.ControlInvokeAction(lst => lst.SelectedItems[0].SubItems[4].Text = selectedNode.GetStatus);
-            }
-        }
-
-        private void bwListener_DoWork( object sender, DoWorkEventArgs e )
-        {
-            CancellationTokenSource source = new CancellationTokenSource();
-            var token = source.Token;
-            WebSocket ws = null;
-            try
-            {
-                using (ws = new WebSocket($"ws://{handler.NotificationUrlListener}"))
-                {
-                    ws.OnMessage += ( s, ev ) =>
-                    {
-                        var text = Regex.Replace(ev.Data, "{|}|\"", "");
-                        AddLine($"> {text}");
-                    };
-                    ws.Connect();
-                    while (true)
-                    {
-                        if (bwListener.CancellationPending)
-                            source.Cancel();
-                        token.ThrowIfCancellationRequested();
-                    }
-                }
-            }
-            catch (OperationCanceledException) { }
-            catch (Exception ex)
-            {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message);
-            }
-            finally
-            {
-                if (ws?.IsAlive == true)
-                    ws.Close();
-            }
         }
     }
 }

@@ -53,6 +53,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnScan = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
@@ -70,9 +71,11 @@
             this.txtPort = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.lblUserName = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.btnFind = new System.Windows.Forms.Button();
             this.lstNodes = new System.Windows.Forms.ListView();
             this.columnHost = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -89,11 +92,11 @@
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.btnStartStop = new System.Windows.Forms.Button();
             this.btnReloadStatus = new System.Windows.Forms.Button();
+            this.btnGraphics = new System.Windows.Forms.Button();
             this.bwGNS3_API = new System.ComponentModel.BackgroundWorker();
             this.bwListener = new System.ComponentModel.BackgroundWorker();
-            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl();
-            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
-            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsBtnSettings = new System.Windows.Forms.ToolStripButton();
             this.statusStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -114,6 +117,7 @@
             this.panel6.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -173,11 +177,11 @@
             this.tabControl.Controls.Add(this.tabRealData);
             this.tabControl.Controls.Add(this.tabGNS3);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Location = new System.Drawing.Point(0, 27);
             this.tabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(800, 535);
+            this.tabControl.Size = new System.Drawing.Size(800, 508);
             this.tabControl.TabIndex = 6;
             this.tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl_Selecting);
             // 
@@ -188,7 +192,7 @@
             this.tabRealData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabRealData.Name = "tabRealData";
             this.tabRealData.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabRealData.Size = new System.Drawing.Size(792, 395);
+            this.tabRealData.Size = new System.Drawing.Size(792, 479);
             this.tabRealData.TabIndex = 0;
             this.tabRealData.Text = "Real time simulation";
             this.tabRealData.UseVisualStyleBackColor = true;
@@ -204,11 +208,12 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 2);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75.70755F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.29245F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 391);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 475);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // listVAddr
@@ -226,7 +231,7 @@
             this.listVAddr.Location = new System.Drawing.Point(4, 22);
             this.listVAddr.Margin = new System.Windows.Forms.Padding(4);
             this.listVAddr.Name = "listVAddr";
-            this.listVAddr.Size = new System.Drawing.Size(778, 274);
+            this.listVAddr.Size = new System.Drawing.Size(778, 322);
             this.listVAddr.TabIndex = 2;
             this.listVAddr.UseCompatibleStateImageBehavior = false;
             this.listVAddr.View = System.Windows.Forms.View.Details;
@@ -259,12 +264,12 @@
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 300);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 348);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(786, 91);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(786, 106);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // tableLayoutPanel4
@@ -280,8 +285,8 @@
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 91F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(546, 91);
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(546, 106);
             this.tableLayoutPanel4.TabIndex = 9;
             // 
             // panel1
@@ -293,7 +298,7 @@
             this.panel1.Location = new System.Drawing.Point(3, 2);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 0, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(91, 87);
+            this.panel1.Size = new System.Drawing.Size(91, 102);
             this.panel1.TabIndex = 5;
             // 
             // label1
@@ -325,8 +330,24 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(97, 2);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(446, 87);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(446, 102);
             this.flowLayoutPanel1.TabIndex = 6;
+            // 
+            // txtIP
+            // 
+            this.txtIP.AllowInternalTab = false;
+            this.txtIP.AutoHeight = true;
+            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
+            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIP.Location = new System.Drawing.Point(5, 5);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
+            this.txtIP.MinimumSize = new System.Drawing.Size(84, 22);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.ReadOnly = false;
+            this.txtIP.Size = new System.Drawing.Size(111, 22);
+            this.txtIP.TabIndex = 1;
+            this.txtIP.Text = "..";
             // 
             // tableLayoutPanel3
             // 
@@ -342,7 +363,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.54945F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.45055F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(240, 91);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(240, 106);
             this.tableLayoutPanel3.TabIndex = 8;
             // 
             // btnScan
@@ -351,7 +372,7 @@
             this.btnScan.Location = new System.Drawing.Point(4, 4);
             this.btnScan.Margin = new System.Windows.Forms.Padding(4);
             this.btnScan.Name = "btnScan";
-            this.btnScan.Size = new System.Drawing.Size(232, 37);
+            this.btnScan.Size = new System.Drawing.Size(232, 45);
             this.btnScan.TabIndex = 0;
             this.btnScan.Text = "Scan";
             this.btnScan.UseVisualStyleBackColor = true;
@@ -361,10 +382,10 @@
             // 
             this.btnStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(4, 49);
+            this.btnStop.Location = new System.Drawing.Point(4, 57);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(232, 38);
+            this.btnStop.Size = new System.Drawing.Size(232, 45);
             this.btnStop.TabIndex = 1;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -389,7 +410,7 @@
             this.tabGNS3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabGNS3.Name = "tabGNS3";
             this.tabGNS3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabGNS3.Size = new System.Drawing.Size(792, 506);
+            this.tabGNS3.Size = new System.Drawing.Size(792, 475);
             this.tabGNS3.TabIndex = 1;
             this.tabGNS3.Text = "GNS3 Simulation";
             this.tabGNS3.UseVisualStyleBackColor = true;
@@ -412,7 +433,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 502);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 471);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // flowLayoutPanel2
@@ -531,6 +552,16 @@
             this.panel5.Size = new System.Drawing.Size(278, 29);
             this.panel5.TabIndex = 4;
             // 
+            // txtUserName
+            // 
+            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.txtUserName.Location = new System.Drawing.Point(90, 4);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(185, 22);
+            this.txtUserName.TabIndex = 7;
+            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
+            this.txtUserName.WaterMarkText = "(Optional)";
+            // 
             // lblUserName
             // 
             this.lblUserName.AutoSize = true;
@@ -561,6 +592,16 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Password:";
             // 
+            // txtPassword
+            // 
+            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.txtPassword.Location = new System.Drawing.Point(82, 4);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(185, 22);
+            this.txtPassword.TabIndex = 6;
+            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
+            this.txtPassword.WaterMarkText = "(Optional)";
+            // 
             // btnFind
             // 
             this.btnFind.Location = new System.Drawing.Point(564, 36);
@@ -590,7 +631,7 @@
             this.lstNodes.Location = new System.Drawing.Point(4, 76);
             this.lstNodes.Margin = new System.Windows.Forms.Padding(4);
             this.lstNodes.Name = "lstNodes";
-            this.lstNodes.Size = new System.Drawing.Size(778, 178);
+            this.lstNodes.Size = new System.Drawing.Size(778, 147);
             this.lstNodes.TabIndex = 1;
             this.lstNodes.UseCompatibleStateImageBehavior = false;
             this.lstNodes.View = System.Windows.Forms.View.Details;
@@ -657,7 +698,7 @@
             // rtbConsole
             // 
             this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbConsole.Location = new System.Drawing.Point(4, 295);
+            this.rtbConsole.Location = new System.Drawing.Point(4, 264);
             this.rtbConsole.Margin = new System.Windows.Forms.Padding(4);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
@@ -670,14 +711,16 @@
             // 
             this.tableLayoutPanel6.AutoSize = true;
             this.tableLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel6.ColumnCount = 3;
+            this.tableLayoutPanel6.ColumnCount = 4;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.Controls.Add(this.btnStartStop, 2, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnReloadStatus, 1, 0);
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel6.Controls.Add(this.btnStartStop, 3, 0);
+            this.tableLayoutPanel6.Controls.Add(this.btnReloadStatus, 2, 0);
+            this.tableLayoutPanel6.Controls.Add(this.btnGraphics, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 258);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 227);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
@@ -714,6 +757,18 @@
             this.btnReloadStatus.UseVisualStyleBackColor = true;
             this.btnReloadStatus.Click += new System.EventHandler(this.btnReloadStatus_Click);
             // 
+            // btnGraphics
+            // 
+            this.btnGraphics.AutoSize = true;
+            this.btnGraphics.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnGraphics.Location = new System.Drawing.Point(509, 3);
+            this.btnGraphics.Name = "btnGraphics";
+            this.btnGraphics.Size = new System.Drawing.Size(78, 27);
+            this.btnGraphics.TabIndex = 4;
+            this.btnGraphics.Text = "Graphics";
+            this.btnGraphics.UseVisualStyleBackColor = true;
+            this.btnGraphics.Click += new System.EventHandler(this.btnGraphics_Click);
+            // 
             // bwGNS3_API
             // 
             this.bwGNS3_API.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwGNS3_API_DoWork);
@@ -724,41 +779,26 @@
             this.bwListener.WorkerSupportsCancellation = true;
             this.bwListener.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwListener_DoWork);
             // 
-            // txtIP
+            // toolStrip1
             // 
-            this.txtIP.AllowInternalTab = false;
-            this.txtIP.AutoHeight = true;
-            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
-            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtIP.Location = new System.Drawing.Point(5, 5);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
-            this.txtIP.MinimumSize = new System.Drawing.Size(84, 22);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.ReadOnly = false;
-            this.txtIP.Size = new System.Drawing.Size(111, 22);
-            this.txtIP.TabIndex = 1;
-            this.txtIP.Text = "..";
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsBtnSettings});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(800, 27);
+            this.toolStrip1.TabIndex = 16;
+            this.toolStrip1.Text = "toolStrip1";
             // 
-            // txtUserName
+            // tsBtnSettings
             // 
-            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtUserName.Location = new System.Drawing.Point(90, 4);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(185, 22);
-            this.txtUserName.TabIndex = 7;
-            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtUserName.WaterMarkText = "(Optional)";
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtPassword.Location = new System.Drawing.Point(82, 4);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(185, 22);
-            this.txtPassword.TabIndex = 6;
-            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtPassword.WaterMarkText = "(Optional)";
+            this.tsBtnSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsBtnSettings.Image = global::NTNN.Properties.Resources.settings;
+            this.tsBtnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnSettings.Name = "tsBtnSettings";
+            this.tsBtnSettings.Size = new System.Drawing.Size(29, 24);
+            this.tsBtnSettings.Text = "toolStripButton1";
+            this.tsBtnSettings.Click += new System.EventHandler(this.Settings_Click);
             // 
             // Form1
             // 
@@ -767,6 +807,7 @@
             this.ClientSize = new System.Drawing.Size(800, 561);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
@@ -804,6 +845,8 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -872,6 +915,9 @@
         private System.Windows.Forms.Button btnReloadStatus;
         private System.ComponentModel.BackgroundWorker bwGNS3_API;
         private System.ComponentModel.BackgroundWorker bwListener;
+        private System.Windows.Forms.Button btnGraphics;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton tsBtnSettings;
     }
 }
 

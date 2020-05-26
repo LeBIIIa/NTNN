@@ -42,12 +42,12 @@ namespace GNS3_API
         /// <value>String IP</value>
         public string ConsoleHost { get => consoleHost; }
 
-        protected ushort port;
+        protected ushort? port;
         /// <summary>
         /// Port of the machine where the node is hosted
         /// </summary>
         /// <value>Port number</value>
-        public ushort Port { get => port; }
+        public ushort? Port { get => port; }
 
         protected string name;
         /// <summary>
@@ -129,7 +129,7 @@ namespace GNS3_API
         /// <param name="_name">Name of the node stablished in the project</param>
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
-        internal Node(string _consoleHost, ushort _port, string _name, string _id, Status status,
+        internal Node(string _consoleHost, ushort? _port, string _name, string _id, Status status,
             Dictionary<string,dynamic>[] _ports){
 
             this.consoleHost = _consoleHost; this.port = _port; this.name = _name; this.id = _id;
@@ -175,8 +175,10 @@ namespace GNS3_API
         /// <param name="timeout">Timeout (in seconds) before quitting the connection</param>
         /// <returns></returns>
         protected (TcpClient Connection, NetworkStream Stream) Connect(int timeout = 10000){
+            if (!port.HasValue)
+                return (null, null);
             // Network endpoint as an IP address and a port number
-            IPEndPoint address = new IPEndPoint(IPAddress.Parse(this.consoleHost),this.port);
+            IPEndPoint address = new IPEndPoint(IPAddress.Parse(this.consoleHost),this.port.Value);
             // Set the socket for the connection
             TcpClient newConnection = new TcpClient();
             // Stream used to send and receive data

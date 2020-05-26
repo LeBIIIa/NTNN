@@ -6,6 +6,9 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using NTNN.ConfigurationHelpers;
+using GN3_API.events;
+using log4net.Core;
+using GNS3_API.Helpers;
 
 namespace NTNN.DAL
 {

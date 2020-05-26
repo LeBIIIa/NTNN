@@ -413,12 +413,15 @@ namespace GNS3_API {
                         }
 
                         // Invoke the previous constructor and create the instance through it
+                        ushort? port = null;
+                        if (ushort.TryParse(node["console"]?.ToString(), out ushort portT))
+                            port = portT;
                         listOfNodes[i] = (Node)ctor.Invoke(
                             new object[]{
-                                node["console_host"].ToString(), 
-                                ushort.Parse(node["console"].ToString()), 
-                                node["name"].ToString(),
-                                node["node_id"].ToString(),
+                                node["console_host"]?.ToString(), 
+                                port, 
+                                node["name"]?.ToString(),
+                                node["node_id"]?.ToString(),
                                 status,
                                 GetNodeListOfPorts(node)
                             }
