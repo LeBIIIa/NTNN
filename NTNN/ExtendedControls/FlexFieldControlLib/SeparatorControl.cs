@@ -1,8 +1,6 @@
-// Copyright (c) 2007-2016  Michael Chapman
-// https://github.com/m66n/ipaddresscontrollib
-
-// The MIT License (MIT)
-
+// Copyright (c) 2010-2015 Michael Chapman
+// https://github.com/m66n/flexfieldcontrollib
+//
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -10,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -25,41 +23,35 @@
 
 using System;
 using System.Drawing;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
-
-namespace NTNN.ExtendedControls.IPAddressControl
+namespace FlexFieldControlLib
 {
-  internal class DotControl : Control
+  internal class SeparatorControl : Control
   {
-    #region Public Properties
+    public event EventHandler<SeparatorMouseEventArgs> SeparatorMouseEvent;
+    public event EventHandler<EventArgs> SeparatorSizeChangedEvent;
 
-    public override Size MinimumSize
+    public Point MidPoint
     {
       get
       {
-        using (Graphics g = Graphics.FromHwnd(Handle))
-        {
-          _sizeText = g.MeasureString(Text, Font, -1, _stringFormat);
-        }
-
-        // MeasureString() cuts off the bottom pixel for descenders no matter
-        // which StringFormatFlags are chosen.  This doesn't matter for '.' but
-        // it's here in case someone wants to modify the text.
-        //
-        _sizeText.Height += 1F;
-
-        return _sizeText.ToSize();
+        Point midPoint = Location;
+        midPoint.Offset(Width / 2, Height / 2);
+        return midPoint;
       }
+    }
+
+    public new Size MinimumSize
+    {
+      get { return CalculateMinimumSize(); }
     }
 
     public bool ReadOnly
     {
-      get
-      {
-        return _readOnly;
-      }
+      get { return _readOnly; }
       set
       {
         _readOnly = value;
@@ -67,42 +59,44 @@ namespace NTNN.ExtendedControls.IPAddressControl
       }
     }
 
-    #endregion // Public Properties
+    public int SeparatorIndex
+    {
+      get { return _separatorIndex; }
+      set { _separatorIndex = value; }
+    }
 
-    #region Public Methods
+    public override string Text
+    {
+      get { return base.Text; }
+      set
+      {
+        base.Text = value;
+        Size = MinimumSize;
+      }
+    }
 
     public override string ToString()
     {
       return Text;
     }
 
-    #endregion // Public Methods
-
-    #region Constructors
-
-    public DotControl()
+    public SeparatorControl()
     {
-      Text = NTNN.Properties.Resources.FieldSeparator;
-
-      _stringFormat = StringFormat.GenericTypographic;
-      _stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
-
-      BackColor = SystemColors.Window;
-      Size = MinimumSize;
-      TabStop = false;
-
       SetStyle(ControlStyles.AllPaintingInWmPaint, true);
       SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-      SetStyle(ControlStyles.ResizeRedraw, true);
       SetStyle(ControlStyles.UserPaint, true);
 
       SetStyle(ControlStyles.FixedHeight, true);
       SetStyle(ControlStyles.FixedWidth, true);
+
+      BackColor = SystemColors.Window;
+
+      _stringFormat = StringFormat.GenericTypographic;
+      _stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
+
+      Size = MinimumSize;
+      TabStop = false;
     }
-
-    #endregion // Constructors
-
-    #region Protected Methods
 
     protected override void OnFontChanged(EventArgs e)
     {
@@ -110,9 +104,32 @@ namespace NTNN.ExtendedControls.IPAddressControl
       Size = MinimumSize;
     }
 
+    protected override void OnMouseDown(MouseEventArgs e)
+    {
+      if (null == e)
+      {
+        throw new ArgumentNullException("e");
+      }
+
+      base.OnMouseDown(e);
+
+      if (SeparatorMouseEvent != null)
+      {
+        SeparatorMouseEventArgs args = new SeparatorMouseEventArgs();
+
+        args.Location = PointToScreen(e.Location);
+        args.SeparatorIndex = SeparatorIndex;
+
+        SeparatorMouseEvent(this, args);
+      }
+    }
+
     protected override void OnPaint(PaintEventArgs e)
     {
-      if (null == e) { throw new ArgumentNullException("e"); }
+      if (null == e)
+      {
+        throw new ArgumentNullException("e");
+      }
 
       base.OnPaint(e);
 
@@ -126,17 +143,17 @@ namespace NTNN.ExtendedControls.IPAddressControl
         }
       }
 
-      Color textColor = ForeColor;
+      Color foreColor = ForeColor;
 
       if (!Enabled)
       {
-        textColor = SystemColors.GrayText;
+        foreColor = SystemColors.GrayText;
       }
       else if (ReadOnly)
       {
         if (!_backColorChanged)
         {
-          textColor = SystemColors.WindowText;
+          foreColor = SystemColors.WindowText;
         }
       }
 
@@ -145,7 +162,7 @@ namespace NTNN.ExtendedControls.IPAddressControl
         e.Graphics.FillRectangle(backgroundBrush, ClientRectangle);
       }
 
-      using (SolidBrush foreBrush = new SolidBrush(textColor))
+      using (SolidBrush foreBrush = new SolidBrush(foreColor))
       {
         float x = (float)ClientRectangle.Width / 2F - _sizeText.Width / 2F;
         e.Graphics.DrawString(Text, Font, foreBrush,
@@ -156,32 +173,43 @@ namespace NTNN.ExtendedControls.IPAddressControl
     protected override void OnParentBackColorChanged(EventArgs e)
     {
       base.OnParentBackColorChanged(e);
-      BackColor = Parent.BackColor;
-      _backColorChanged = true;
-    }
 
-    protected override void OnParentForeColorChanged(EventArgs e)
-    {
-      base.OnParentForeColorChanged(e);
-      ForeColor = Parent.ForeColor;
+      BackColor = Parent.BackColor;
+
+      _backColorChanged = true;
     }
 
     protected override void OnSizeChanged(EventArgs e)
     {
       base.OnSizeChanged(e);
-      base.Size = MinimumSize;
+
+      if (SeparatorSizeChangedEvent != null)
+      {
+        SeparatorSizeChangedEvent(this, EventArgs.Empty);
+      }
     }
 
-    #endregion // Protected Methods
+    private Size CalculateMinimumSize()
+    {
+      using (Graphics g = Graphics.FromHwnd(Handle))
+      {
+        _sizeText = g.MeasureString(Text, Font, -1, _stringFormat);
+      }
 
-    #region Private Data
+      // MeasureString() cuts off the bottom pixel for descenders no matter
+      // which StringFormatFlags are chosen
+      //
+      _sizeText.Height += 1F;
 
-    private bool _backColorChanged;
+      return _sizeText.ToSize();
+    }
+
+    private int _separatorIndex;
+
     private bool _readOnly;
+    private bool _backColorChanged;
 
     private StringFormat _stringFormat;
     private SizeF _sizeText;
-
-    #endregion // Private Data
   }
 }

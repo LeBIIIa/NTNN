@@ -21,15 +21,14 @@ namespace NTNN.Helpers
 		public static int TimeoutMax = 60000;
 		public static int TimeoutMin = 1000;
 
-		public static string SPLogEvent { get; private set; }
+		public static string SPLogEventGNS3 { get; private set; }
 		public static double? HighLoadRAM { get; private set; }
 		public static double? HighLoadCPU { get; private set; }
 
 		static Helper()
 		{
-			double temp;
-			SPLogEvent = ConfigurationManager.AppSettings["spLogEvent"];
-			if (double.TryParse(ConfigurationManager.AppSettings["highLoadCPU"], out temp))
+            SPLogEventGNS3 = ConfigurationManager.AppSettings["spLogEventGNS3"];
+            if (double.TryParse(ConfigurationManager.AppSettings["highLoadCPU"], out double temp))
 			{
 				HighLoadCPU = temp;
 			}
@@ -148,4 +147,11 @@ namespace NTNN.Helpers
 		Down,
 		Unstable
 	}
+
+	public enum TypeOfWork
+    {
+		FromScannedDevice,
+		AddDevice,
+		UpdateDevice,
+    }
 }

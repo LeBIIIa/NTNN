@@ -1,8 +1,6 @@
-// Copyright (c) 2007-2016  Michael Chapman
-// https://github.com/m66n/ipaddresscontrollib
-
-// The MIT License (MIT)
-
+// Copyright (c) 2010-2015 Michael Chapman
+// https://github.com/m66n/flexfieldcontrollib
+//
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -10,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -25,15 +23,12 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
-namespace NTNN.ExtendedControls.IPAddressControl
+namespace FlexFieldControlLib
 {
-  internal class NativeMethods
+  internal static class NativeMethods
   {
-    private NativeMethods()
-    {
-    }
-
     [DllImport("user32.dll")]
     public static extern IntPtr GetWindowDC(IntPtr hWnd);
 
@@ -42,7 +37,7 @@ namespace NTNN.ExtendedControls.IPAddressControl
 
     [DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool GetTextMetrics(IntPtr hdc, out Textmetric lptm);
+    public static extern bool GetTextMetrics(IntPtr hdc, out TEXTMETRIC lptm);
 
     [DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
     public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
@@ -52,7 +47,7 @@ namespace NTNN.ExtendedControls.IPAddressControl
     public static extern bool DeleteObject(IntPtr hdc);
 
     [Serializable, StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct Textmetric
+    public struct TEXTMETRIC
     {
       public int tmHeight;
       public int tmAscent;

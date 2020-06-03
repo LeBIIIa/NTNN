@@ -1,8 +1,6 @@
-// Copyright (c) 2007-2016  Michael Chapman
-// https://github.com/m66n/ipaddresscontrollib
-
-// The MIT License (MIT)
-
+// Copyright (c) 2010-2015 Michael Chapman
+// https://github.com/m66n/flexfieldcontrollib
+//
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -10,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -25,11 +23,32 @@
 
 using System;
 
-namespace NTNN.ExtendedControls.IPAddressControl
+namespace FlexFieldControlLib
 {
+  /// <summary>
+  /// Arguments for FieldChangedEvent.
+  /// </summary>
   public class FieldChangedEventArgs : EventArgs
   {
-    public int FieldIndex { get; set; }
-    public String Text { get; set; }
+    /// <summary>
+    /// Gets or sets index of field that is raising FieldChangedEvent.
+    /// </summary>
+    public int FieldIndex
+    {
+      get { return _fieldIndex; }
+      set { _fieldIndex = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets text of field that is raising FieldChangedEvent.
+    /// </summary>
+    public string Text
+    {
+      get { return _text; }
+      set { _text = value; }
+    }
+
+    private int _fieldIndex;
+    private string _text;
   }
 }

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using NTNN.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
@@ -26,8 +27,10 @@ namespace NTNN
 {
     public partial class Form1 : Form
     {
-        BackgroundWorkerObjectGNS bwoGNS;
-        BackgroundWorkerObject bwo;
+        List<RegisteredDevice> registeredDevices;
+
+        readonly BackgroundWorkerObjectGNS bwoGNS;
+        readonly BackgroundWorkerObject bwo;
 
         public static readonly string StartText = "Start";
         public static readonly string StopText = "Stop";
@@ -35,6 +38,9 @@ namespace NTNN
         public Form1()
         {
             InitializeComponent();
+
+            UpdateRegisteredDevices();
+
             (bwo, bwoGNS) = CreateBackgroundWorker();
 
             btnReloadStatus.Enabled = false;
@@ -104,10 +110,7 @@ namespace NTNN
             obj.ShowMessageBox += ShowMessageBox;
 
             BackgroundWorkerObjectGNS gns = new BackgroundWorkerObjectGNS(SynchronizationContext.Current, bwListener);
-            gns.InitProgressBar += InitProgressBar;
             gns.SetTextLabel1 += SetTextLabel1;
-            gns.SetTextLabel2 += SetTextLabel2;
-            gns.UpdateProgressBar += UpdateProgressBar;
             gns.ShowMessageBoxWithResult += ShowMessageBoxWithResult;
             gns.SetNodeStatus += SetNodeStatus;
             gns.UpdateNodesTable += UpdateNodesTable;
@@ -117,7 +120,6 @@ namespace NTNN
 
             return (obj, gns);
         }
-
         private bool IsWorkingBW( bool showMsg = true )
         {
             if (backgroundWorker.IsBusy || bwGNS3_API.IsBusy || bwListener.IsBusy)
@@ -235,11 +237,6 @@ namespace NTNN
         {
             lblStatus1.ToolStripStatusInvokeAction(t => t.Text = text);
         }
-        private void SetTextLabel2( SystemCategories category, string text )
-        {
-            lblStatus2.ToolStripStatusInvokeAction(t => t.Text = text);
-            LoggingHelper.LogEntry(category, text);
-        }
         private void SetTextLabel2( string text )
         {
             lblStatus2.ToolStripStatusInvokeAction(t => t.Text = text);
@@ -265,9 +262,18 @@ namespace NTNN
             });
 
         }
-        private void AddDevice( string[] items )
+        private void AddDevice( KeyValuePair<string, string>[] items )
         {
-            listVAddr.ControlInvokeAction(l => l.Items.Add(new ListViewItem(items)));
+            listVAddr.ControlInvokeAction(l =>
+            {
+                var item = new ListViewItem();
+                item.SubItems.AddRange(Array.ConvertAll(items, (KeyValuePair<string, string> i) => 
+                {
+                    return new ListViewItem.ListViewSubItem() { Text = i.Value, Name = i.Key };
+                }));
+                item.SubItems.RemoveAt(0);
+                l.Items.Add(item);
+            });
         }
 
         private void ShowMessageBox( string text )
@@ -279,6 +285,7 @@ namespace NTNN
             return MessageBox.Show(text, "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes;
         }
 
+        #region TAB2
         private void UpdateNodesTable()
         {
             lstNodes.ControlInvokeAction(lst => lst.Items.Clear());
@@ -321,6 +328,25 @@ namespace NTNN
         private void AddLine(string text)
         {
             rtbConsole.ControlInvokeAction(console => console.AppendText($"{text}\r\n"));
+        }
+        #endregion
+
+        private void UpdateRegisteredDevices()
+        {
+            registeredDevices = RegisteredDevice.GetRegisteredDevices();
+            lstRegisterDevices.Items.Clear();
+
+            foreach (var item in registeredDevices)
+            {
+                item.Deconstruct(out var collection);
+                var lstItem = new ListViewItem();
+                lstItem.SubItems.AddRange(Array.ConvertAll(collection, ( KeyValuePair<string, string> i ) =>
+                {
+                    return new ListViewItem.ListViewSubItem() { Text = i.Value, Name = i.Key };
+                }));
+                lstItem.SubItems.RemoveAt(0);
+                lstRegisterDevices.Items.Add(lstItem);
+            }
         }
         #endregion
 
@@ -395,7 +421,7 @@ namespace NTNN
                         notify = JsonConvert.DeserializeObject<Notification>(ev.Data);
                         if (notify.Event is PingEvent)
                             Helper.CheckHighLoad(notify, !string.IsNullOrEmpty(bwoGNS.ProjectName) ? bwoGNS.ProjectName : bwoGNS.Handler.ProjectID );
-                        Helper.LogEvent(notify, Helper.SPLogEvent);
+                        Helper.LogEvent(notify, Helper.SPLogEventGNS3);
                         var text = regex.Replace(ev.Data, "");
                         AddLine($"> {text}");
                     };
@@ -466,5 +492,101 @@ namespace NTNN
             e.Cancel = IsWorkingBW();
         }
 
+        private void ForRegisterDevicesToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            if (IsWorkingBW())
+                return;
+            TypeOfWork? work = null;
+            NameValueCollection nameValue = new NameValueCollection();
+
+            if (sender == addToRegisteredDeviceListToolStripMenuItem)
+            {
+                var sel = listVAddr.SelectedItems[0];
+                nameValue.Add("IP", sel.SubItems["IP"].Text);
+                nameValue.Add("Hostname", sel.SubItems["Hostname"].Text);
+                work = TypeOfWork.FromScannedDevice;
+            }
+            else if (sender == addToolStripMenuItem)
+            {
+                work = TypeOfWork.AddDevice;
+            }
+            else if (sender == updateDeviceToolStripMenuItem)
+            {
+                var sel = lstRegisterDevices.SelectedItems[0];
+                nameValue.Add("IP", sel.SubItems["IP"].Text);
+                nameValue.Add("Hostname", sel.SubItems["Hostname"].Text);
+                nameValue.Add("Name", sel.SubItems["Name"].Text);
+                nameValue.Add("Type", sel.SubItems["Type"].Text);
+                nameValue.Add("RegisteredDevicePK", sel.SubItems["RegisteredDevicePK"].Text);
+                work = TypeOfWork.UpdateDevice;
+            }
+            else if (sender == removeToolStripMenuItem)
+            {
+                var registeredDevicePK = int.Parse(lstRegisterDevices.SelectedItems[0].SubItems["RegisteredDevicePK"].Text);
+                var ret = RegisteredDevice.RemoveRegisteredDevice(registeredDevicePK);
+                if (ret)
+                    UpdateRegisteredDevices();
+                else
+                    MessageBox.Show("Internal error! Could not remove this device!");
+                return;
+            }
+            else if (sender == showInformationToolStripMenuItem)
+            {
+                var registeredDevicePK = int.Parse(lstRegisterDevices.SelectedItems[0].SubItems["RegisteredDevicePK"].Text);
+                var registeredDevice = registeredDevices.Find(r => r.RegisteredDevicePK == registeredDevicePK);
+                using (var form = new ShowInfoForm(registeredDevice))
+                {
+                    form.ShowDialog();
+                }
+                return;
+            }
+
+            if (!work.HasValue)
+            {
+                return;
+            }
+
+            using (var form = new RegisterForm(work.Value, nameValue))
+            {
+                var ret = form.ShowDialog();
+                if (ret == DialogResult.OK)
+                    UpdateRegisteredDevices();
+            }
+        }
+
+        private void contextMenuScannedDevices_Opening( object sender, CancelEventArgs e )
+        {
+            e.Cancel = listVAddr.Items.Count == 0;
+            if (sender is ContextMenuStrip strip)
+            {
+                foreach (ToolStripItem item in strip.Items)
+                    item.Enabled = !bwo.IsCancelled;
+            }
+        }
+
+        private void contextMenuRegisteredDevices_Opening( object sender, CancelEventArgs e )
+        {
+            if (sender is ContextMenuStrip strip)
+            {
+                foreach (ToolStripItem item in strip.Items)
+                {
+                    if (item == addToolStripMenuItem)
+                        continue;
+                    if (lstRegisterDevices.SelectedItems.Count > 0)
+                        item.Enabled = lstRegisterDevices.Items.Count != 0;
+                    else
+                        item.Enabled = false;
+                }
+            }
+        }
+
+        private void lstRegisterDevices_ColumnWidthChanging( object sender, ColumnWidthChangingEventArgs e )
+        {
+            if (e.ColumnIndex == 0)
+            {
+                e.Cancel = true;
+                e.NewWidth = lstRegisterDevices.Columns[e.ColumnIndex].Width;
+            }
+        }
     }
 }

@@ -14,11 +14,7 @@ namespace NTNN
     public class BackgroundWorkerObjectGNS
     {
         #region events
-        public event Action<int> InitProgressBar;
-        public event Action<int> UpdateProgressBar;
-
         public event Action<SystemCategories, string> SetTextLabel1;
-        public event Action<SystemCategories, string> SetTextLabel2;
 
         public event Func<string, bool> ShowMessageBoxWithResult;
 

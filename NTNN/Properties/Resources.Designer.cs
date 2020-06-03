@@ -61,20 +61,38 @@ namespace NTNN.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 333.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string FieldMeasureText {
+        internal static string FarText {
             get {
-                return ResourceManager.GetString("FieldMeasureText", resourceCulture);
+                return ResourceManager.GetString("FarText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FieldControl.
+        /// </summary>
+        internal static string FieldControlName {
+            get {
+                return ResourceManager.GetString("FieldControlName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ..
         /// </summary>
-        internal static string FieldSeparator {
+        internal static string MiddleText {
             get {
-                return ResourceManager.GetString("FieldSeparator", resourceCulture);
+                return ResourceManager.GetString("MiddleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string NearText {
+            get {
+                return ResourceManager.GetString("NearText", resourceCulture);
             }
         }
         
@@ -85,6 +103,15 @@ namespace NTNN.Properties {
             get {
                 object obj = ResourceManager.GetObject("nwico", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SeparatorControl.
+        /// </summary>
+        internal static string SeparatorControlName {
+            get {
+                return ResourceManager.GetString("SeparatorControlName", resourceCulture);
             }
         }
         

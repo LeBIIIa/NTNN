@@ -1,8 +1,6 @@
-// Copyright (c) 2007-2016  Michael Chapman
-// https://github.com/m66n/ipaddresscontrollib
-
-// The MIT License (MIT)
-
+// Copyright (c) 2010-2015 Michael Chapman
+// https://github.com/m66n/flexfieldcontrollib
+//
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -10,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -23,41 +21,26 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-using System.Collections;
-using System.Windows.Forms.Design;
-using System.Windows.Forms.Design.Behavior;
+using System;
+using System.Drawing;
 
-namespace NTNN.ExtendedControls.IPAddressControl
+namespace FlexFieldControlLib
 {
-  internal class IpAddressControlDesigner : ControlDesigner
+  class SeparatorMouseEventArgs : EventArgs
   {
-    public override SelectionRules SelectionRules
+    public Point Location
     {
-      get
-      {
-        var control = (IPAddressControl)Control;
-
-        if (control.AutoHeight)
-        {
-          return SelectionRules.Moveable | SelectionRules.Visible | SelectionRules.LeftSizeable |
-                 SelectionRules.RightSizeable;
-        }
-        return SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible;
-      }
+      get { return _location; }
+      set { _location = value; }
     }
 
-    public override IList SnapLines
+    public int SeparatorIndex
     {
-      get
-      {
-        var control = (IPAddressControl)Control;
-
-        var snapLines = base.SnapLines;
-
-        snapLines.Add(new SnapLine(SnapLineType.Baseline, control.Baseline));
-
-        return snapLines;
-      }
+      get { return _separatorIndex; }
+      set { _separatorIndex = value; }
     }
+
+    private Point _location;
+    private int _separatorIndex;
   }
 }

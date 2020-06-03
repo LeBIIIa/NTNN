@@ -29,7 +29,7 @@ namespace NTNN
 
         public event Action<string> SetAutoIP;
 
-        public event Action<string[]> AddDevice;
+        public event Action<KeyValuePair<string, string>[]> AddDevice;
         #endregion
 
         public string Subnet { get; set; }
@@ -41,6 +41,8 @@ namespace NTNN
         private bool useAutoIP;
         private CancellationTokenSource tokenSource;
         private int foundDevices;
+
+        public bool IsCancelled => tokenSource == null ? false : tokenSource.IsCancellationRequested;
 
         public BackgroundWorkerObject(SynchronizationContext context)
         {
@@ -76,7 +78,6 @@ namespace NTNN
         }
         public void Scan()
         {
-            new ExtendedControls.IPAddressControl.IPAddressControl();
             try
             {
                 CreateSource();
@@ -162,7 +163,13 @@ namespace NTNN
                         Interlocked.Increment(ref foundDevices);
                         string hostname = GetHostName(host);
                         string macaddres = GetMacAddress(host);
-                        AddDevice(new string[] { host, hostname, macaddres, status.ToString() });
+                        AddDevice(new KeyValuePair<string, string>[] 
+                        { 
+                            new KeyValuePair<string, string>("IP", host),
+                            new KeyValuePair<string, string>("Hostname", hostname),
+                            new KeyValuePair<string, string>("Macaddress", macaddres),
+                            new KeyValuePair<string, string>("Status", status.ToString()),
+                        });
                     }
                 }
 

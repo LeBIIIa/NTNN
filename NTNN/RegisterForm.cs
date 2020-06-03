@@ -1,0 +1,109 @@
+﻿using NTNN.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace NTNN
+{
+    public partial class RegisterForm : Form
+    {
+        TypeOfWork currWork;
+        int RegisteredDevicePK;
+
+        public RegisterForm(TypeOfWork work, NameValueCollection nameValueCollection)
+        {
+            InitializeComponent();
+
+            foreach (var strDeviceType in Enum.GetNames(typeof(DeviceType)))
+            {
+                cbType.Items.Add(strDeviceType);
+            }
+
+            currWork = work;
+
+            foreach (var val in nameValueCollection.AllKeys)
+            {
+                switch (val)
+                {
+                    case "IP":
+                        txtIP.Text = nameValueCollection["IP"];
+                        break;
+                    case "Name":
+                        txtName.Text = nameValueCollection["Name"];
+                        break;
+                    case "Hostname":
+                        txtHostname.Text = nameValueCollection["Hostname"];
+                        break;
+                    case "Type":
+                        cbType.SelectedItem = nameValueCollection["Type"];
+                        break;
+                    case "RegisteredDevicePK":
+                        RegisteredDevicePK = int.Parse(nameValueCollection["RegisteredDevicePK"]);
+                        break;
+                }
+            }
+
+            switch (work)
+            {
+                case TypeOfWork.UpdateDevice:
+                    txtIP.Enabled = false;
+                    break;
+                case TypeOfWork.FromScannedDevice:
+                    txtIP.Enabled = false;
+                    break;
+            }
+        }
+
+        private void btnAddORSave_Click( object sender, EventArgs e )
+        {
+            try
+            {
+                if (!IPAddress.TryParse(txtIP.Text, out _))
+                {
+                    MessageBox.Show("IP address is incorrect!");
+                    return;
+                }
+                if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtHostname.Text))
+                {
+                    MessageBox.Show("Hostname/Name cannot be empty!");
+                    return;
+                }
+                if (cbType.SelectedItem == null)
+                {
+                    MessageBox.Show("Select type, it cannot be empty!");
+                    return;
+                }
+                var type = (DeviceType)Enum.Parse(typeof(DeviceType), cbType.SelectedItem.ToString());
+                bool? ret = null;
+                switch (currWork)
+                {
+                    case TypeOfWork.FromScannedDevice:
+                    case TypeOfWork.AddDevice:
+                        RegisteredDevice.AddRegisteredDevice(txtIP.Text, txtName.Text, txtHostname.Text, type);
+                        break;
+                    case TypeOfWork.UpdateDevice:
+                        ret = RegisteredDevice.UpdateRegisteredDevice(txtName.Text, type, RegisteredDevicePK);
+                        break;
+                }
+                if (ret == null)
+                    DialogResult = DialogResult.OK;
+                if (ret != null && ret == true)
+                    DialogResult = DialogResult.OK;
+                else if (ret != null && ret == false)
+                    MessageBox.Show("Internal error! Could not update device!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Internal error! {ex.Message}");
+            }
+        }
+    }
+}
