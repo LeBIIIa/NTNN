@@ -34,7 +34,7 @@ namespace NTNN
                         txtName.Text = nameValueCollection["Name"];
                         break;
                     case "Hostname":
-                        txtHostname.Text = nameValueCollection["Hostname"];
+                        txtHostname.Text = string.IsNullOrEmpty(nameValueCollection["Hostname"]) ? "Hostname_empty" : nameValueCollection["Hostname"];
                         break;
                     case "Type":
                         cbType.SelectedItem = nameValueCollection["Type"];
