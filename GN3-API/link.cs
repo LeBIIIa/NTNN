@@ -1,9 +1,11 @@
+using GNS3_API.Helpers;
+
+using Newtonsoft.Json;
+
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using GNS3_API.Helpers;
 
 namespace GNS3_API
 {
@@ -14,7 +16,8 @@ namespace GNS3_API
     /// to a node as well as edit it and change its parameters
     /// </remarks>
     /// </summary>
-    public class Link{
+    public class Link
+    {
         /// <summary>
         /// ID the link has implicitly
         /// </summary>
@@ -32,9 +35,11 @@ namespace GNS3_API
         /// Parameter that measure the frequency drop of the link
         /// </summary>
         /// <value>Throughput as an integer</value>
-        public int FrequencyDrop { 
+        public int FrequencyDrop
+        {
             get => frequencyDrop;
-            private set {
+            private set
+            {
                 if (value < -1) frequencyDrop = 0;
                 else frequencyDrop = value;
             }
@@ -45,23 +50,27 @@ namespace GNS3_API
         /// Parameter that measure the packet loss of the link
         /// </summary>
         /// <value>Percentage as an integer</value>
-        public int PacketLoss { 
-            get  => packetLoss;
-            private set {
+        public int PacketLoss
+        {
+            get => packetLoss;
+            private set
+            {
                 if (value < 0) packetLoss = 0;
                 else if (value > 100) packetLoss = 100;
                 else packetLoss = value;
             }
         }
-        
+
         private int latency;
         /// <summary>
         /// Parameter that measure the latency of the link
         /// </summary>
         /// <value>ms as an integer</value>
-        public int Latency {
+        public int Latency
+        {
             get => latency;
-            private set {
+            private set
+            {
                 if (value < 0) latency = 0;
                 else latency = value;
             }
@@ -72,9 +81,11 @@ namespace GNS3_API
         /// Parameter that measure the jitter of the link
         /// </summary>
         /// <value>ms as an integer</value>
-        public int Jitter {
+        public int Jitter
+        {
             get => jitter;
-            private set {
+            private set
+            {
                 if (value < 0) jitter = 0;
                 else jitter = value;
             }
@@ -85,9 +96,11 @@ namespace GNS3_API
         /// Parameter that measure the corruption of the link
         /// </summary>
         /// <value>Percentage as an integer</value>
-        public int Corrupt {
-            get {return corrupt;}
-            private set {
+        public int Corrupt
+        {
+            get { return corrupt; }
+            private set
+            {
                 if (value < 0) corrupt = 0;
                 else if (value > 100) corrupt = 100;
                 else corrupt = value;
@@ -98,7 +111,7 @@ namespace GNS3_API
         /// Information about the server
         /// </summary>
         /// <value>Keys: host, port and projectID</value>
-        private Dictionary<string,string> serverInfo;
+        private Dictionary<string, string> serverInfo;
 
         /// <summary>
         /// HTTP client used to interact with the REST API
@@ -114,7 +127,8 @@ namespace GNS3_API
         /// <param name="_nodes">Array of nodes that the link is connecting</param>
         /// <param name="_serverInfo">Information about the server (host, port and projectID)</param>
         /// <param name="_HTTPclient">HTTP client used by the GNS3sharp object which creates this link</param>
-        internal Link(string _id, Node[] _nodes, Dictionary<string, string> _serverInfo, HttpClient _HTTPclient){
+        internal Link(string _id, Node[] _nodes, Dictionary<string, string> _serverInfo, HttpClient _HTTPclient)
+        {
             ID = _id; Nodes = _nodes; serverInfo = _serverInfo; HTTPclient = _HTTPclient;
             frequencyDrop = 0; packetLoss = 0;
             latency = 0; jitter = 0; corrupt = 0;
@@ -134,15 +148,16 @@ namespace GNS3_API
         /// <param name="_corrupt">Parameter that measure the corruption of the link</param>
         internal Link(
             string _id, Node[] _nodes, Dictionary<string, string> _serverInfo, HttpClient _HTTPclient,
-            int _frequencyDrop=0, int _packetLoss=0, int _latency=0, int _jitter=0, int _corrupt=0
-            ){
+            int _frequencyDrop = 0, int _packetLoss = 0, int _latency = 0, int _jitter = 0, int _corrupt = 0
+            )
+        {
             ID = _id; Nodes = _nodes; serverInfo = _serverInfo; HTTPclient = _HTTPclient;
             frequencyDrop = _frequencyDrop; packetLoss = _packetLoss;
             latency = _latency; jitter = _jitter; corrupt = _corrupt;
         }
 
         ///////////////////////////////// Methods ////////////////////////////////////////////
-        
+
         /// <summary>
         /// Edit some filter of a link
         /// </summary>
@@ -153,24 +168,28 @@ namespace GNS3_API
         /// <param name="_corrupt">Parameter that measure the corruption of the link</param>
         /// <returns>True if everything went right, False otherwise</returns>
         public bool EditLink(
-            int _frequencyDrop=-10, int _packetLoss=-10,
-            int _latency=-10, int _jitter=-10, int _corrupt=-10
-            ){
+            int _frequencyDrop = -10, int _packetLoss = -10,
+            int _latency = -10, int _jitter = -10, int _corrupt = -10
+            )
+        {
 
             // Return variable
             bool linkEdited;
 
             // Check the filters that is going to modify
             bool filterChanges = true;
-            if (_frequencyDrop != -10){ filterChanges = true; FrequencyDrop = _frequencyDrop; }
-            if (_packetLoss != -10){ filterChanges = true; PacketLoss = _packetLoss; }
-            if (_latency != -10){ filterChanges = true; Latency = _latency; }
-            if (_jitter != -10){ filterChanges = true; Jitter = _jitter; }
-            if (_corrupt != -10){ filterChanges = true; Corrupt = _corrupt; }
+            if (_frequencyDrop != -10) { filterChanges = true; FrequencyDrop = _frequencyDrop; }
+            if (_packetLoss != -10) { filterChanges = true; PacketLoss = _packetLoss; }
+            if (_latency != -10) { filterChanges = true; Latency = _latency; }
+            if (_jitter != -10) { filterChanges = true; Jitter = _jitter; }
+            if (_corrupt != -10) { filterChanges = true; Corrupt = _corrupt; }
 
-            if (!filterChanges){
+            if (!filterChanges)
+            {
                 linkEdited = false;
-            } else{
+            }
+            else
+            {
                 // Content to send
                 Dictionary<string, int[]> filtersInfo = new Dictionary<string, int[]>{
                     {"frequency_drop", new int[1]{this.frequencyDrop}},
@@ -183,10 +202,11 @@ namespace GNS3_API
                     $"http://{serverInfo["host"]}:{serverInfo["port"]}/v2/projects/{serverInfo["projectID"]}/links/{ID}"
                 );
 
-                try {
+                try
+                {
 
                     // Pack the content we will send
-                    string content = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, int[]>> { 
+                    string content = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, int[]>> {
                         { "filters" , filtersInfo }
                     });
                     ByteArrayContent byteContent = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(content));
@@ -195,13 +215,19 @@ namespace GNS3_API
                     // Send the content and check if everything is alright
                     linkEdited = HTTPclient.PutAsync($"{URL}", byteContent).Result.IsSuccessStatusCode;
 
-                } catch(JsonSerializationException err){
+                }
+                catch (JsonSerializationException err)
+                {
                     LoggingHelper.LogEntry(SystemCategories.GeneralError, string.Format("Impossible to serialize the JSON to send it to the API: {0}", err.Message));
                     linkEdited = false;
-                } catch(HttpRequestException err){
+                }
+                catch (HttpRequestException err)
+                {
                     LoggingHelper.LogEntry(SystemCategories.GeneralError, string.Format("Some problem occured with the HTTP connection: {0}", err.Message));
                     linkEdited = false;
-                } catch(Exception err){
+                }
+                catch (Exception err)
+                {
                     LoggingHelper.LogEntry(SystemCategories.GeneralError, string.Format("Impossible to edit the link: {0}", err.Message));
                     linkEdited = false;
                 }

@@ -1,12 +1,9 @@
 ﻿using GNS3_API;
 using GNS3_API.Helpers;
+
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NTNN
@@ -40,7 +37,7 @@ namespace NTNN
 
         public string ProjectName { get; private set; }
 
-        public BackgroundWorkerObjectGNS( SynchronizationContext context, BackgroundWorker worker )
+        public BackgroundWorkerObjectGNS(SynchronizationContext context, BackgroundWorker worker)
         {
             _synchronizationContext = context;
             bwListener = worker;
@@ -120,7 +117,7 @@ namespace NTNN
                 SetNodeStatus(selectedNode.GetStatus);
             }
         }
-        private bool ShowMessageWithResult( string text )
+        private bool ShowMessageWithResult(string text)
         {
             bool ret = false;
             _synchronizationContext.Send(callback => ret = ShowMessageBoxWithResult(text), null);

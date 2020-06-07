@@ -1,10 +1,11 @@
+using GNS3_API.Helpers;
+
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using GNS3_API.Helpers;
 
 namespace GNS3_API
 {
@@ -13,7 +14,8 @@ namespace GNS3_API
     /// Class that defines some methods and propertiesthat are helpful for
     /// the other classes of the namespace
     /// </summary>
-    internal static class Aux{
+    internal static class Aux
+    {
         /// <summary>
         /// Array of dictionaries. Every dictionary contains two keys: "class" and "label". If you create
         /// a new appliance class, you must add its label and type here
@@ -25,20 +27,23 @@ namespace GNS3_API
         /// Generate the dictionary for NodesAvailable property
         /// </summary>
         /// <returns>A map between the type of a node and its label</returns>
-        private static Dictionary<string,object>[] CreateNodesAvailable(){
-            
+        private static Dictionary<string, object>[] CreateNodesAvailable()
+        {
+
             /// <summary>
             /// List of all nodes defined in the API
             /// </summary>
             /// <returns>IEnumerable with the <c>Type</c> of the nodes</returns>
-            IEnumerable<Type> GetNodesTypes(){
-                
+            IEnumerable<Type> GetNodesTypes()
+            {
+
                 /// <summary>
                 /// Find the children classes of a class
                 /// </summary>
                 /// <typeparam name="TBaseType">Type whose children types must be found</typeparam>
                 /// <returns>IEnumerable with the <c>Type</c> of the nodes</returns>
-                IEnumerable<Type> FindSubClassesOf<TBaseType>() {   
+                IEnumerable<Type> FindSubClassesOf<TBaseType>()
+                {
 
                     var baseType = typeof(TBaseType);
                     var assembly = baseType.Assembly;
@@ -53,12 +58,13 @@ namespace GNS3_API
                 return routers.Concat(guests).Concat(switches);
             }
 
-            List<Dictionary<string,object>> typesOfNodes = new List<Dictionary<string,object>>();
+            List<Dictionary<string, object>> typesOfNodes = new List<Dictionary<string, object>>();
 
-            foreach (var nodeType in GetNodesTypes()){
-                
+            foreach (var nodeType in GetNodesTypes())
+            {
+
                 typesOfNodes.Add(
-                    new Dictionary<string,object>(){
+                    new Dictionary<string, object>(){
                         {"class", nodeType},
                         {"label", nodeType.GetProperty("Label", BindingFlags.Static | BindingFlags.Public).GetValue(null)}
                     }
@@ -76,17 +82,21 @@ namespace GNS3_API
         /// <param name="nodeName">Name set to a node in GNS3</param>
         /// <returns>The type of the node. If it can not find the certain type
         /// of node, returns <c>typeof(Node)</c></returns>
-        internal static Type NodeType(string nodeName){
+        internal static Type NodeType(string nodeName)
+        {
 
             // If something goes wrong and the label is not properly set on the
             // name, it returns the generic Node class
             Type newNode = typeof(Node);
             Match match = Regex.Match(nodeName, @"(?<=\[).+?(?=\])");
 
-            if (match.Success) {
+            if (match.Success)
+            {
                 string label = match.Groups[0].Value.ToUpperInvariant();
-                foreach(Dictionary<string,object> typeOfNode in NodesAvailables){
-                    if (label.Equals(typeOfNode["label"].ToString())){
+                foreach (Dictionary<string, object> typeOfNode in NodesAvailables)
+                {
+                    if (label.Equals(typeOfNode["label"].ToString()))
+                    {
                         newNode = (Type)typeOfNode["class"];
                         break;
                     }
@@ -100,7 +110,7 @@ namespace GNS3_API
         /// </summary>
         /// <param name="IP">String to check</param>
         /// <returns>True if the string is an IP, False otherwise</returns>
-        internal static bool IsIP(string IP) => 
+        internal static bool IsIP(string IP) =>
             Regex.IsMatch(IP, @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
 
         /// <summary>
@@ -110,28 +120,34 @@ namespace GNS3_API
         /// <returns>True if the string is a netmask, False otherwise</returns>
         internal static bool IsNetmask(string netmask) =>
             Regex.IsMatch(netmask, @"^(((255\.){3}(255|254|252|248|240|224|192|128|0+))|((255\.){2}(255|254|252|248|240|224|192|128|0+)\.0)|((255\.)(255|254|252|248|240|224|192|128|0+)(\.0+){2})|((255|254|252|248|240|224|192|128|0+)(\.0+){3}))$");
-        
+
         /// <summary>
         /// Convert a mask written in numbers and dots into its CIDR notation
         /// </summary>
         /// <param name="netmaskDecimals">Mask written in numbers and dots</param>
         /// <returns>Mask in CIDR notation</returns>
-        internal static short NetmaskCIDR(string netmaskDecimals){
+        internal static short NetmaskCIDR(string netmaskDecimals)
+        {
             short result = 0;
 
-            if (Aux.IsNetmask(netmaskDecimals)){
+            if (Aux.IsNetmask(netmaskDecimals))
+            {
                 // Split the mask by its dots
                 string[] netmaskSplit = netmaskDecimals.Split('.');
                 BitArray bits;
-                foreach (string numberStr in netmaskSplit){
+                foreach (string numberStr in netmaskSplit)
+                {
                     // Turn every number into a bit array
                     bits = new BitArray(BitConverter.GetBytes(ushort.Parse(numberStr)));
-                    foreach (bool bit in bits){
+                    foreach (bool bit in bits)
+                    {
                         // Run over the array and add 1 to the value for every true found
                         if (bit == true) result++;
                     }
                 }
-            } else{
+            }
+            else
+            {
                 result = -1;
             }
 
@@ -145,12 +161,14 @@ namespace GNS3_API
     /// It is just a structure for better handling routing tables
     /// </remarks>
     /// </summary>
-    public class RoutingTable{
+    public class RoutingTable
+    {
 
         /// <summary>
         /// Class that represents a row (a route) of a routing table
         /// </summary>
-        public struct RoutingTableRow{
+        public struct RoutingTableRow
+        {
             /// <summary>
             /// Destination of the route
             /// </summary>
@@ -168,7 +186,7 @@ namespace GNS3_API
             /// Netmask of the route
             /// </summary>
             /// <value>Netmask as a string</value>
-            public string Netmask{ get => netmask;}
+            public string Netmask { get => netmask; }
 
             /// <summary>
             /// Interface related to the route
@@ -181,7 +199,7 @@ namespace GNS3_API
             /// Metric of the route
             /// </summary>
             /// <value>Metric as an integer</value>
-            public int Metric{ get => metric;}
+            public int Metric { get => metric; }
 
             /// <summary>
             /// Constructor that initializes every parameter
@@ -192,9 +210,10 @@ namespace GNS3_API
             /// <param name="_iface">Interface related to the route</param>
             /// <param name="_metric">Metric of the route</param>
             public RoutingTableRow(
-                string _destination, string _gateway, string _netmask, 
+                string _destination, string _gateway, string _netmask,
                 string _iface, int _metric
-                ){
+                )
+            {
                 if (_gateway.Equals('*'))
                     _gateway = "0.0.0.0";
                 this.Destination = _destination;
@@ -210,12 +229,13 @@ namespace GNS3_API
         /// List of the routes the table contains
         /// </summary>
         /// <returns>List of <c>RoutingTableRow</c></returns>
-        public RoutingTableRow[] Routes{ get => routes.ToArray();}
+        public RoutingTableRow[] Routes { get => routes.ToArray(); }
 
         /// <summary>
         /// Initialize the object
         /// </summary>
-        public RoutingTable(){
+        public RoutingTable()
+        {
             this.routes = new List<RoutingTableRow>();
         }
 
@@ -223,7 +243,8 @@ namespace GNS3_API
         /// Initialize the object with a fixed size
         /// </summary>
         /// <param name="numberOfRoutes">Number of routes the table contains</param>
-        public RoutingTable(ushort numberOfRoutes){
+        public RoutingTable(ushort numberOfRoutes)
+        {
             this.routes = new List<RoutingTableRow>(numberOfRoutes);
         }
 
@@ -236,14 +257,18 @@ namespace GNS3_API
         /// <param name="_iface">Interface related to the route</param>
         /// <param name="_metric">Metric of the route</param>
         public void AddRoute(
-            string destination, string gateway, string netmask, 
+            string destination, string gateway, string netmask,
             string iface, int metric
-            ){
-            if (Aux.IsIP(destination) && Aux.IsIP(gateway) && Aux.IsNetmask(netmask)){
+            )
+        {
+            if (Aux.IsIP(destination) && Aux.IsIP(gateway) && Aux.IsNetmask(netmask))
+            {
                 routes.Add(new RoutingTableRow(
                     destination, gateway, netmask, iface, metric
                 ));
-            } else{
+            }
+            else
+            {
                 LoggingHelper.LogEntry(SystemCategories.GeneralError, "Impossible to add the new row: some of the parameters were not valid");
             }
         }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using NTNN.ConfigurationHelpers;
+
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using NTNN.ConfigurationHelpers;
-using GN3_API.events;
-using log4net.Core;
-using GNS3_API.Helpers;
 
 namespace NTNN.DAL
 {
@@ -20,20 +14,20 @@ namespace NTNN.DAL
         // Public Properties
         public static string ConnectionString
         {
-            get 
+            get
             {
                 if (mConnectionString.Trim() == "")
                 {
                     mConnectionString = DataAccessConfiguration.DataAccessSection.ConnectionString;
                 }
-                return mConnectionString; 
+                return mConnectionString;
             }
             set { mConnectionString = value; }
         }
 
         // Constructor
         public DataAccess() { }
-                
+
         // Methods
         public static int ExecuteNonQuery(DbCommand cmd)
         {

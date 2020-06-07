@@ -36,6 +36,7 @@
             this.numericTimeout = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.numericAttempts = new System.Windows.Forms.NumericUpDown();
+            this.cbMonitoring = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -47,8 +48,8 @@
             // btnExit
             // 
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExit.Location = new System.Drawing.Point(277, 139);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnExit.Location = new System.Drawing.Point(277, 166);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(4);
             this.btnExit.MinimumSize = new System.Drawing.Size(67, 28);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(100, 28);
@@ -65,42 +66,45 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.MinimumSize = new System.Drawing.Size(373, 160);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.81685F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.18315F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(381, 171);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(381, 198);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
             // tableLayoutPanel2
             // 
+            this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.groupBox2, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.groupBox1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cbMonitoring, 0, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.MinimumSize = new System.Drawing.Size(0, 123);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(373, 123);
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(373, 153);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.numericTimeout);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(4, 65);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Location = new System.Drawing.Point(4, 67);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.MinimumSize = new System.Drawing.Size(267, 55);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(365, 55);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
@@ -140,10 +144,10 @@
             this.groupBox1.Controls.Add(this.numericAttempts);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(4, 4);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.MinimumSize = new System.Drawing.Size(267, 55);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(365, 55);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
@@ -168,21 +172,33 @@
             0,
             0});
             // 
+            // cbMonitoring
+            // 
+            this.cbMonitoring.AutoSize = true;
+            this.cbMonitoring.Location = new System.Drawing.Point(3, 129);
+            this.cbMonitoring.Name = "cbMonitoring";
+            this.cbMonitoring.Size = new System.Drawing.Size(264, 21);
+            this.cbMonitoring.TabIndex = 2;
+            this.cbMonitoring.Text = "Enable monitoring registered devices";
+            this.cbMonitoring.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 171);
+            this.ClientSize = new System.Drawing.Size(381, 198);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(397, 206);
             this.Name = "Settings";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericTimeout)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -200,5 +216,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown numericTimeout;
         private System.Windows.Forms.NumericUpDown numericAttempts;
+        private System.Windows.Forms.CheckBox cbMonitoring;
     }
 }

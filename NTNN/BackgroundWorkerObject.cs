@@ -1,6 +1,8 @@
 ﻿using GNS3_API.Helpers;
+
 using NTNN.ExtendedControls;
 using NTNN.Helpers;
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,11 +10,9 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
 
 namespace NTNN
 {
@@ -37,12 +37,12 @@ namespace NTNN
 
         private readonly SynchronizationContext _synchronizationContext;
         private int currProgressVal;
-        private int maxProgressVal; 
+        private int maxProgressVal;
         private bool useAutoIP;
         private CancellationTokenSource tokenSource;
         private int foundDevices;
 
-        public bool IsCancelled => tokenSource == null ? false : tokenSource.IsCancellationRequested;
+        public bool IsCancelled => tokenSource != null && tokenSource.IsCancellationRequested;
 
         public BackgroundWorkerObject(SynchronizationContext context)
         {
@@ -120,7 +120,7 @@ namespace NTNN
                 LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
             }
         }
-        private void Ping( string host, int attempts, int timeout, CancellationToken ct)
+        private void Ping(string host, int attempts, int timeout, CancellationToken ct)
         {
             List<Thread> threads = new List<Thread>();
             ConcurrentBag<KeyValuePair<ExtendedPing, PingCompletedEventArgs>> pings = new ConcurrentBag<KeyValuePair<ExtendedPing, PingCompletedEventArgs>>();
@@ -135,7 +135,7 @@ namespace NTNN
                         try
                         {
                             ExtendedPing ping = new ExtendedPing(i);
-                            ping.PingCompleted += new PingCompletedEventHandler(( obj, PingCompletedEventArgs ) =>
+                            ping.PingCompleted += new PingCompletedEventHandler((obj, PingCompletedEventArgs) =>
                             {
                                 pings.Add(new KeyValuePair<ExtendedPing, PingCompletedEventArgs>((ExtendedPing)obj, PingCompletedEventArgs));
                                 Interlocked.Decrement(ref counter);
@@ -163,8 +163,8 @@ namespace NTNN
                         Interlocked.Increment(ref foundDevices);
                         string hostname = GetHostName(host);
                         string macaddres = GetMacAddress(host);
-                        AddDevice(new KeyValuePair<string, string>[] 
-                        { 
+                        AddDevice(new KeyValuePair<string, string>[]
+                        {
                             new KeyValuePair<string, string>("IP", host),
                             new KeyValuePair<string, string>("Hostname", hostname),
                             new KeyValuePair<string, string>("Macaddress", macaddres),
@@ -175,7 +175,7 @@ namespace NTNN
 
                 ct.ThrowIfCancellationRequested();
             }
-            catch(OperationCanceledException) { }
+            catch (OperationCanceledException) { }
             finally
             {
                 if (ct.IsCancellationRequested)
@@ -185,7 +185,7 @@ namespace NTNN
                     ping.Key.Dispose();
             }
         }
-        public static string GetHostName( string ipAddress )
+        public static string GetHostName(string ipAddress)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace NTNN
             return null;
         }
         //Get MAC address
-        public static string GetMacAddress( string ipAddress )
+        public static string GetMacAddress(string ipAddress)
         {
             System.Diagnostics.Process Process = new System.Diagnostics.Process();
             Process.StartInfo.FileName = "arp";
@@ -230,25 +230,23 @@ namespace NTNN
         }
 
         #region Synchronization progress bar/message box
-        private void ClearProgress( Action<int> initPB, Action<string> lblUpdate, int total, string labelText )
+        private void ClearProgress(Action<int> initPB, Action<string> lblUpdate, int total, string labelText)
         {
             currProgressVal = 0;
             maxProgressVal = total;
             initPB(total);
             lblUpdate(labelText);
         }
-        private void UpdateProgress( Action<int> updPB, Action<string> lblUpdate, string labelText = "" )
+        private void UpdateProgress(Action<int> updPB, Action<string> lblUpdate, string labelText = "")
         {
-            currProgressVal = ( currProgressVal + 1 ) % maxProgressVal;
+            currProgressVal = (currProgressVal + 1) % maxProgressVal;
             updPB(currProgressVal);
             lblUpdate(labelText);
         }
-        private void ShowMessage( string text )
+        private void ShowMessage(string text)
         {
             _synchronizationContext.Send(callback => ShowMessageBox(text), null);
         }
         #endregion
-
-
     }
 }

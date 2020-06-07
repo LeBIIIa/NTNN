@@ -25,55 +25,55 @@ using System;
 
 namespace FlexFieldControlLib
 {
-  internal class CedeFocusEventArgs : EventArgs
-  {
-    public Action Action
+    internal class CedeFocusEventArgs : EventArgs
     {
-      get { return _action; }
-      set { _action = value; }
+        public Action Action
+        {
+            get { return _action; }
+            set { _action = value; }
+        }
+
+        public Direction Direction
+        {
+            get { return _direction; }
+            set { _direction = value; }
+        }
+
+        public int FieldIndex
+        {
+            get { return _fieldIndex; }
+            set { _fieldIndex = value; }
+        }
+
+        public Selection Selection
+        {
+            get { return _selection; }
+            set { _selection = value; }
+        }
+
+        private Action _action;
+        private Direction _direction;
+        private int _fieldIndex;
+        private Selection _selection;
     }
 
-    public Direction Direction
+    internal enum Action
     {
-      get { return _direction; }
-      set { _direction = value; }
+        None,
+        Trim,
+        Home,
+        End
     }
 
-    public int FieldIndex
+    internal enum Direction
     {
-      get { return _fieldIndex; }
-      set { _fieldIndex = value; }
+        Forward,
+        Reverse
     }
 
-    public Selection Selection
+    internal enum Selection
     {
-      get { return _selection; }
-      set { _selection = value; }
+        None,
+        All
     }
-
-    private Action _action;
-    private Direction _direction;
-    private int _fieldIndex;
-    private Selection _selection;
-  }
-
-  internal enum Action
-  {
-    None,
-    Trim,
-    Home,
-    End
-  }
-
-  internal enum Direction
-  {
-    Forward,
-    Reverse
-  }
-
-  internal enum Selection
-  {
-    None,
-    All
-  }
 }

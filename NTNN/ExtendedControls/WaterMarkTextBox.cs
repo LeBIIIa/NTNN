@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NTNN.ExtendedControls
@@ -47,7 +43,7 @@ namespace NTNN.ExtendedControls
         }
 
         //Override OnPaint
-        protected override void OnPaint( PaintEventArgs args )
+        protected override void OnPaint(PaintEventArgs args)
         {
             // Use the same font that was defined in base class
             System.Drawing.Font drawFont = new System.Drawing.Font(Font.FontFamily,
@@ -55,12 +51,12 @@ namespace NTNN.ExtendedControls
             //Create new brush with gray color or 
             SolidBrush drawBrush = new SolidBrush(WaterMarkColor);//use Water mark color
             //Draw Text or WaterMark
-            args.Graphics.DrawString(( waterMarkTextEnabled ? WaterMarkText : Text ),
+            args.Graphics.DrawString((waterMarkTextEnabled ? WaterMarkText : Text),
                 drawFont, drawBrush, new PointF(0.0F, 0.0F));
             base.OnPaint(args);
         }
 
-        private void JoinEvents( Boolean join )
+        private void JoinEvents(Boolean join)
         {
             if (join)
             {
@@ -79,7 +75,7 @@ namespace NTNN.ExtendedControls
             }
         }
 
-        private void WaterMark_Toggel( object sender, EventArgs args )
+        private void WaterMark_Toggel(object sender, EventArgs args)
         {
             if (this.Text.Length <= 0)
                 EnableWaterMark();
@@ -111,7 +107,7 @@ namespace NTNN.ExtendedControls
                     oldFont.Style, oldFont.Unit);
         }
 
-        private void WaterMark_FontChanged( object sender, EventArgs args )
+        private void WaterMark_FontChanged(object sender, EventArgs args)
         {
             if (waterMarkTextEnabled)
             {

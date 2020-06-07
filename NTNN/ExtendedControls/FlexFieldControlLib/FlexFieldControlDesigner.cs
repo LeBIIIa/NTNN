@@ -21,45 +21,44 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-using System;
 using System.Collections;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Design.Behavior;
 
 namespace FlexFieldControlLib
 {
-  class FlexFieldControlDesigner : ControlDesigner
-  {
-    public override SelectionRules SelectionRules
+    class FlexFieldControlDesigner : ControlDesigner
     {
-      get
-      {
-        FlexFieldControl control = (FlexFieldControl)Control;
-
-        if (control.AutoHeight)
+        public override SelectionRules SelectionRules
         {
-          return SelectionRules.Moveable | SelectionRules.Visible |
-             SelectionRules.RightSizeable | SelectionRules.LeftSizeable;
+            get
+            {
+                FlexFieldControl control = (FlexFieldControl)Control;
+
+                if (control.AutoHeight)
+                {
+                    return SelectionRules.Moveable | SelectionRules.Visible |
+                       SelectionRules.RightSizeable | SelectionRules.LeftSizeable;
+                }
+                else
+                {
+                    return SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible;
+                }
+            }
         }
-        else
+
+        public override IList SnapLines
         {
-          return SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible;
+            get
+            {
+                FlexFieldControl control = (FlexFieldControl)Control;
+
+                IList snapLines = base.SnapLines;
+
+                snapLines.Add(new SnapLine(SnapLineType.Baseline, control.Baseline));
+
+                return snapLines;
+            }
         }
-      }
     }
-
-    public override IList SnapLines
-    {
-      get
-      {
-        FlexFieldControl control = (FlexFieldControl)Control;
-
-        IList snapLines = base.SnapLines;
-
-        snapLines.Add(new SnapLine(SnapLineType.Baseline, control.Baseline));
-
-        return snapLines;
-      }
-    }
-  }
 }

@@ -1,17 +1,17 @@
 using System;
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using GNS3_API.Helpers;
 
 namespace GNS3_API
 {
-    public enum Status{
+    public enum Status
+    {
         Unknown,
         Start,
         Stop,
@@ -34,7 +34,8 @@ namespace GNS3_API
     /// This class can interact directly by telnet to a node
     /// </remarks>
     /// </summary>
-    public class Node {
+    public class Node
+    {
 
         protected string consoleHost;
         /// <summary>
@@ -95,7 +96,7 @@ namespace GNS3_API
 
         public Status Status { get; private set; }
 
-        public string GetStatus 
+        public string GetStatus
         {
             get
             {
@@ -119,7 +120,8 @@ namespace GNS3_API
         /// <summary>
         /// Constructor by default. Every property is empty
         /// </summary>
-        internal Node(){
+        internal Node()
+        {
             this.consoleHost = null; this.port = 0; this.name = null; this.id = null;
             this.tcpConnection = null; this.netStream = null;
         }
@@ -133,7 +135,8 @@ namespace GNS3_API
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
         internal Node(string _consoleHost, ushort? _port, string _name, string _id, Status status, GNS3sharp parent,
-            Dictionary<string,dynamic>[] _ports){
+            Dictionary<string, dynamic>[] _ports)
+        {
 
             this.consoleHost = _consoleHost; this.port = _port; this.name = _name; this.id = _id;
             this.ports = _ports;
@@ -146,7 +149,8 @@ namespace GNS3_API
         /// Constructor that replicates a node from another one
         /// </summary>
         /// <param name="clone">Node you want to make the copy from</param>
-        public Node(Node clone){
+        public Node(Node clone)
+        {
             this.consoleHost = clone.ConsoleHost; this.port = clone.Port;
             this.name = clone.Name; this.id = clone.ID; this.ports = clone.Ports;
             this.tcpConnection = clone.TCPConnection; this.netStream = clone.NetStream;
@@ -155,20 +159,23 @@ namespace GNS3_API
         /// <summary>
         /// Close the connection with the node before leaving
         /// </summary>
-        ~Node(){
-            try{
+        ~Node()
+        {
+            try
+            {
                 // Close the network stream
-                if(this.netStream != null)
+                if (this.netStream != null)
                     this.netStream.Close();
                 // Close the TCP connection
-                if(this.tcpConnection != null)
+                if (this.tcpConnection != null)
                     this.tcpConnection.Close();
-            } catch{}
+            }
+            catch { }
         }
 
         ///////////////////////////////// Methods ////////////////////////////////////////////
-        
-        public void SetStatus( Status status )
+
+        public void SetStatus(Status status)
         {
             Status = status;
         }
@@ -178,20 +185,24 @@ namespace GNS3_API
         /// </summary>
         /// <param name="timeout">Timeout (in seconds) before quitting the connection</param>
         /// <returns></returns>
-        protected (TcpClient Connection, NetworkStream Stream) Connect(int timeout = 10000){
+        protected (TcpClient Connection, NetworkStream Stream) Connect(int timeout = 10000)
+        {
             if (!port.HasValue)
                 return (null, null);
             // Network endpoint as an IP address and a port number
-            IPEndPoint address = new IPEndPoint(IPAddress.Parse(this.consoleHost),this.port.Value);
+            IPEndPoint address = new IPEndPoint(IPAddress.Parse(this.consoleHost), this.port.Value);
             // Set the socket for the connection
             TcpClient newConnection = new TcpClient();
             // Stream used to send and receive data
             NetworkStream newStream = null;
-            try{
+            try
+            {
                 newConnection.Connect(address);
                 newStream = newConnection.GetStream();
                 newStream.ReadTimeout = timeout; newStream.WriteTimeout = timeout;
-            } catch(Exception err){
+            }
+            catch (Exception err)
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Impossible to connect to the node {name}: {err.Message}");
                 newConnection = null;
             }
@@ -207,7 +218,8 @@ namespace GNS3_API
         /// PC.Send("ifconfig");
         /// </code>
         /// </example>
-        public void Send(string message){
+        public void Send(string message)
+        {
 
             if (this.tcpConnection == null)
                 (this.tcpConnection, this.netStream) = this.Connect();
@@ -215,19 +227,29 @@ namespace GNS3_API
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "The connection couldn't be stablished and so the message can not be sent");
             else if (!this.netStream.CanWrite)
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Impossible to send any messages right now");
-            else{
-                try{
+            else
+            {
+                try
+                {
                     // We need to convert the string into a bytes array first
                     byte[] out_txt = Encoding.Default.GetBytes($"{message}\n");
                     this.netStream.Write(buffer: out_txt, offset: 0, size: out_txt.Length);
                     this.netStream.Flush();
-                } catch(ObjectDisposedException err1){
+                }
+                catch (ObjectDisposedException err1)
+                {
                     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Impossible to send anything, connection closed: {err1.Message}");
-                } catch(NullReferenceException){
+                }
+                catch (NullReferenceException)
+                {
                     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Connection value is null. Probably it was not possible to initialize it");
-                } catch(IOException err2){
+                }
+                catch (IOException err2)
+                {
                     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Time to write expired: {err2.Message}");
-                } catch(Exception err3){
+                }
+                catch (Exception err3)
+                {
                     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError,
                         $"Some error occured while sending '{message}': {err3.Message}"
                     );
@@ -249,7 +271,8 @@ namespace GNS3_API
         ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "${line}");
         /// </code>
         /// </example>
-        public string[] Receive(int timeBetweenReads = 2){
+        public string[] Receive(int timeBetweenReads = 2)
+        {
 
             // Reception variable as a string split by \n
             string[] in_txt_split = null;
@@ -258,30 +281,40 @@ namespace GNS3_API
 
             if (this.tcpConnection != null)
                 (this.tcpConnection, this.netStream) = this.Connect();
-            if (this.netStream.CanRead){
+            if (this.netStream.CanRead)
+            {
                 // Reception variable as a bytes array
                 byte[] in_bytes = new byte[tcpConnection.ReceiveBufferSize];
                 // Reception variable as a string
                 string in_txt = "";
                 // Number of bytes read for every iteration
                 int numberOfBytesRead;
-                do{
-                    do{
+                do
+                {
+                    do
+                    {
                         // We repeat this until there's no more to read
-                        try{
+                        try
+                        {
                             numberOfBytesRead = this.netStream.Read(buffer: in_bytes, offset: 0, size: in_bytes.Length);
                             in_txt = $"{in_txt}{Encoding.Default.GetString(in_bytes, 0, numberOfBytesRead)}";
-                        } catch(NullReferenceException){
+                        }
+                        catch (NullReferenceException)
+                        {
                             Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Connection is null. Probably it was not possible to initialize it");
-                        } catch(IOException err1){
+                        }
+                        catch (IOException err1)
+                        {
                             Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Time to write expired: {err1.Message}");
-                        } catch(Exception err2){
+                        }
+                        catch (Exception err2)
+                        {
                             Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"Some error occured while receiving text: {err2.Message}");
                         }
                     } while (this.netStream.DataAvailable);
                     // We need to wait for the server to process our messages
                     Thread.Sleep(timeBetweenReads);
-                // We double check the availability of data 
+                    // We double check the availability of data 
                 } while (this.netStream.DataAvailable);
                 // Remove all the unnecesary characters contained in the buffer and split the text we have received in \n
                 in_txt_split = Regex.Replace(in_txt, @"(\0){2,}", "").Split('\n');
@@ -301,7 +334,8 @@ namespace GNS3_API
         ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{line}");
         /// </code>
         /// </example>
-        public virtual string[] Ping(string IP, ushort count=5){
+        public virtual string[] Ping(string IP, ushort count = 5)
+        {
             return Ping(IP, $"-c {count}");
         }
 
@@ -318,14 +352,18 @@ namespace GNS3_API
         /// </code>
         /// </example>
         protected string[] Ping(
-            string IP, string additionalParameters){
+            string IP, string additionalParameters)
+        {
             // Reception variable as a string
             string[] in_txt = null;
 
-            if(Aux.IsIP(IP)) {
+            if (Aux.IsIP(IP))
+            {
                 Send($"ping {IP} {additionalParameters}");
                 in_txt = Receive();
-            } else{
+            }
+            else
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
             }
 
@@ -344,12 +382,15 @@ namespace GNS3_API
         ///     Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "The ping went ok");
         /// </code>
         /// </example>
-        public virtual bool PingResult(string[] pingMessage){
+        public virtual bool PingResult(string[] pingMessage)
+        {
             // We assume the result will be negative
             bool result = false;
-            foreach(string line in pingMessage.Reverse<string>()){
+            foreach (string line in pingMessage.Reverse<string>())
+            {
                 // Search for the line with the results
-                if (Regex.IsMatch(line, @"\d+\spackets\stransmitted,\s\d+\spackets\sreceived,\s(\d+|\d+[.]\d+)%?%\spacket\sloss\s")){
+                if (Regex.IsMatch(line, @"\d+\spackets\stransmitted,\s\d+\spackets\sreceived,\s(\d+|\d+[.]\d+)%?%\spacket\sloss\s"))
+                {
                     string[] resultStr = line.Split(',');
                     // If "%d packets received" is different to zero means the ping went right
                     if (Int32.Parse(resultStr[1].TrimStart().Split(' ')[0]) != 0)

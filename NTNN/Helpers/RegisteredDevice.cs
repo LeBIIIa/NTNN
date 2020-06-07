@@ -1,21 +1,11 @@
 ﻿using GNS3_API.Helpers;
 
-using Lextm.SharpSnmpLib;
-
-using Newtonsoft.Json.Converters;
-
 using NTNN.DAL;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel.Design;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NTNN.Helpers
 {
@@ -34,18 +24,18 @@ namespace NTNN.Helpers
             RegisteredDevicePK = 0;
         }
 
-        public RegisteredDevice( int RegisteredDevicePK )
+        public RegisteredDevice(int RegisteredDevicePK)
         {
             LoadRegisteredDevice(RegisteredDevicePK, this);
         }
 
-        public RegisteredDevice( int RegisteredDevicePK, string IP, string Name, string Hostname, DeviceType Type ) 
+        public RegisteredDevice(int RegisteredDevicePK, string IP, string Name, string Hostname, DeviceType Type)
             : this(IP, Name, Hostname, Type)
         {
             this.RegisteredDevicePK = RegisteredDevicePK;
         }
 
-        public RegisteredDevice(string IP, string Name, string Hostname, DeviceType Type )
+        public RegisteredDevice(string IP, string Name, string Hostname, DeviceType Type)
         {
             this.IP = IP;
             this.Name = Name;
@@ -99,7 +89,7 @@ namespace NTNN.Helpers
             }
             return null;
         }
-        public static byte[] GetIPToBinary( string ipv4 )
+        public static byte[] GetIPToBinary(string ipv4)
         {
             try
             {
@@ -221,7 +211,7 @@ namespace NTNN.Helpers
             }
             return false;
         }
-        public static bool UpdateRegisteredDevice( string newName, DeviceType newType, int RegisteredDevicePK )
+        public static bool UpdateRegisteredDevice(string newName, DeviceType newType, int RegisteredDevicePK)
         {
             try
             {
@@ -250,7 +240,7 @@ namespace NTNN.Helpers
         }
         #endregion
 
-        public void Deconstruct( out string IP, out string Name, out string Hostname, out string Type )
+        public void Deconstruct(out string IP, out string Name, out string Hostname, out string Type)
         {
             IP = this.IP;
             Name = this.Name;
@@ -258,7 +248,7 @@ namespace NTNN.Helpers
             Type = this.Type.ToString();
         }
 
-        public void Deconstruct(out KeyValuePair<string, string>[] pairs )
+        public void Deconstruct(out KeyValuePair<string, string>[] pairs)
         {
             pairs = new KeyValuePair<string, string>[5];
             pairs[0] = new KeyValuePair<string, string>("RegisteredDevicePK", RegisteredDevicePK.ToString());
@@ -271,9 +261,9 @@ namespace NTNN.Helpers
 
     public enum DeviceType
     {
-        PC,
-        Router,
-        Switch,
-        Printer
+        PC
+        , Router
+        , Switch
+        //,Printer
     }
 }

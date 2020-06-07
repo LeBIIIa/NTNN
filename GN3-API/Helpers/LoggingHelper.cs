@@ -1,16 +1,11 @@
 ﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GNS3_API.Helpers
 {
     public static class LoggingHelper
     {
         private static log4net.Repository.ILoggerRepository _repository = LogManager.GetRepository();
-        public static void LogEntry(SystemCategories[] categories, string message )
+        public static void LogEntry(SystemCategories[] categories, string message)
         {
             log4net.Config.XmlConfigurator.Configure();
             ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -20,7 +15,7 @@ namespace GNS3_API.Helpers
             }
         }
 
-        public static void LogEntry( SystemCategories category, string message )
+        public static void LogEntry(SystemCategories category, string message)
         {
             LogEntry(new SystemCategories[] { category }, message);
         }

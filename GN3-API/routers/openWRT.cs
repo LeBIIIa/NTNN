@@ -10,7 +10,8 @@ namespace GNS3_API
     /// Define methods that are only available for this appliance
     /// </remarks>
     /// </summary>
-    public class OpenWRT : Router{
+    public class OpenWRT : Router
+    {
 
         private const string label = "OPENWRT";
         /// <summary>
@@ -24,14 +25,15 @@ namespace GNS3_API
         /// Routing table of the node as an object
         /// </summary>
         /// <value>Object of type <c>RoutingTable</c></value>
-        public override RoutingTable RoutingTable { 
+        public override RoutingTable RoutingTable
+        {
             get => this.GetRoutingTable(this.GetRoutingTable());
         }
 
         /// <summary>
         /// Constructor by default. Every property is empty
         /// </summary>
-        internal OpenWRT() : base() {}
+        internal OpenWRT() : base() { }
 
         /// <summary>
         /// Constructor for any kind of <c>Node</c>. It must be called from a <c>GNS3sharp</c> object
@@ -42,19 +44,21 @@ namespace GNS3_API
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
         internal OpenWRT(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
-            Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
+            Dictionary<string, dynamic>[] _ports) :
+            base(_consoleHost, _port, _name, _id, status, parent, _ports)
+        { }
 
         /// <summary>
         /// Constructor that replicates a router from another node
         /// </summary>
         /// <param name="clone">Node you want to make the copy from</param>
-        public OpenWRT(Node clone) : base(clone){}
+        public OpenWRT(Node clone) : base(clone) { }
 
         /// <summary>
         /// Force the terminal to allow messages by sending a first \n. You should wait for the router to finish of configuring though
         /// </summary>
-        private void ActivateTerminal(){
+        private void ActivateTerminal()
+        {
             Send("");
         }
 
@@ -67,7 +71,8 @@ namespace GNS3_API
         /// <returns>Received message as an array of strings</returns>
         public override string[] ActivateInterface(
             string IP, string netmask = "255.255.255.0", ushort interfaceNumber = 0
-            ){
+            )
+        {
             return ChangeInterfaceStatus("up", IP, netmask, interfaceNumber);
         }
 
@@ -76,7 +81,8 @@ namespace GNS3_API
         /// </summary>
         /// <param name="interfaceNumber">Interface number (eth#)</param>
         /// <returns>Received message as an array of strings</returns>
-        public override string[] DeactivateInterface(ushort interfaceNumber){
+        public override string[] DeactivateInterface(ushort interfaceNumber)
+        {
             return ChangeInterfaceStatus("down", null, null, interfaceNumber);
         }
 
@@ -90,15 +96,21 @@ namespace GNS3_API
         /// <returns>Received message as an array of strings</returns>
         private string[] ChangeInterfaceStatus(
             string status, string IP, string netmask = "255.255.255.0", ushort interfaceNumber = 0
-            ){
+            )
+        {
             // Reception variable as a string
             string[] in_txt = null;
 
-            if(IP != null && !Aux.IsIP(IP)) {
+            if (IP != null && !Aux.IsIP(IP))
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
-            } else if(netmask != null && !Aux.IsNetmask(netmask)){
+            }
+            else if (netmask != null && !Aux.IsNetmask(netmask))
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{netmask} is not a valid netmask");
-            } else{
+            }
+            else
+            {
                 ActivateTerminal();
                 if (IP == null && netmask == null)
                     Send($"ifconfig eth{interfaceNumber.ToString()} {status}");
@@ -118,7 +130,8 @@ namespace GNS3_API
         /// <param name="gateway">Gateway where the packets must initially go through to reach the destination</param>
         /// <param name="netmask">Netmask of the IP. By default "255.255.255.0"</param>
         /// <returns>Received message as an array of strings</returns>
-        public override string[] SetRoute(string destination, string gateway, string netmask = "255.255.255.0"){
+        public override string[] SetRoute(string destination, string gateway, string netmask = "255.255.255.0")
+        {
             // Reception variable as a string
             string[] in_txt = null;
 
@@ -127,7 +140,8 @@ namespace GNS3_API
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{destination} is not a valid IP");
             else if (!Aux.IsIP(gateway))
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{gateway} is not a valid gateway");
-            else{
+            else
+            {
                 Send($"route add -net {destination} netmask {netmask} gw {gateway}");
                 in_txt = Receive();
             }
@@ -140,7 +154,8 @@ namespace GNS3_API
         /// Get the routing table of the router
         /// </summary>
         /// <returns>The routing table as an array of strings</returns>
-        protected override string[] GetRoutingTable(){
+        protected override string[] GetRoutingTable()
+        {
             // Reception variable as a string
             string[] in_txt = null;
 
@@ -157,7 +172,8 @@ namespace GNS3_API
         /// </summary>
         /// <param name="routingTable">Routing table as a string</param>
         /// <returns>The routing table</returns>
-        private RoutingTable GetRoutingTable(string[] routingTable){
+        private RoutingTable GetRoutingTable(string[] routingTable)
+        {
             RoutingTable table = new RoutingTable();
 
             string[][] lines = new string[routingTable.Length][];
@@ -165,8 +181,9 @@ namespace GNS3_API
             // Position of the "Destination-Gateway-Genmask-Flags-Metric-Ref-Use-Iface" line
 
             short informationPosition = -1;
-            for (short i = 0; i < routingTable.Length; i++){
-                lines[i] = routingTable[i].Trim().Split(new char[] {' ','\t'}, StringSplitOptions.RemoveEmptyEntries);
+            for (short i = 0; i < routingTable.Length; i++)
+            {
+                lines[i] = routingTable[i].Trim().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 if (
                     lines[i][0].ToUpper().Equals("DESTINATION") &&
                     lines[i][1].ToUpper().Equals("GATEWAY") &&
@@ -175,17 +192,21 @@ namespace GNS3_API
                     informationPosition = i;
             }
 
-            if (informationPosition >= 0){
+            if (informationPosition >= 0)
+            {
                 short i = informationPosition;
                 // While the first element of every line keep being an IP means we are
                 // scanning the actual routing table
-                while (Aux.IsIP(lines[++i][0])){
+                while (Aux.IsIP(lines[++i][0]))
+                {
                     table.AddRoute(
                         lines[i][0], lines[i][1], lines[i][2],
                         lines[i][7], UInt16.Parse(lines[i][5])
                     );
                 }
-            } else{
+            }
+            else
+            {
                 table = null;
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, "Impossible to analyze the routing table");
             }
@@ -197,7 +218,8 @@ namespace GNS3_API
         /// (Re)start the router firewall
         /// </summary>
         /// <returns>Received message as an array of strings</returns>
-        public virtual string[] EnableFirewall(){
+        public virtual string[] EnableFirewall()
+        {
             return ChangeFirewallStatus("start");
         }
 
@@ -205,7 +227,8 @@ namespace GNS3_API
         /// Stop the router firewall
         /// </summary>
         /// <returns>Received message as an array of strings</returns>
-        public virtual string[] DisableFirewall(){
+        public virtual string[] DisableFirewall()
+        {
             return ChangeFirewallStatus("stop");
         }
 
@@ -214,7 +237,8 @@ namespace GNS3_API
         /// </summary>
         /// <param name="newStatus">"start" or "stop"</param>
         /// <returns></returns>
-        private string[] ChangeFirewallStatus(string newStatus){
+        private string[] ChangeFirewallStatus(string newStatus)
+        {
             // Reception variable as a string
             string[] in_txt = null;
 
@@ -231,21 +255,26 @@ namespace GNS3_API
         /// </summary>
         /// <param name="iface">Interface whose IPv4 will be searched</param>
         /// <returns>Array of strings: first corresponds to the IP nad second to the netmask</returns>
-        public override string[] GetIPByInterface(string iface){
+        public override string[] GetIPByInterface(string iface)
+        {
 
-            string GetParameterIfconfig(string _iface, string type){
+            string GetParameterIfconfig(string _iface, string type)
+            {
 
                 string result = null; string command = null;
                 if (type.Equals("IP"))
                     command = $"ifconfig {_iface} | grep 'inet addr' | cut -d: -f2 | awk '{{print $1}}'";
                 else if (type.Equals("NETMASK"))
                     command = $"ifconfig {_iface} | grep 'inet addr' | cut -d: -f4 | awk '{{print $1}}'";
-                if (command != null){
+                if (command != null)
+                {
                     string lineTemp;
                     Send(command);
-                    foreach (string line in Receive()) {
+                    foreach (string line in Receive())
+                    {
                         lineTemp = line.Trim();
-                        if (Aux.IsIP(lineTemp)){
+                        if (Aux.IsIP(lineTemp))
+                        {
                             result = lineTemp;
                             break;
                         }
@@ -255,10 +284,10 @@ namespace GNS3_API
 
             }
 
-            return new string[]{ 
-                GetParameterIfconfig(iface, "IP"), GetParameterIfconfig(iface, "NETMASK") 
+            return new string[]{
+                GetParameterIfconfig(iface, "IP"), GetParameterIfconfig(iface, "NETMASK")
             };
-            
+
         }
     }
 }

@@ -21,31 +21,30 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace FlexFieldControlLib
 {
-  internal interface IValueFormatter
-  {
-    int MaxFieldLength
+    internal interface IValueFormatter
     {
-      get;
+        int MaxFieldLength
+        {
+            get;
+        }
+
+        string RegexString
+        {
+            get;
+        }
+
+        Size GetCharacterSize(Graphics g, Font font, CharacterCasing casing);
+
+        bool IsValidKey(KeyEventArgs e);
+
+        int MaxValue(int fieldLength);
+
+        int Value(string text);
+        string ValueText(int value, CharacterCasing casing);
     }
-
-    string RegexString
-    {
-      get;
-    }
-
-    Size GetCharacterSize(Graphics g, Font font, CharacterCasing casing);
-
-    bool IsValidKey(KeyEventArgs e);
-
-    int MaxValue(int fieldLength);
-
-    int Value(string text);
-    string ValueText(int value, CharacterCasing casing);
-  }
 }

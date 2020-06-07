@@ -14,7 +14,8 @@ namespace GNS3_API
     /// </item>
     /// </list>
     /// </summary>
-    public static class ServerProjects {
+    public static class ServerProjects
+    {
 
         /// <summary>
         /// Return the ID of a project giving its name. It's case sensitive
@@ -23,15 +24,21 @@ namespace GNS3_API
         /// <param name="host">IP where the GNS3 server is hosted. "localhost" by default</param>
         /// <param name="port">Port where the server is hosted. 3080 by default</param>
         /// <returns>The ID of the project in case it's found. Null otherwise</returns>
-        public static string GetProjectIDByName(string projectName, string host = "localhost", ushort port = 3080) {
+        public static string GetProjectIDByName(string projectName, string host = "localhost", ushort port = 3080)
+        {
             string id = null;
-            List<Dictionary<string,object>> projects = null;
-            try {
-                projects = GNS3sharp.ExtractDictionary($"http://{host}:{port}/v2/projects","zoom");
-            } catch {}
-            if (projects != null){
-                foreach(Dictionary<string, object> project in projects){
-                    if ( projectName.Equals(project["name"].ToString()) ){
+            List<Dictionary<string, object>> projects = null;
+            try
+            {
+                projects = GNS3sharp.ExtractDictionary($"http://{host}:{port}/v2/projects", "zoom");
+            }
+            catch { }
+            if (projects != null)
+            {
+                foreach (Dictionary<string, object> project in projects)
+                {
+                    if (projectName.Equals(project["name"].ToString()))
+                    {
                         id = project["project_id"].ToString();
                         break;
                     }

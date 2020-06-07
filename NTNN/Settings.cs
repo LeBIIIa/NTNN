@@ -1,13 +1,6 @@
 ﻿using NTNN.Helpers;
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NTNN
@@ -26,11 +19,11 @@ namespace NTNN
             LoadSettings();
         }
 
-        
+
         private void LoadSettings()
         {
             Properties.Settings.Default.Reload();
-            if (Properties.Settings.Default.Timeout > numericTimeout.Minimum && 
+            if (Properties.Settings.Default.Timeout > numericTimeout.Minimum &&
                 Properties.Settings.Default.Timeout < numericTimeout.Maximum)
             {
                 numericTimeout.Value = Properties.Settings.Default.Timeout;
@@ -40,6 +33,7 @@ namespace NTNN
             {
                 numericAttempts.Value = Properties.Settings.Default.Attempts;
             }
+            cbMonitoring.Checked = Properties.Settings.Default.EnableMonitoring;
         }
 
         private void SaveSettings()
@@ -48,6 +42,7 @@ namespace NTNN
             {
                 Properties.Settings.Default.Attempts = (int)numericAttempts.Value;
                 Properties.Settings.Default.Timeout = (int)numericTimeout.Value;
+                Properties.Settings.Default.EnableMonitoring = cbMonitoring.Checked;
                 Properties.Settings.Default.Save();
                 this.DialogResult = DialogResult.OK;
             }
@@ -58,7 +53,7 @@ namespace NTNN
             }
         }
 
-        private void BtnExit_Click( object sender, EventArgs e )
+        private void BtnExit_Click(object sender, EventArgs e)
         {
             SaveSettings();
         }

@@ -1,18 +1,14 @@
-﻿using GNS3_API.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GN3_API.events
 {
     public class BaseSpecifiedConcreteClassConverter : DefaultContractResolver
     {
-        protected override JsonConverter ResolveContractConverter( Type objectType )
+        protected override JsonConverter ResolveContractConverter(Type objectType)
         {
             if (typeof(Notification).IsAssignableFrom(objectType) && !objectType.IsAbstract)
                 return null; // pretend TableSortRuleConvert is not specified (thus avoiding a stack overflow)
@@ -23,12 +19,12 @@ namespace GN3_API.events
     {
         static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new BaseSpecifiedConcreteClassConverter() };
 
-        public override bool CanConvert( Type objectType )
+        public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(Notification);
         }
 
-        public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jo = JObject.Load(reader);
             var ret = new Notification()
@@ -54,7 +50,7 @@ namespace GN3_API.events
             get { return false; }
         }
 
-        public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException(); // won't be called because CanWrite returns false
         }

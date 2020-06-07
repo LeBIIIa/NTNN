@@ -1,6 +1,5 @@
-using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GNS3_API
 {
@@ -11,7 +10,8 @@ namespace GNS3_API
     /// Define methods that are only available for this appliance
     /// </remarks>
     /// </summary>
-    public class MicroCore : Guest{
+    public class MicroCore : Guest
+    {
 
         private const string label = "MICROCORE";
         /// <summary>
@@ -24,7 +24,7 @@ namespace GNS3_API
         /// <summary>
         /// Constructor by default. Every property is empty
         /// </summary>
-        internal MicroCore() : base() {}
+        internal MicroCore() : base() { }
 
         /// <summary>
         /// Constructor for any kind of <c>Node</c>. It must be called from a <c>GNS3sharp</c> object
@@ -35,14 +35,15 @@ namespace GNS3_API
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
         internal MicroCore(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
-            Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
+            Dictionary<string, dynamic>[] _ports) :
+            base(_consoleHost, _port, _name, _id, status, parent, _ports)
+        { }
 
         /// <summary>
         /// Constructor that replicates a guest from another node
         /// </summary>
         /// <param name="clone">Node you want to make the copy from</param>
-        public MicroCore(Node clone) : base(clone){}
+        public MicroCore(Node clone) : base(clone) { }
 
         /// <summary>
         /// Set an IP for an interface of the device
@@ -54,19 +55,26 @@ namespace GNS3_API
         /// <returns>Received message as an array of strings</returns>
         public override string[] SetIP(
             string IP, string netmask = "255.255.255.0", ushort adapterNumber = 0, string gateway = null
-            ){
+            )
+        {
 
             // Reception variable as a string
             string[] in_txt = null;
 
-            if(!Aux.IsIP(IP)) {
+            if (!Aux.IsIP(IP))
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{IP} is not a valid IP");
-            } else if(!Aux.IsNetmask(netmask)){
+            }
+            else if (!Aux.IsNetmask(netmask))
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{netmask} is not a valid netmask");
-            } else{
+            }
+            else
+            {
                 Send($"sudo ifconfig eth{adapterNumber} {IP} netmask {netmask}");
                 in_txt = Receive();
-                if (gateway != null) {
+                if (gateway != null)
+                {
                     // If we choose to set a gateway
                     in_txt = in_txt.Concat(SetGateway(gateway)).ToArray();
                 }
@@ -81,14 +89,18 @@ namespace GNS3_API
         /// </summary>
         /// <param name="gateway">Gateway address</param>
         /// <returns>Received message as an array of strings</returns>
-        public string[] SetGateway(string gateway){
+        public string[] SetGateway(string gateway)
+        {
             // Reception variable as a string
             string[] in_txt = null;
 
-            if (Aux.IsIP(gateway)) {
+            if (Aux.IsIP(gateway))
+            {
                 Send($"sudo route add default gw {gateway}");
                 in_txt = Receive();
-            } else{
+            }
+            else
+            {
                 Parent.InvokeLogEvent(Helpers.SystemCategories.GeneralError, $"{gateway} is not a valid gateway");
             }
             // Return the response
@@ -103,8 +115,9 @@ namespace GNS3_API
         /// <param name="count">Number of retries. By default 5</param>
         /// <param name="timeout">Timeout for retrying</param>
         /// <returns>The result messages of the ping as an array of strings</returns>
-        public virtual string[] Ping(string IP, ushort count=5, ushort timeout=10){
-            return Ping(IP,$"-c {count.ToString()} -W {timeout.ToString()}");
+        public virtual string[] Ping(string IP, ushort count = 5, ushort timeout = 10)
+        {
+            return Ping(IP, $"-c {count.ToString()} -W {timeout.ToString()}");
         }
 
     }

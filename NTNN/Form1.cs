@@ -1,26 +1,22 @@
 ﻿using GN3_API.events;
+
 using GNS3_API;
 using GNS3_API.Helpers;
+
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using NTNN.Helpers;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using WebSocketSharp;
 
 namespace NTNN
@@ -31,6 +27,7 @@ namespace NTNN
 
         readonly BackgroundWorkerObjectGNS bwoGNS;
         readonly BackgroundWorkerObject bwo;
+        readonly BackgroundWorkerChecker checker = BackgroundWorkerChecker.Instance;
 
         public static readonly string StartText = "Start";
         public static readonly string StopText = "Stop";
@@ -54,6 +51,7 @@ namespace NTNN
             }
             else
             {
+                ConfigureDeviceChecker();
                 lblError.Text = "";
                 lblError.Visible = false;
             }
@@ -69,7 +67,7 @@ namespace NTNN
             }
         }
 
-        private bool CheckSettings( out string failMessage )
+        private bool CheckSettings(out string failMessage)
         {
             bool result = true;
             try
@@ -120,7 +118,7 @@ namespace NTNN
 
             return (obj, gns);
         }
-        private bool IsWorkingBW( bool showMsg = true )
+        private bool IsWorkingBW(bool showMsg = true)
         {
             if (backgroundWorker.IsBusy || bwGNS3_API.IsBusy || bwListener.IsBusy)
             {
@@ -132,7 +130,7 @@ namespace NTNN
         }
 
         #region Tab1
-        private void Scan_Click( object sender, EventArgs e )
+        private void Scan_Click(object sender, EventArgs e)
         {
             if (txtIP.AnyBlank && !txtIP.Blank)
             {
@@ -144,12 +142,12 @@ namespace NTNN
             listVAddr.Items.Clear();
             backgroundWorker.RunWorkerAsync(bwo);
         }
-        private void Stop_Click( object sender, EventArgs e )
+        private void Stop_Click(object sender, EventArgs e)
         {
             backgroundWorker.CancelAsync();
             bwo.Cancel();
         }
-        private void StatsToolStripMenuItem_Click( object sender, EventArgs e )
+        private void StatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (IsWorkingBW())
                 return;
@@ -166,7 +164,7 @@ namespace NTNN
         #endregion
 
         #region Tab2
-        private void btnFind_Click( object sender, EventArgs e )
+        private void btnFind_Click(object sender, EventArgs e)
         {
             try
             {
@@ -203,22 +201,22 @@ namespace NTNN
                 LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
             }
         }
-        private void btnStartStop_Click( object sender, EventArgs e )
+        private void btnStartStop_Click(object sender, EventArgs e)
         {
             bwGNS3_API.RunWorkerAsync(sender);
         }
-        private void contextMenuStrip1_ItemClicked( object sender, ToolStripItemClickedEventArgs e )
+        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (lstNodes.SelectedItems.Count > 0)
             {
                 bwGNS3_API.RunWorkerAsync(e.ClickedItem);
             }
         }
-        private void btnReloadStatus_Click( object sender, EventArgs e )
+        private void btnReloadStatus_Click(object sender, EventArgs e)
         {
             bwGNS3_API.RunWorkerAsync(sender);
         }
-        private void btnGraphics_Click( object sender, EventArgs e )
+        private void btnGraphics_Click(object sender, EventArgs e)
         {
             using (ChartStats chart = new ChartStats(bwoGNS.Handler.NotificationUrlListener, TypeOfGraph.GNS3Simulation))
             {
@@ -228,24 +226,24 @@ namespace NTNN
         #endregion
 
         #region Updating UI
-        private void SetTextLabel1( SystemCategories category, string text )
+        private void SetTextLabel1(SystemCategories category, string text)
         {
             lblStatus1.ToolStripStatusInvokeAction(t => t.Text = text);
             LoggingHelper.LogEntry(category, text);
         }
-        private void SetTextLabel1( string text )
+        private void SetTextLabel1(string text)
         {
             lblStatus1.ToolStripStatusInvokeAction(t => t.Text = text);
         }
-        private void SetTextLabel2( string text )
+        private void SetTextLabel2(string text)
         {
             lblStatus2.ToolStripStatusInvokeAction(t => t.Text = text);
         }
-        private void SetAutoIP( string text )
+        private void SetAutoIP(string text)
         {
             txtIP.ControlInvokeAction(t => t.Text = text);
         }
-        private void InitProgressBar( int total )
+        private void InitProgressBar(int total)
         {
             toolStripProgressBar.ToolStripStatusInvokeAction(t =>
             {
@@ -254,7 +252,7 @@ namespace NTNN
                 toolStripProgressBar.Value = 0;
             });
         }
-        private void UpdateProgressBar( int curVal )
+        private void UpdateProgressBar(int curVal)
         {
             toolStripProgressBar.ToolStripStatusInvokeAction(t =>
             {
@@ -262,12 +260,12 @@ namespace NTNN
             });
 
         }
-        private void AddDevice( KeyValuePair<string, string>[] items )
+        private void AddDevice(KeyValuePair<string, string>[] items)
         {
             listVAddr.ControlInvokeAction(l =>
             {
                 var item = new ListViewItem();
-                item.SubItems.AddRange(Array.ConvertAll(items, (KeyValuePair<string, string> i) => 
+                item.SubItems.AddRange(Array.ConvertAll(items, (KeyValuePair<string, string> i) =>
                 {
                     return new ListViewItem.ListViewSubItem() { Text = i.Value, Name = i.Key };
                 }));
@@ -276,11 +274,11 @@ namespace NTNN
             });
         }
 
-        private void ShowMessageBox( string text )
+        private void ShowMessageBox(string text)
         {
             MessageBox.Show(text);
         }
-        private bool ShowMessageBoxWithResult( string text )
+        private bool ShowMessageBoxWithResult(string text)
         {
             return MessageBox.Show(text, "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes;
         }
@@ -304,7 +302,7 @@ namespace NTNN
             string name = null;
             this.Invoke(new MethodInvoker(() => name = lstNodes.SelectedItems[0].SubItems[2].Text));
             return name;
-        } 
+        }
 
         private void StartProject(Button btn)
         {
@@ -340,19 +338,20 @@ namespace NTNN
             {
                 item.Deconstruct(out var collection);
                 var lstItem = new ListViewItem();
-                lstItem.SubItems.AddRange(Array.ConvertAll(collection, ( KeyValuePair<string, string> i ) =>
+                lstItem.SubItems.AddRange(Array.ConvertAll(collection, (KeyValuePair<string, string> i) =>
                 {
                     return new ListViewItem.ListViewSubItem() { Text = i.Value, Name = i.Key };
                 }));
                 lstItem.SubItems.RemoveAt(0);
                 lstRegisterDevices.Items.Add(lstItem);
             }
+            checker.UpdateDevices(registeredDevices);
         }
         #endregion
 
         #region background workers
 
-        private void backgroundWorker_DoWork( object sender, DoWorkEventArgs e )
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             if (e.Argument is BackgroundWorkerObject bwo)
             {
@@ -366,7 +365,7 @@ namespace NTNN
                 return;
             }
         }
-        private void backgroundWorker_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnScan.Enabled = true;
             btnStop.Enabled = false;
@@ -377,7 +376,7 @@ namespace NTNN
                 InitProgressBar(0);
             }
         }
-        private void bwGNS3_API_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+        private void bwGNS3_API_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnFind.Enabled = true;
             if (bwoGNS.Handler == null)
@@ -396,7 +395,7 @@ namespace NTNN
             }
         }
 
-        private void bwGNS3_API_DoWork( object sender, DoWorkEventArgs e )
+        private void bwGNS3_API_DoWork(object sender, DoWorkEventArgs e)
         {
             btnFind.ControlInvokeAction(b => b.Enabled = false);
             btnReloadStatus.ControlInvokeAction(b => b.Enabled = false);
@@ -404,7 +403,7 @@ namespace NTNN
             bwoGNS.DoWork(e.Argument);
         }
 
-        private void bwListener_DoWork( object sender, DoWorkEventArgs e )
+        private void bwListener_DoWork(object sender, DoWorkEventArgs e)
         {
             btnFind.ControlInvokeAction(b => b.Enabled = false);
             Regex regex = new Regex("{|}|\"", RegexOptions.Compiled);
@@ -416,11 +415,11 @@ namespace NTNN
                 {
                     Notification notify;
                     ws.WaitTime = wait;
-                    ws.OnMessage += ( s, ev ) =>
+                    ws.OnMessage += (s, ev) =>
                     {
                         notify = JsonConvert.DeserializeObject<Notification>(ev.Data);
                         if (notify.Event is PingEvent)
-                            Helper.CheckHighLoad(notify, !string.IsNullOrEmpty(bwoGNS.ProjectName) ? bwoGNS.ProjectName : bwoGNS.Handler.ProjectID );
+                            Helper.CheckHighLoad(notify, !string.IsNullOrEmpty(bwoGNS.ProjectName) ? bwoGNS.ProjectName : bwoGNS.Handler.ProjectID);
                         Helper.LogEvent(notify, Helper.SPLogEventGNS3);
                         var text = regex.Replace(ev.Data, "");
                         AddLine($"> {text}");
@@ -442,22 +441,27 @@ namespace NTNN
                 LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message);
             }
         }
-        private void bwListener_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+        private void bwListener_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnFind.ControlInvokeAction(b => b.Enabled = true);
         }
         #endregion
 
-        private void Form1_FormClosing( object sender, FormClosingEventArgs e )
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            var isClosing = false;
             if (IsWorkingBW(false))
             {
                 var result = MessageBox.Show("Are you sure want to close program when operation is running?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                e.Cancel = result == DialogResult.No;
+                isClosing = result == DialogResult.No;
             }
+
+            if (isClosing && bwCheckDevices.IsBusy)
+                checker.Cancel();
+            e.Cancel = isClosing;
         }
 
-        private void Settings_Click( object sender, EventArgs e )
+        private void Settings_Click(object sender, EventArgs e)
         {
             try
             {
@@ -466,6 +470,8 @@ namespace NTNN
                 using (Settings settings = new Settings())
                 {
                     DialogResult dialogResult = settings.ShowDialog();
+                    if (dialogResult == DialogResult.OK)
+                        ConfigureDeviceChecker();
                     if (!CheckSettings(out string message))
                     {
                         lblError.Visible = true;
@@ -487,12 +493,12 @@ namespace NTNN
             }
         }
 
-        private void tabControl_Selecting( object sender, TabControlCancelEventArgs e )
+        private void tabControl_Selecting(object sender, TabControlCancelEventArgs e)
         {
             e.Cancel = IsWorkingBW();
         }
 
-        private void ForRegisterDevicesToolStripMenuItem_Click( object sender, EventArgs e )
+        private void ForRegisterDevicesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (IsWorkingBW())
                 return;
@@ -554,7 +560,7 @@ namespace NTNN
             }
         }
 
-        private void contextMenuScannedDevices_Opening( object sender, CancelEventArgs e )
+        private void contextMenuScannedDevices_Opening(object sender, CancelEventArgs e)
         {
             e.Cancel = listVAddr.Items.Count == 0;
             if (sender is ContextMenuStrip strip)
@@ -564,7 +570,7 @@ namespace NTNN
             }
         }
 
-        private void contextMenuRegisteredDevices_Opening( object sender, CancelEventArgs e )
+        private void contextMenuRegisteredDevices_Opening(object sender, CancelEventArgs e)
         {
             if (sender is ContextMenuStrip strip)
             {
@@ -580,13 +586,35 @@ namespace NTNN
             }
         }
 
-        private void lstRegisterDevices_ColumnWidthChanging( object sender, ColumnWidthChangingEventArgs e )
+        private void lstRegisterDevices_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
                 e.Cancel = true;
                 e.NewWidth = lstRegisterDevices.Columns[e.ColumnIndex].Width;
             }
+        }
+
+        private void bwCheckDevices_DoWork(object sender, DoWorkEventArgs e)
+        {
+            checker.StartCheckDevices(registeredDevices);
+            while (true)
+            {
+                if (bwCheckDevices.CancellationPending)
+                {
+                    checker.Cancel();
+                    break;
+                }
+            }
+        }
+
+        private void ConfigureDeviceChecker()
+        {
+            var enableMonitoring = Properties.Settings.Default.EnableMonitoring;
+            if (!enableMonitoring && bwCheckDevices.IsBusy)
+                bwCheckDevices.CancelAsync();
+            else if (enableMonitoring && !bwCheckDevices.IsBusy)
+                bwCheckDevices.RunWorkerAsync();
         }
     }
 }

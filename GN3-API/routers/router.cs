@@ -2,11 +2,12 @@ using System.Collections.Generic;
 
 namespace GNS3_API
 {
-    
+
     /// <summary>
     /// Abstract class that serves as a skeleton for the routers that are defined
     /// </summary>
-    public abstract class Router : Node{
+    public abstract class Router : Node
+    {
 
         /// <summary>
         /// Routing table of the node as an object
@@ -17,7 +18,7 @@ namespace GNS3_API
         /// <summary>
         /// Constructor by default. Every property is empty
         /// </summary>
-        internal Router() : base(){}
+        internal Router() : base() { }
 
         /// <summary>
         /// Constructor for any kind of <c>Node</c>. It must be called from a <c>GNS3sharp</c> object
@@ -28,14 +29,15 @@ namespace GNS3_API
         /// <param name="_id">ID the node has implicitly</param>
         /// <param name="_ports">Array of dictionaries that contains information about every network interface</param>
         internal Router(string _consoleHost, ushort _port, string _name, string _id, Status status, GNS3sharp parent,
-            Dictionary<string,dynamic>[] _ports) : 
-            base(_consoleHost, _port, _name, _id, status, parent, _ports){}
+            Dictionary<string, dynamic>[] _ports) :
+            base(_consoleHost, _port, _name, _id, status, parent, _ports)
+        { }
 
         /// <summary>
         /// Constructor that replicates a router from another node
         /// </summary>
         /// <param name="clone">Node you want to make the copy from</param>
-        public Router(Node clone) : base(clone){}
+        public Router(Node clone) : base(clone) { }
 
         /// <summary>
         /// Send Ping to a certain IP
@@ -44,8 +46,9 @@ namespace GNS3_API
         /// <param name="count">Number of retries. By default 5</param>
         /// <param name="timeout">Seconds until it stops retrying</param>
         /// <returns>The result of the ping as an array of strings</returns>
-        public virtual string[] Ping(string IP, ushort count=5, ushort timeout=10){
-            return Ping(IP,$"-c {count.ToString()} -W {timeout.ToString()}");
+        public virtual string[] Ping(string IP, ushort count = 5, ushort timeout = 10)
+        {
+            return Ping(IP, $"-c {count.ToString()} -W {timeout.ToString()}");
         }
 
         /// <summary>

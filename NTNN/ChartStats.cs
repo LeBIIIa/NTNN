@@ -1,42 +1,41 @@
 ﻿using GN3_API.events;
+
 using GNS3_API.Helpers;
+
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
-using LiveCharts.Wpf.Charts.Base;
+
 using Newtonsoft.Json;
+
 using NTNN.ExtendedControls;
 using NTNN.Helpers;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using WebSocketSharp;
 
 namespace NTNN
 {
     public partial class ChartStats : Form
     {
-        TypeOfGraph currType;
-        string ip;
+        readonly TypeOfGraph currType;
+        readonly string ip;
         const int MAXItems = 21;
-        ChartValues<ObservableValue> PackageValues = new ChartValues<ObservableValue>();
-        ChartValues<ObservableValue> InSpeedValues = new ChartValues<ObservableValue>();
-
-        List<PingReply> pingReplies = new List<PingReply>();
+        readonly ChartValues<ObservableValue> PackageValues = new ChartValues<ObservableValue>();
+        readonly ChartValues<ObservableValue> InSpeedValues = new ChartValues<ObservableValue>();
+        readonly List<PingReply> pingReplies = new List<PingReply>();
 
         public ChartStats()
         {
             InitializeComponent();
-            for (int i = 0;i<MAXItems;++i)
+            for (int i = 0; i < MAXItems; ++i)
             {
                 PackageValues.Add(new ObservableValue());
                 InSpeedValues.Add(new ObservableValue());
@@ -49,7 +48,7 @@ namespace NTNN
             this.ip = ip;
         }
 
-        private void ChartStats_Load( object sender, EventArgs e )
+        private void ChartStats_Load(object sender, EventArgs e)
         {
             chartPackages.AxisX.Add(new Axis
             {
@@ -100,7 +99,7 @@ namespace NTNN
                 chartSpeed.AxisY.Add(new Axis
                 {
                     Title = "Speed",
-                    LabelFormatter = ( val ) => val.ToString("F3"),
+                    LabelFormatter = (val) => val.ToString("F3"),
                     MinValue = 0
                 });
                 chartSpeed.LegendLocation = LegendLocation.Right;
@@ -129,7 +128,7 @@ namespace NTNN
             }
         }
 
-        private void btnStartStop_Click( object sender, EventArgs e )
+        private void btnStartStop_Click(object sender, EventArgs e)
         {
             if (btnStartStop.Text == "Start")
             {
@@ -148,7 +147,7 @@ namespace NTNN
             }
         }
 
-        private async void backgroundWorker_DoWork( object sender, DoWorkEventArgs e )
+        private async void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             int i = MAXItems - 1;
             if (currType == TypeOfGraph.RealSimulation)
@@ -159,7 +158,7 @@ namespace NTNN
                     {
                         ExtendedPing ping = new ExtendedPing(i);
                         ping.On_ExtendedPing_Completed += new ExtendedPing.ExtendedPing_Completed(
-                        ( obj, PingCompletedEventArgs, ident ) =>
+                        (obj, PingCompletedEventArgs, ident) =>
                         {
                             if (backgroundWorker.CancellationPending)
                                 return;
@@ -199,7 +198,7 @@ namespace NTNN
                 {
                     Notification notify;
                     ws.WaitTime = wait;
-                    ws.OnMessage += ( s, ev ) =>
+                    ws.OnMessage += (s, ev) =>
                     {
                         if (ev.Data.Contains("ping"))
                         {
@@ -228,7 +227,7 @@ namespace NTNN
             }
         }
 
-        private void ChartStats_FormClosing( object sender, FormClosingEventArgs e )
+        private void ChartStats_FormClosing(object sender, FormClosingEventArgs e)
         {
             backgroundWorker.CancelAsync();
         }

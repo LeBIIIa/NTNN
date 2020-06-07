@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NTNN.Helpers
 {
     public static class ControlExtenstions
     {
-        public static void ToolStripStatusInvokeAction<TControlType>( this TControlType control, Action<TControlType> del )
+        public static void ToolStripStatusInvokeAction<TControlType>(this TControlType control, Action<TControlType> del)
             where TControlType : ToolStripItem
         {
             if (control.GetCurrentParent().InvokeRequired)
@@ -17,7 +13,7 @@ namespace NTNN.Helpers
             else
                 del(control);
         }
-        public static void ControlInvokeAction<TControlType>( this TControlType control, Action<TControlType> del )
+        public static void ControlInvokeAction<TControlType>(this TControlType control, Action<TControlType> del)
             where TControlType : Control
         {
             if (control.InvokeRequired)
