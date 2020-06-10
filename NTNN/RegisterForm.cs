@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace NTNN
@@ -11,6 +12,7 @@ namespace NTNN
     {
         TypeOfWork currWork;
         int RegisteredDevicePK;
+        Thread thread;
 
         public RegisterForm(TypeOfWork work, NameValueCollection nameValueCollection)
         {
@@ -61,6 +63,7 @@ namespace NTNN
 
         private void btnAddORSave_Click(object sender, EventArgs e)
         {
+            btnAddORSave.Enabled = false;
             try
             {
                 if (!IPAddress.TryParse(txtIP.Text, out _))
@@ -70,9 +73,19 @@ namespace NTNN
                 }
                 if (string.IsNullOrEmpty(txtHostname.Text))
                 {
+                    if (thread == null || (thread != null && thread.ThreadState == ThreadState.Stopped))
+                    {
+                        thread = new Thread(() =>
+                        {
+                            var host = BackgroundWorkerObject.GetHostName(txtIP.Text);
+                            txtHostname.ControlInvokeAction(hostname =>
+                            {
+                                hostname.Text = host;
+                            });
+                        });
+                        thread.Start();
+                    }
                     MessageBox.Show("Identifying hostname...");
-                    var host = BackgroundWorkerObject.GetHostName(txtIP.Text);
-                    txtHostname.Text = host;
                     return;
                 }
                 if (string.IsNullOrEmpty(txtName.Text))
@@ -108,6 +121,7 @@ namespace NTNN
             {
                 MessageBox.Show($"Internal error! {ex.Message}");
             }
+            btnAddORSave.Enabled = true;
         }
     }
 }
