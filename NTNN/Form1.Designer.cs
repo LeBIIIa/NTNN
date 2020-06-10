@@ -46,6 +46,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl3();
             this.label2 = new System.Windows.Forms.Label();
             this.btnScan = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
@@ -81,9 +82,11 @@
             this.txtPort = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.lblUserName = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.btnFind = new System.Windows.Forms.Button();
             this.lstNodes = new System.Windows.Forms.ListView();
             this.columnHost = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -106,9 +109,6 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsBtnSettings = new System.Windows.Forms.ToolStripButton();
             this.bwCheckDevices = new System.ComponentModel.BackgroundWorker();
-            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl3();
-            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
-            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.statusStrip.SuspendLayout();
             this.contextMenuScannedDevices.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -275,6 +275,21 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Subnet:";
             // 
+            // txtIP
+            // 
+            this.txtIP.AllowInternalTab = false;
+            this.txtIP.AutoHeight = true;
+            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
+            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIP.Location = new System.Drawing.Point(96, 4);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.ReadOnly = false;
+            this.txtIP.Size = new System.Drawing.Size(84, 22);
+            this.txtIP.TabIndex = 5;
+            this.txtIP.Text = "..";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -349,6 +364,7 @@
             this.lstRegisterDevices.HideSelection = false;
             this.lstRegisterDevices.Location = new System.Drawing.Point(3, 17);
             this.lstRegisterDevices.Margin = new System.Windows.Forms.Padding(4);
+            this.lstRegisterDevices.MultiSelect = false;
             this.lstRegisterDevices.Name = "lstRegisterDevices";
             this.lstRegisterDevices.Size = new System.Drawing.Size(774, 233);
             this.lstRegisterDevices.TabIndex = 17;
@@ -448,6 +464,7 @@
             this.listVAddr.HideSelection = false;
             this.listVAddr.Location = new System.Drawing.Point(3, 17);
             this.listVAddr.Margin = new System.Windows.Forms.Padding(4);
+            this.listVAddr.MultiSelect = false;
             this.listVAddr.Name = "listVAddr";
             this.listVAddr.Size = new System.Drawing.Size(774, 130);
             this.listVAddr.TabIndex = 2;
@@ -481,7 +498,7 @@
             this.tabGNS3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabGNS3.Name = "tabGNS3";
             this.tabGNS3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabGNS3.Size = new System.Drawing.Size(792, 476);
+            this.tabGNS3.Size = new System.Drawing.Size(792, 480);
             this.tabGNS3.TabIndex = 1;
             this.tabGNS3.Text = "GNS3 Simulation";
             this.tabGNS3.UseVisualStyleBackColor = true;
@@ -504,7 +521,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 472);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 476);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // flowLayoutPanel2
@@ -623,6 +640,17 @@
             this.panel5.Size = new System.Drawing.Size(279, 28);
             this.panel5.TabIndex = 4;
             // 
+            // txtUserName
+            // 
+            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.txtUserName.Location = new System.Drawing.Point(91, 4);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(185, 22);
+            this.txtUserName.TabIndex = 7;
+            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
+            this.txtUserName.WaterMarkText = "(Optional)";
+            // 
             // lblUserName
             // 
             this.lblUserName.AutoSize = true;
@@ -653,6 +681,17 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Password:";
             // 
+            // txtPassword
+            // 
+            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.txtPassword.Location = new System.Drawing.Point(83, 4);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(185, 22);
+            this.txtPassword.TabIndex = 6;
+            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
+            this.txtPassword.WaterMarkText = "(Optional)";
+            // 
             // btnFind
             // 
             this.btnFind.Location = new System.Drawing.Point(566, 36);
@@ -681,8 +720,9 @@
             listViewItem2});
             this.lstNodes.Location = new System.Drawing.Point(4, 76);
             this.lstNodes.Margin = new System.Windows.Forms.Padding(4);
+            this.lstNodes.MultiSelect = false;
             this.lstNodes.Name = "lstNodes";
-            this.lstNodes.Size = new System.Drawing.Size(778, 141);
+            this.lstNodes.Size = new System.Drawing.Size(778, 145);
             this.lstNodes.TabIndex = 1;
             this.lstNodes.UseCompatibleStateImageBehavior = false;
             this.lstNodes.View = System.Windows.Forms.View.Details;
@@ -749,7 +789,7 @@
             // rtbConsole
             // 
             this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbConsole.Location = new System.Drawing.Point(4, 265);
+            this.rtbConsole.Location = new System.Drawing.Point(4, 269);
             this.rtbConsole.Margin = new System.Windows.Forms.Padding(4);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
@@ -771,7 +811,7 @@
             this.tableLayoutPanel6.Controls.Add(this.btnReloadStatus, 2, 0);
             this.tableLayoutPanel6.Controls.Add(this.btnGraphics, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 221);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 225);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
@@ -859,43 +899,6 @@
             // 
             this.bwCheckDevices.WorkerSupportsCancellation = true;
             this.bwCheckDevices.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwCheckDevices_DoWork);
-            // 
-            // txtIP
-            // 
-            this.txtIP.AllowInternalTab = false;
-            this.txtIP.AutoHeight = true;
-            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
-            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtIP.Location = new System.Drawing.Point(96, 4);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.ReadOnly = false;
-            this.txtIP.Size = new System.Drawing.Size(84, 22);
-            this.txtIP.TabIndex = 5;
-            this.txtIP.Text = "..";
-            // 
-            // txtUserName
-            // 
-            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtUserName.Location = new System.Drawing.Point(91, 4);
-            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(185, 22);
-            this.txtUserName.TabIndex = 7;
-            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtUserName.WaterMarkText = "(Optional)";
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtPassword.Location = new System.Drawing.Point(83, 4);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(185, 22);
-            this.txtPassword.TabIndex = 6;
-            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtPassword.WaterMarkText = "(Optional)";
             // 
             // Form1
             // 
