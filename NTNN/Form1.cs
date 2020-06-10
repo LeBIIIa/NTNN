@@ -562,7 +562,7 @@ namespace NTNN
 
         private void contextMenuScannedDevices_Opening(object sender, CancelEventArgs e)
         {
-            e.Cancel = listVAddr.Items.Count == 0 || backgroundWorker.IsBusy || listVAddr.SelectedItems.Count > 0;
+            e.Cancel = listVAddr.Items.Count == 0 || backgroundWorker.IsBusy || listVAddr.SelectedItems.Count == 0;
             if (sender is ContextMenuStrip strip)
             {
                 foreach (ToolStripItem item in strip.Items)

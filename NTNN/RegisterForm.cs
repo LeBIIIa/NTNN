@@ -63,7 +63,6 @@ namespace NTNN
 
         private void btnAddORSave_Click(object sender, EventArgs e)
         {
-            btnAddORSave.Enabled = false;
             try
             {
                 if (!IPAddress.TryParse(txtIP.Text, out _))
@@ -73,16 +72,27 @@ namespace NTNN
                 }
                 if (string.IsNullOrEmpty(txtHostname.Text))
                 {
-                    if (thread == null || (thread != null && thread.ThreadState == ThreadState.Stopped))
+                    if (thread == null)
                     {
                         thread = new Thread(() =>
                         {
-                            var host = BackgroundWorkerObject.GetHostName(txtIP.Text);
-                            txtHostname.ControlInvokeAction(hostname =>
+                            try
                             {
-                                hostname.Text = host;
-                            });
-                        });
+
+                                var host = BackgroundWorkerObject.GetHostName(txtIP.Text);
+                                txtHostname.ControlInvokeAction(hostname =>
+                                {
+                                    hostname.Text = host;
+                                });
+                            }
+                            finally
+                            {
+                                thread = null;
+                            }
+                        })
+                        {
+                            IsBackground = true
+                        };
                         thread.Start();
                     }
                     MessageBox.Show("Identifying hostname...");
@@ -121,7 +131,6 @@ namespace NTNN
             {
                 MessageBox.Show($"Internal error! {ex.Message}");
             }
-            btnAddORSave.Enabled = true;
         }
     }
 }
