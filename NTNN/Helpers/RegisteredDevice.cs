@@ -262,8 +262,8 @@ namespace NTNN.Helpers
     public enum DeviceType
     {
         PC
-        , Router
-        , Switch
+        ,Router
+        //,Switch
         //,Printer
     }
 }

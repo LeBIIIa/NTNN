@@ -137,6 +137,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\InterfaceObject.cs" />
     <Compile Include="Helpers\RegisteredDevice.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />

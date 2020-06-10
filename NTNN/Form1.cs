@@ -577,11 +577,9 @@ namespace NTNN
                 foreach (ToolStripItem item in strip.Items)
                 {
                     if (item == addToolStripMenuItem)
-                        continue;
-                    if (lstRegisterDevices.SelectedItems.Count > 0)
-                        item.Enabled = lstRegisterDevices.Items.Count != 0;
+                        item.Enabled = lstRegisterDevices.SelectedItems.Count == 0;
                     else
-                        item.Enabled = false;
+                        item.Enabled = lstRegisterDevices.SelectedItems.Count > 0;
                 }
             }
         }

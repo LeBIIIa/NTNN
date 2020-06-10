@@ -23,6 +23,8 @@ namespace NTNN.Helpers
         public static int TimeoutMax = 60000;
         public static int TimeoutMin = 1000;
 
+        public static readonly string DefaultHost = "notIdentify";
+
         public static string SPLogEventGNS3 { get; private set; }
         public static double? HighLoadRAM { get; private set; }
         public static double? HighLoadCPU { get; private set; }
@@ -221,7 +223,6 @@ namespace NTNN.Helpers
                 target.Close();
 
                 packet = res;
-
                 return true;
             }
             catch (Exception ex)

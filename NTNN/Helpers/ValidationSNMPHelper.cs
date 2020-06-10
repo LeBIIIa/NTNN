@@ -1,4 +1,6 @@
 ﻿using SnmpSharpNet;
+using System;
+using System.Windows.Media.Animation;
 
 namespace NTNN.Helpers
 {
@@ -8,6 +10,19 @@ namespace NTNN.Helpers
         {
             if (obj.Type == AsnType.INTEGER)
                 return ((Integer32)obj).Value;
+            return defaultValue;
+        }
+        public static uint GetUnsignedInteger(AsnType obj, uint defaultValue)
+        {
+            if (obj is Counter32 c)
+                return c.Value;
+            return defaultValue;
+        }
+
+        public static TimeSpan GetTimeSpan(AsnType obj, TimeSpan defaultValue)
+        {
+            if (obj is TimeTicks tt)
+                return (TimeSpan)tt;
             return defaultValue;
         }
     }

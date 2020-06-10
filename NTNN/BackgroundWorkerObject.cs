@@ -199,8 +199,7 @@ namespace NTNN
             {
                 LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
             }
-
-            return null;
+            return Helper.DefaultHost;
         }
         //Get MAC address
         public static string GetMacAddress(string ipAddress)

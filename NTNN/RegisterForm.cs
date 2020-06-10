@@ -34,7 +34,7 @@ namespace NTNN
                         txtName.Text = nameValueCollection["Name"];
                         break;
                     case "Hostname":
-                        txtHostname.Text = string.IsNullOrEmpty(nameValueCollection["Hostname"]) ? "Hostname_empty" : nameValueCollection["Hostname"];
+                        txtHostname.Text = nameValueCollection["Hostname"];
                         break;
                     case "Type":
                         cbType.SelectedItem = nameValueCollection["Type"];
@@ -47,6 +47,9 @@ namespace NTNN
 
             switch (work)
             {
+                case TypeOfWork.AddDevice:
+                    txtIP.Enabled = true;
+                    break;
                 case TypeOfWork.UpdateDevice:
                     txtIP.Enabled = false;
                     break;
@@ -65,9 +68,16 @@ namespace NTNN
                     MessageBox.Show("IP address is incorrect!");
                     return;
                 }
-                if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtHostname.Text))
+                if (string.IsNullOrEmpty(txtHostname.Text))
                 {
-                    MessageBox.Show("Hostname/Name cannot be empty!");
+                    MessageBox.Show("Identifying hostname...");
+                    var host = BackgroundWorkerObject.GetHostName(txtIP.Text);
+                    txtHostname.Text = host;
+                    return;
+                }
+                if (string.IsNullOrEmpty(txtName.Text))
+                {
+                    MessageBox.Show("Name cannot be empty!");
                     return;
                 }
                 if (cbType.SelectedItem == null)
