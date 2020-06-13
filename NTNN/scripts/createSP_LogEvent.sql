@@ -1,3 +1,6 @@
+USE [NTNN]
+GO
+
 CREATE OR ALTER PROCEDURE LogEventGNS3
 @EventName nvarchar(100),
 @EventJSON nvarchar(max)

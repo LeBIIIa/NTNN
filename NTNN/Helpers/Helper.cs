@@ -22,24 +22,18 @@ namespace NTNN.Helpers
         public static int AttemptsMin = 1;
         public static int TimeoutMax = 60000;
         public static int TimeoutMin = 1000;
+        public static int CPULoadMax = 100;
+        public static int CPULoadMin = 1;
+        public static int RAMLoadMax = 100;
+        public static int RAMLoadMin = 1;
 
         public static readonly string DefaultHost = "notIdentify";
 
         public static string SPLogEventGNS3 { get; private set; }
-        public static double? HighLoadRAM { get; private set; }
-        public static double? HighLoadCPU { get; private set; }
 
         static Helper()
         {
             SPLogEventGNS3 = ConfigurationManager.AppSettings["spLogEventGNS3"];
-            if (double.TryParse(ConfigurationManager.AppSettings["highLoadCPU"], out double temp))
-            {
-                HighLoadCPU = temp;
-            }
-            if (double.TryParse(ConfigurationManager.AppSettings["highLoadRAM"], out temp))
-            {
-                HighLoadRAM = temp;
-            }
         }
 
         public static void SendEmail(string To, string Subject, string Msg)
@@ -61,13 +55,13 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
 
         }
         public static void SendDebugEmail(string Subject, string Msg)
         {
-            SendEmail(ConfigurationManager.AppSettings["alertNotifyEmailTo"], Subject, Msg);
+            SendEmail(Properties.Settings.Default.NotifyEmail, Subject, Msg);
 
             // write to Log4Net - most Catches that implement this do not throw error 
             LoggingHelper.LogEntry(SystemCategories.GeneralError, "Debug Email Message: " + Msg);
@@ -75,77 +69,59 @@ namespace NTNN.Helpers
 
         public static void CheckHighLoad(Notification notify, string projectName)
         {
-            if (HighLoadCPU.HasValue && HighLoadRAM.HasValue)
+            PingEvent pr = (PingEvent)notify.Event;
+            if (pr.CPULoad >= Properties.Settings.Default.HighCPULoad && 
+            pr.RAMLoad >= Properties.Settings.Default.HighRAMLoad)
+                SendDebugEmail($"ALERT! HIGH RAM and CPU USAGE of {projectName} GNS3", $@"
+					<b>cpu_usage_percent: {pr.CPULoad}<br>
+					memory_usage_percent: {pr.RAMLoad}</b>");
+            else if (pr.CPULoad >= Properties.Settings.Default.HighCPULoad)
             {
-                PingEvent pr = (PingEvent)notify.Event;
-                if (pr.CPULoad >= HighLoadCPU.Value && pr.RAMLoad >= HighLoadRAM.Value)
-                    SendDebugEmail($"ALERT! HIGH RAM and CPU USAGE of {projectName} GNS3", $@"
-						<b>cpu_usage_percent: {pr.CPULoad}<br>
-						memory_usage_percent: {pr.RAMLoad}</b>");
-                else if (pr.CPULoad >= HighLoadCPU.Value)
-                {
-                    SendDebugEmail($"ALERT! HIGH CPU USAGE of {projectName} GNS3", $@"
-					<b>cpu_usage_percent: {pr.CPULoad}</b><br>
-					memory_usage_percent: {pr.RAMLoad}");
-                }
-                else if (pr.RAMLoad >= HighLoadRAM.Value)
-                {
-                    SendDebugEmail($"ALERT! HIGH RAM USAGE of {projectName} GNS3", $@"
-						cpu_usage_percent: {pr.CPULoad}<br>
-						<b>memory_usage_percent: {pr.RAMLoad}</b>");
-                }
+                SendDebugEmail($"ALERT! HIGH CPU USAGE of {projectName} GNS3", $@"
+				<b>cpu_usage_percent: {pr.CPULoad}</b><br>
+				memory_usage_percent: {pr.RAMLoad}");
             }
-            else
+            else if (pr.RAMLoad >= Properties.Settings.Default.HighRAMLoad)
             {
-                if (!HighLoadCPU.HasValue)
-                    LoggingHelper.LogEntry(SystemCategories.GeneralError, "HighLoadCPU variable isn't set or is incorrect");
-                else if (HighLoadRAM.HasValue)
-                    LoggingHelper.LogEntry(SystemCategories.GeneralError, "HighLoadRAM variable isn't set or is incorrect");
+                SendDebugEmail($"ALERT! HIGH RAM USAGE of {projectName} GNS3", $@"
+					cpu_usage_percent: {pr.CPULoad}<br>
+					<b>memory_usage_percent: {pr.RAMLoad}</b>");
             }
         }
 
         public static void CheckHighLoad(RegisteredDevice device, int curLoadCPU, int curLoadRAM)
         {
-            if (HighLoadCPU.HasValue && HighLoadRAM.HasValue)
+            if (curLoadCPU >= Properties.Settings.Default.HighCPULoad &&
+            curLoadRAM >= Properties.Settings.Default.HighRAMLoad)
+                SendDebugEmail($"ALERT! HIGH RAM and CPU USAGE of {device.IP}", $@"
+                    Device:<br>
+                    Name: <b>{device.Name}</b><br>                        
+                    Hostname: <b>{device.Hostname}</b><br>
+                    IP: <b>{device.IP}</b><br>
+                    Device type: <b>{device.Type}</b><br>
+					<b>CPU Load: {curLoadCPU}%<br>
+					RAM Load: {curLoadRAM}</b>");
+            else if (curLoadCPU >= Properties.Settings.Default.HighCPULoad)
             {
-                if (curLoadCPU >= HighLoadCPU.Value && curLoadRAM >= HighLoadRAM.Value)
-                    SendDebugEmail($"ALERT! HIGH RAM and CPU USAGE of {device.IP}", $@"
-                        Device:<br>
-                        Name: <b>{device.Name}</b><br>                        
-                        Hostname: <b>{device.Hostname}</b><br>
-                        IP: <b>{device.IP}</b><br>
-                        Device type: <b>{device.Type}</b><br>
-						<b>CPU Load: {curLoadCPU}%<br>
-						RAM Load: {curLoadRAM}</b>");
-                else if (curLoadCPU >= HighLoadCPU.Value)
-                {
-                    SendDebugEmail($"ALERT! HIGH CPU USAGE of {device.IP}", $@"
-                        Device:<br>
-                        Name: <b>{device.Name}</b><br>                        
-                        Hostname: <b>{device.Hostname}</b><br>
-                        IP: <b>{device.IP}</b><br>
-                        Device type: <b>{device.Type}</b><br>
-					    <b>CPU Load: {curLoadCPU}</b><br>
-					    RAM Load: {curLoadRAM}");
-                }
-                else if (curLoadRAM >= HighLoadRAM.Value)
-                {
-                    SendDebugEmail($"ALERT! HIGH RAM USAGE of {device.IP}", $@"
-                        Device:<br>
-                        Name: <b>{device.Name}</b><br>                        
-                        Hostname: <b>{device.Hostname}</b><br>
-                        IP: <b>{device.IP}</b><br>
-                        Device type: <b>{device.Type}</b><br>
-						CPU Load: {curLoadCPU}<br>
-						<b>RAM Load: {curLoadRAM}</b>");
-                }
+                SendDebugEmail($"ALERT! HIGH CPU USAGE of {device.IP}", $@"
+                    Device:<br>
+                    Name: <b>{device.Name}</b><br>                        
+                    Hostname: <b>{device.Hostname}</b><br>
+                    IP: <b>{device.IP}</b><br>
+                    Device type: <b>{device.Type}</b><br>
+					<b>CPU Load: {curLoadCPU}</b><br>
+					RAM Load: {curLoadRAM}");
             }
-            else
+            else if (curLoadRAM >= Properties.Settings.Default.HighRAMLoad)
             {
-                if (!HighLoadCPU.HasValue)
-                    LoggingHelper.LogEntry(SystemCategories.GeneralError, "HighLoadCPU variable isn't set or is incorrect");
-                else if (HighLoadRAM.HasValue)
-                    LoggingHelper.LogEntry(SystemCategories.GeneralError, "HighLoadRAM variable isn't set or is incorrect");
+                SendDebugEmail($"ALERT! HIGH RAM USAGE of {device.IP}", $@"
+                    Device:<br>
+                    Name: <b>{device.Name}</b><br>                        
+                    Hostname: <b>{device.Hostname}</b><br>
+                    IP: <b>{device.IP}</b><br>
+                    Device type: <b>{device.Type}</b><br>
+					CPU Load: {curLoadCPU}<br>
+					<b>RAM Load: {curLoadRAM}</b>");
             }
         }
 
@@ -176,9 +152,51 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
             return ret;
+        }
+
+        public static string GetIPFromBinary(byte[] ipv4)
+        {
+            if (ipv4.Length != 4)
+                return null;
+            try
+            {
+                using (SqlCommand sql = new SqlCommand("SELECT dbo.fnDisplayIPv4(@binIP) as strIP"))
+                {
+                    sql.Parameters.AddWithValue("@binIP", ipv4);
+                    using (var reader = DataAccess.ExecuteReader(sql))
+                    {
+                        return ValidationHelper.GetString(reader["strIP"], null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+            }
+            return null;
+        }
+        public static byte[] GetIPToBinary(string ipv4)
+        {
+            try
+            {
+                using (SqlCommand sql = new SqlCommand("SELECT dbo.fnBinaryIPv4(@strIP) as binIP"))
+                {
+                    sql.CommandType = System.Data.CommandType.StoredProcedure;
+                    sql.Parameters.AddWithValue("@strIP", ipv4);
+                    using (var reader = DataAccess.ExecuteReader(sql))
+                    {
+                        return ValidationHelper.GetBinary(reader["binIP"], new byte[4]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+            }
+            return null;
         }
 
         public static bool SendSNMPRequest(Pdu pdu, IPAddress ip, out SnmpPacket packet, SnmpVersion version = SnmpVersion.Ver2, string community = "public", int port = 161, int timeout = 1000, int retry = 1)

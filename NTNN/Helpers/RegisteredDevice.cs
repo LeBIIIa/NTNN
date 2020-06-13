@@ -16,6 +16,7 @@ namespace NTNN.Helpers
         public string Name { get; private set; }
         public string Hostname { get; private set; }
         public DeviceType Type { get; private set; }
+        public short Port { get; private set; }
 
         public IPAddress GetIPAddress => IPAddress.Parse(IP);
 
@@ -29,18 +30,19 @@ namespace NTNN.Helpers
             LoadRegisteredDevice(RegisteredDevicePK, this);
         }
 
-        public RegisteredDevice(int RegisteredDevicePK, string IP, string Name, string Hostname, DeviceType Type)
-            : this(IP, Name, Hostname, Type)
+        public RegisteredDevice(int RegisteredDevicePK, string IP, string Name, string Hostname, DeviceType Type, short Port)
+            : this(IP, Name, Hostname, Type, Port)
         {
             this.RegisteredDevicePK = RegisteredDevicePK;
         }
 
-        public RegisteredDevice(string IP, string Name, string Hostname, DeviceType Type)
+        public RegisteredDevice(string IP, string Name, string Hostname, DeviceType Type, short Port)
         {
             this.IP = IP;
             this.Name = Name;
             this.Hostname = Hostname;
             this.Type = Type;
+            this.Port = Port;
         }
 
         private static void LoadRegisteredDevice(int RegisteredDevicePK, RegisteredDevice device)
@@ -59,55 +61,14 @@ namespace NTNN.Helpers
                         device.Hostname = ValidationHelper.GetString(reader["Hostname"], null);
                         if (Enum.TryParse<DeviceType>(ValidationHelper.GetString(reader["Type"], null), out var temp))
                             device.Type = temp;
+                        device.Port = ValidationHelper.GetShort(reader["Port"], 161);
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
-        }
-
-        public static string GetIPFromBinary(byte[] ipv4)
-        {
-            if (ipv4.Length != 4)
-                return null;
-            try
-            {
-                using (SqlCommand sql = new SqlCommand("SELECT dbo.fnDisplayIPv4(@binIP) as strIP"))
-                {
-                    sql.Parameters.AddWithValue("@binIP", ipv4);
-                    using (var reader = DataAccess.ExecuteReader(sql))
-                    {
-                        return ValidationHelper.GetString(reader["strIP"], null);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
-            }
-            return null;
-        }
-        public static byte[] GetIPToBinary(string ipv4)
-        {
-            try
-            {
-                using (SqlCommand sql = new SqlCommand("SELECT dbo.fnBinaryIPv4(@strIP) as binIP"))
-                {
-                    sql.CommandType = System.Data.CommandType.StoredProcedure;
-                    sql.Parameters.AddWithValue("@strIP", ipv4);
-                    using (var reader = DataAccess.ExecuteReader(sql))
-                    {
-                        return ValidationHelper.GetBinary(reader["binIP"], new byte[4]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
-            }
-            return null;
         }
 
         #region static
@@ -128,10 +89,15 @@ namespace NTNN.Helpers
                                 RegisteredDevicePK = ValidationHelper.GetInteger(reader["RegisteredDevicePK"], 0),
                                 IP = string.Join(".", ValidationHelper.GetBinary(reader["IP"], new byte[1])),
                                 Name = ValidationHelper.GetString(reader["Name"], null),
-                                Hostname = ValidationHelper.GetString(reader["Hostname"], null)
+                                Hostname = ValidationHelper.GetString(reader["Hostname"], null),
+                                Port = ValidationHelper.GetShort(reader["Port"], 161)
+
                             };
                             if (Enum.TryParse<DeviceType>(ValidationHelper.GetString(reader["Type"], null), out var temp))
                                 device.Type = temp;
+
+                            
+
                             devices.Add(device);
                         }
                     }
@@ -139,13 +105,13 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+                throw;
             }
             return devices;
         }
         public static RegisteredDevice GetRegisteredDevice(int RegisteredDevicePK)
         {
-            RegisteredDevice device = null;
             try
             {
                 using (SqlCommand sql = new SqlCommand("GetRegisteredDevice"))
@@ -154,22 +120,27 @@ namespace NTNN.Helpers
                     sql.Parameters.AddWithValue("@RegisteredDevicePK", RegisteredDevicePK);
                     using (var reader = DataAccess.ExecuteReader(sql))
                     {
-                        device.RegisteredDevicePK = ValidationHelper.GetInteger(reader["RegisteredDevicePK"], 0);
-                        device.IP = string.Join(".", ValidationHelper.GetBinary(reader["IP"], new byte[1]));
-                        device.Name = ValidationHelper.GetString(reader["Name"], null);
-                        device.Hostname = ValidationHelper.GetString(reader["Hostname"], null);
+                        RegisteredDevice device = new RegisteredDevice
+                        {
+                            RegisteredDevicePK = ValidationHelper.GetInteger(reader["RegisteredDevicePK"], 0),
+                            IP = string.Join(".", ValidationHelper.GetBinary(reader["IP"], new byte[1])),
+                            Name = ValidationHelper.GetString(reader["Name"], null),
+                            Hostname = ValidationHelper.GetString(reader["Hostname"], null),
+                            Port = ValidationHelper.GetShort(reader["Port"], 161)
+                        };
                         if (Enum.TryParse<DeviceType>(ValidationHelper.GetString(reader["Type"], null), out var temp))
                             device.Type = temp;
+                        return device;
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+                throw;
             }
-            return device;
         }
-        public static void AddRegisteredDevice(string IP, string Name, string Hostname, DeviceType type)
+        public static void AddRegisteredDevice(string IP, string Name, string Hostname, DeviceType type, short port)
         {
             try
             {
@@ -180,12 +151,14 @@ namespace NTNN.Helpers
                     sql.Parameters.AddWithValue("@Name", Name);
                     sql.Parameters.AddWithValue("@Hostname", Hostname);
                     sql.Parameters.AddWithValue("@Type", type.ToString());
+                    sql.Parameters.AddWithValue("@Port", port);
                     DataAccess.ExecuteNonQuery(sql);
                 }
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+                throw;
             }
         }
         public static bool RemoveRegisteredDevice(int RegisteredDevicePK)
@@ -207,11 +180,11 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+                throw;
             }
-            return false;
         }
-        public static bool UpdateRegisteredDevice(string newName, DeviceType newType, int RegisteredDevicePK)
+        public static bool UpdateRegisteredDevice(string newName, DeviceType newType, short newPort, int RegisteredDevicePK)
         {
             try
             {
@@ -221,6 +194,7 @@ namespace NTNN.Helpers
                     sql.Parameters.AddWithValue("@RegisteredDevicePK", RegisteredDevicePK);
                     sql.Parameters.AddWithValue("@Name", newName);
                     sql.Parameters.AddWithValue("@Type", newType.ToString());
+                    sql.Parameters.AddWithValue("@Port", newPort);
                     var param = new SqlParameter("@Result", System.Data.SqlDbType.Bit)
                     {
                         Direction = System.Data.ParameterDirection.Output
@@ -234,28 +208,30 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+                throw;
             }
-            return false;
         }
         #endregion
 
-        public void Deconstruct(out string IP, out string Name, out string Hostname, out string Type)
+        public void Deconstruct(out string IP, out string Name, out string Hostname, out string Type, out int Port)
         {
             IP = this.IP;
             Name = this.Name;
             Hostname = this.Hostname;
             Type = this.Type.ToString();
+            Port = this.Port;
         }
 
         public void Deconstruct(out KeyValuePair<string, string>[] pairs)
         {
-            pairs = new KeyValuePair<string, string>[5];
+            pairs = new KeyValuePair<string, string>[6];
             pairs[0] = new KeyValuePair<string, string>("RegisteredDevicePK", RegisteredDevicePK.ToString());
             pairs[1] = new KeyValuePair<string, string>("IP", IP);
             pairs[2] = new KeyValuePair<string, string>("Name", Name);
             pairs[3] = new KeyValuePair<string, string>("Hostname", Hostname);
             pairs[4] = new KeyValuePair<string, string>("Type", Type.ToString());
+            pairs[5] = new KeyValuePair<string, string>("Port", Port.ToString());
         }
     }
 

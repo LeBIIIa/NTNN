@@ -1,3 +1,4 @@
+USE [NTNN]
 -- ================================================
 -- Template generated from Template Explorer using:
 -- Create Procedure (New Menu).SQL
@@ -18,7 +19,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE DelRegisteredDevice
+CREATE OR ALTER PROCEDURE DelRegisteredDevice
 @RegisteredDevicePK int,
 @Result bit out
 AS

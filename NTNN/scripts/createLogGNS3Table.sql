@@ -1,3 +1,5 @@
+USE [NTNN]
+
 CREATE TABLE [LogNotificationGNS3](
 	LogPK int PRIMARY KEY NOT NULL IDENTITY(1,1),
 	EventName nvarchar(100) not null,

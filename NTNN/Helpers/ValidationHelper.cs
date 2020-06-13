@@ -46,7 +46,7 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                 return defaultValue;
             }
         }
@@ -91,7 +91,7 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                 return defaultValue;
             }
         }
@@ -108,7 +108,7 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                 return defaultValue;
             }
         }
@@ -158,7 +158,7 @@ namespace NTNN.Helpers
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                 return defaultValue;
             }
         }
@@ -170,6 +170,15 @@ namespace NTNN.Helpers
                 return defaultValue;
             }
             return Convert.ToInt32(value);
+        }
+
+        public static short GetShort(object value, short defaultValue)
+        {
+            if (!IsInteger(value))
+            {
+                return defaultValue;
+            }
+            return Convert.ToInt16(value);
         }
 
         public static string GetString(object value, string defaultValue)

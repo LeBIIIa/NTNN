@@ -46,23 +46,24 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl3();
             this.label2 = new System.Windows.Forms.Label();
             this.btnScan = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
-            this.lblError = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.lstRegisterDevices = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.contextMenuRegisteredDevices = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.updateDeviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnAddDevice = new System.Windows.Forms.Button();
+            this.btnDelDevice = new System.Windows.Forms.Button();
+            this.btnUpdDevice = new System.Windows.Forms.Button();
+            this.btnShowDeviceInf = new System.Windows.Forms.Button();
+            this.lblError = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listVAddr = new System.Windows.Forms.ListView();
             this.IP = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -82,11 +83,9 @@
             this.txtPort = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.lblUserName = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.btnFind = new System.Windows.Forms.Button();
             this.lstNodes = new System.Windows.Forms.ListView();
             this.columnHost = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -106,9 +105,12 @@
             this.btnGraphics = new System.Windows.Forms.Button();
             this.bwGNS3_API = new System.ComponentModel.BackgroundWorker();
             this.bwListener = new System.ComponentModel.BackgroundWorker();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.menuStrip = new System.Windows.Forms.ToolStrip();
             this.tsBtnSettings = new System.Windows.Forms.ToolStripButton();
             this.bwCheckDevices = new System.ComponentModel.BackgroundWorker();
+            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl3();
+            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
+            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.statusStrip.SuspendLayout();
             this.contextMenuScannedDevices.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -117,7 +119,8 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.contextMenuRegisteredDevices.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabGNS3.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -129,7 +132,7 @@
             this.panel6.SuspendLayout();
             this.contextMenuGNS3.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -185,7 +188,7 @@
             this.addToRegisteredDeviceListToolStripMenuItem.Name = "addToRegisteredDeviceListToolStripMenuItem";
             this.addToRegisteredDeviceListToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
             this.addToRegisteredDeviceListToolStripMenuItem.Text = "Add to Registered device list";
-            this.addToRegisteredDeviceListToolStripMenuItem.Click += new System.EventHandler(this.ForRegisterDevicesToolStripMenuItem_Click);
+            this.addToRegisteredDeviceListToolStripMenuItem.Click += new System.EventHandler(this.ToolBtnsForRegisteredDevices_Click);
             // 
             // backgroundWorker
             // 
@@ -198,11 +201,11 @@
             this.tabControl.Controls.Add(this.tabRealData);
             this.tabControl.Controls.Add(this.tabGNS3);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 27);
+            this.tabControl.Location = new System.Drawing.Point(0, 31);
             this.tabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(800, 509);
+            this.tabControl.Size = new System.Drawing.Size(800, 505);
             this.tabControl.TabIndex = 6;
             this.tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl_Selecting);
             // 
@@ -213,7 +216,7 @@
             this.tabRealData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabRealData.Name = "tabRealData";
             this.tabRealData.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabRealData.Size = new System.Drawing.Size(792, 480);
+            this.tabRealData.Size = new System.Drawing.Size(792, 476);
             this.tabRealData.TabIndex = 0;
             this.tabRealData.Text = "Real time simulation";
             this.tabRealData.UseVisualStyleBackColor = true;
@@ -223,8 +226,8 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.lblError, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblError, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 2);
@@ -235,7 +238,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 476);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 472);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // flowLayoutPanel1
@@ -246,7 +249,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnScan);
             this.flowLayoutPanel1.Controls.Add(this.btnStop);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 429);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 425);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(780, 45);
@@ -274,21 +277,6 @@
             this.label1.Size = new System.Drawing.Size(57, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "Subnet:";
-            // 
-            // txtIP
-            // 
-            this.txtIP.AllowInternalTab = false;
-            this.txtIP.AutoHeight = true;
-            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
-            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtIP.Location = new System.Drawing.Point(96, 4);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.ReadOnly = false;
-            this.txtIP.Size = new System.Drawing.Size(84, 22);
-            this.txtIP.TabIndex = 5;
-            this.txtIP.Text = "..";
             // 
             // label2
             // 
@@ -324,30 +312,33 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.Stop_Click);
             // 
-            // lblError
-            // 
-            this.lblError.AutoSize = true;
-            this.lblError.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(3, 1);
-            this.lblError.Margin = new System.Windows.Forms.Padding(3, 1, 3, 0);
-            this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(780, 17);
-            this.lblError.TabIndex = 15;
-            this.lblError.Text = "lblError";
-            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.lstRegisterDevices);
+            this.groupBox1.Controls.Add(this.tableLayoutPanel2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 20);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(780, 252);
+            this.groupBox1.Size = new System.Drawing.Size(780, 249);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Registered devices";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.lstRegisterDevices, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel3, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(774, 230);
+            this.tableLayoutPanel2.TabIndex = 18;
             // 
             // lstRegisterDevices
             // 
@@ -356,17 +347,17 @@
             this.columnHeader1,
             this.columnHeader4,
             this.columnHeader2,
-            this.columnHeader3});
-            this.lstRegisterDevices.ContextMenuStrip = this.contextMenuRegisteredDevices;
+            this.columnHeader3,
+            this.columnHeader6});
             this.lstRegisterDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstRegisterDevices.FullRowSelect = true;
             this.lstRegisterDevices.GridLines = true;
             this.lstRegisterDevices.HideSelection = false;
-            this.lstRegisterDevices.Location = new System.Drawing.Point(3, 17);
+            this.lstRegisterDevices.Location = new System.Drawing.Point(4, 43);
             this.lstRegisterDevices.Margin = new System.Windows.Forms.Padding(4);
             this.lstRegisterDevices.MultiSelect = false;
             this.lstRegisterDevices.Name = "lstRegisterDevices";
-            this.lstRegisterDevices.Size = new System.Drawing.Size(774, 233);
+            this.lstRegisterDevices.Size = new System.Drawing.Size(766, 183);
             this.lstRegisterDevices.TabIndex = 17;
             this.lstRegisterDevices.UseCompatibleStateImageBehavior = false;
             this.lstRegisterDevices.View = System.Windows.Forms.View.Details;
@@ -397,55 +388,93 @@
             this.columnHeader3.Text = "Type";
             this.columnHeader3.Width = 80;
             // 
-            // contextMenuRegisteredDevices
+            // columnHeader6
             // 
-            this.contextMenuRegisteredDevices.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuRegisteredDevices.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem,
-            this.removeToolStripMenuItem,
-            this.updateDeviceToolStripMenuItem,
-            this.showInformationToolStripMenuItem});
-            this.contextMenuRegisteredDevices.Name = "contextMenuRegisteredDevices";
-            this.contextMenuRegisteredDevices.Size = new System.Drawing.Size(197, 100);
-            this.contextMenuRegisteredDevices.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuRegisteredDevices_Opening);
+            this.columnHeader6.Text = "Port";
             // 
-            // addToolStripMenuItem
+            // flowLayoutPanel3
             // 
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
-            this.addToolStripMenuItem.Text = "Add device";
-            this.addToolStripMenuItem.Click += new System.EventHandler(this.ForRegisterDevicesToolStripMenuItem_Click);
+            this.flowLayoutPanel3.AutoSize = true;
+            this.flowLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel3.Controls.Add(this.btnAddDevice);
+            this.flowLayoutPanel3.Controls.Add(this.btnDelDevice);
+            this.flowLayoutPanel3.Controls.Add(this.btnUpdDevice);
+            this.flowLayoutPanel3.Controls.Add(this.btnShowDeviceInf);
+            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(768, 33);
+            this.flowLayoutPanel3.TabIndex = 18;
             // 
-            // removeToolStripMenuItem
+            // btnAddDevice
             // 
-            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
-            this.removeToolStripMenuItem.Text = "Remove device";
-            this.removeToolStripMenuItem.Click += new System.EventHandler(this.ForRegisterDevicesToolStripMenuItem_Click);
+            this.btnAddDevice.AutoSize = true;
+            this.btnAddDevice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnAddDevice.Location = new System.Drawing.Point(3, 3);
+            this.btnAddDevice.Name = "btnAddDevice";
+            this.btnAddDevice.Size = new System.Drawing.Size(88, 27);
+            this.btnAddDevice.TabIndex = 0;
+            this.btnAddDevice.Text = "Add device";
+            this.btnAddDevice.UseVisualStyleBackColor = true;
+            this.btnAddDevice.Click += new System.EventHandler(this.ToolBtnsForRegisteredDevices_Click);
             // 
-            // updateDeviceToolStripMenuItem
+            // btnDelDevice
             // 
-            this.updateDeviceToolStripMenuItem.Name = "updateDeviceToolStripMenuItem";
-            this.updateDeviceToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
-            this.updateDeviceToolStripMenuItem.Text = "Update device";
-            this.updateDeviceToolStripMenuItem.Click += new System.EventHandler(this.ForRegisterDevicesToolStripMenuItem_Click);
+            this.btnDelDevice.AutoSize = true;
+            this.btnDelDevice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnDelDevice.Location = new System.Drawing.Point(97, 3);
+            this.btnDelDevice.Name = "btnDelDevice";
+            this.btnDelDevice.Size = new System.Drawing.Size(104, 27);
+            this.btnDelDevice.TabIndex = 1;
+            this.btnDelDevice.Text = "Delete device";
+            this.btnDelDevice.UseVisualStyleBackColor = true;
+            this.btnDelDevice.Click += new System.EventHandler(this.ToolBtnsForRegisteredDevices_Click);
             // 
-            // showInformationToolStripMenuItem
+            // btnUpdDevice
             // 
-            this.showInformationToolStripMenuItem.Name = "showInformationToolStripMenuItem";
-            this.showInformationToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
-            this.showInformationToolStripMenuItem.Text = "Show information";
-            this.showInformationToolStripMenuItem.Click += new System.EventHandler(this.ForRegisterDevicesToolStripMenuItem_Click);
+            this.btnUpdDevice.AutoSize = true;
+            this.btnUpdDevice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnUpdDevice.Location = new System.Drawing.Point(207, 3);
+            this.btnUpdDevice.Name = "btnUpdDevice";
+            this.btnUpdDevice.Size = new System.Drawing.Size(109, 27);
+            this.btnUpdDevice.TabIndex = 2;
+            this.btnUpdDevice.Text = "Update device";
+            this.btnUpdDevice.UseVisualStyleBackColor = true;
+            this.btnUpdDevice.Click += new System.EventHandler(this.ToolBtnsForRegisteredDevices_Click);
+            // 
+            // btnShowDeviceInf
+            // 
+            this.btnShowDeviceInf.AutoSize = true;
+            this.btnShowDeviceInf.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnShowDeviceInf.Location = new System.Drawing.Point(322, 3);
+            this.btnShowDeviceInf.Name = "btnShowDeviceInf";
+            this.btnShowDeviceInf.Size = new System.Drawing.Size(124, 27);
+            this.btnShowDeviceInf.TabIndex = 3;
+            this.btnShowDeviceInf.Text = "Show device info";
+            this.btnShowDeviceInf.UseVisualStyleBackColor = true;
+            this.btnShowDeviceInf.Click += new System.EventHandler(this.ToolBtnsForRegisteredDevices_Click);
+            // 
+            // lblError
+            // 
+            this.lblError.AutoSize = true;
+            this.lblError.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(3, 1);
+            this.lblError.Margin = new System.Windows.Forms.Padding(3, 1, 3, 0);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(780, 17);
+            this.lblError.TabIndex = 15;
+            this.lblError.Text = "lblError";
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.listVAddr);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 276);
+            this.groupBox2.Location = new System.Drawing.Point(3, 273);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(780, 149);
+            this.groupBox2.Size = new System.Drawing.Size(780, 148);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Scanned devices";
@@ -466,7 +495,7 @@
             this.listVAddr.Margin = new System.Windows.Forms.Padding(4);
             this.listVAddr.MultiSelect = false;
             this.listVAddr.Name = "listVAddr";
-            this.listVAddr.Size = new System.Drawing.Size(774, 130);
+            this.listVAddr.Size = new System.Drawing.Size(774, 129);
             this.listVAddr.TabIndex = 2;
             this.listVAddr.UseCompatibleStateImageBehavior = false;
             this.listVAddr.View = System.Windows.Forms.View.Details;
@@ -498,7 +527,7 @@
             this.tabGNS3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabGNS3.Name = "tabGNS3";
             this.tabGNS3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabGNS3.Size = new System.Drawing.Size(792, 480);
+            this.tabGNS3.Size = new System.Drawing.Size(792, 476);
             this.tabGNS3.TabIndex = 1;
             this.tabGNS3.Text = "GNS3 Simulation";
             this.tabGNS3.UseVisualStyleBackColor = true;
@@ -521,7 +550,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 476);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 472);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // flowLayoutPanel2
@@ -640,17 +669,6 @@
             this.panel5.Size = new System.Drawing.Size(279, 28);
             this.panel5.TabIndex = 4;
             // 
-            // txtUserName
-            // 
-            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtUserName.Location = new System.Drawing.Point(91, 4);
-            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(185, 22);
-            this.txtUserName.TabIndex = 7;
-            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtUserName.WaterMarkText = "(Optional)";
-            // 
             // lblUserName
             // 
             this.lblUserName.AutoSize = true;
@@ -680,17 +698,6 @@
             this.label4.Size = new System.Drawing.Size(73, 17);
             this.label4.TabIndex = 0;
             this.label4.Text = "Password:";
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtPassword.Location = new System.Drawing.Point(83, 4);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(185, 22);
-            this.txtPassword.TabIndex = 6;
-            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtPassword.WaterMarkText = "(Optional)";
             // 
             // btnFind
             // 
@@ -722,7 +729,7 @@
             this.lstNodes.Margin = new System.Windows.Forms.Padding(4);
             this.lstNodes.MultiSelect = false;
             this.lstNodes.Name = "lstNodes";
-            this.lstNodes.Size = new System.Drawing.Size(778, 145);
+            this.lstNodes.Size = new System.Drawing.Size(778, 141);
             this.lstNodes.TabIndex = 1;
             this.lstNodes.UseCompatibleStateImageBehavior = false;
             this.lstNodes.View = System.Windows.Forms.View.Details;
@@ -789,7 +796,7 @@
             // rtbConsole
             // 
             this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbConsole.Location = new System.Drawing.Point(4, 269);
+            this.rtbConsole.Location = new System.Drawing.Point(4, 265);
             this.rtbConsole.Margin = new System.Windows.Forms.Padding(4);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
@@ -811,7 +818,7 @@
             this.tableLayoutPanel6.Controls.Add(this.btnReloadStatus, 2, 0);
             this.tableLayoutPanel6.Controls.Add(this.btnGraphics, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 225);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 221);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
@@ -874,16 +881,16 @@
             this.bwListener.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwListener_DoWork);
             this.bwListener.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwListener_RunWorkerCompleted);
             // 
-            // toolStrip1
+            // menuStrip
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnSettings});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 27);
-            this.toolStrip1.TabIndex = 16;
-            this.toolStrip1.Text = "toolStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(800, 31);
+            this.menuStrip.TabIndex = 16;
+            this.menuStrip.Text = "toolStrip1";
             // 
             // tsBtnSettings
             // 
@@ -891,7 +898,7 @@
             this.tsBtnSettings.Image = global::NTNN.Properties.Resources.settings;
             this.tsBtnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnSettings.Name = "tsBtnSettings";
-            this.tsBtnSettings.Size = new System.Drawing.Size(29, 24);
+            this.tsBtnSettings.Size = new System.Drawing.Size(29, 28);
             this.tsBtnSettings.Text = "toolStripButton1";
             this.tsBtnSettings.Click += new System.EventHandler(this.Settings_Click);
             // 
@@ -900,6 +907,43 @@
             this.bwCheckDevices.WorkerSupportsCancellation = true;
             this.bwCheckDevices.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwCheckDevices_DoWork);
             // 
+            // txtIP
+            // 
+            this.txtIP.AllowInternalTab = false;
+            this.txtIP.AutoHeight = true;
+            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
+            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIP.Location = new System.Drawing.Point(96, 4);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.ReadOnly = false;
+            this.txtIP.Size = new System.Drawing.Size(84, 22);
+            this.txtIP.TabIndex = 5;
+            this.txtIP.Text = "..";
+            // 
+            // txtUserName
+            // 
+            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.txtUserName.Location = new System.Drawing.Point(91, 4);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(185, 22);
+            this.txtUserName.TabIndex = 7;
+            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
+            this.txtUserName.WaterMarkText = "(Optional)";
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.txtPassword.Location = new System.Drawing.Point(83, 4);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(185, 22);
+            this.txtPassword.TabIndex = 6;
+            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
+            this.txtPassword.WaterMarkText = "(Optional)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -907,7 +951,7 @@
             this.ClientSize = new System.Drawing.Size(800, 561);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
@@ -925,7 +969,10 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            this.contextMenuRegisteredDevices.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.flowLayoutPanel3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.tabGNS3.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
@@ -945,8 +992,8 @@
             this.contextMenuGNS3.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1006,7 +1053,7 @@
         private System.ComponentModel.BackgroundWorker bwGNS3_API;
         private System.ComponentModel.BackgroundWorker bwListener;
         private System.Windows.Forms.Button btnGraphics;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip menuStrip;
         private System.Windows.Forms.ToolStripButton tsBtnSettings;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
@@ -1020,16 +1067,18 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ContextMenuStrip contextMenuRegisteredDevices;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showInformationToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ToolStripMenuItem updateDeviceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addToRegisteredDeviceListToolStripMenuItem;
         private ExtendedControls.IPAddressControl.IPAddressControl3 txtIP;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.ComponentModel.BackgroundWorker bwCheckDevices;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Button btnAddDevice;
+        private System.Windows.Forms.Button btnDelDevice;
+        private System.Windows.Forms.Button btnUpdDevice;
+        private System.Windows.Forms.Button btnShowDeviceInf;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
     }
 }
 

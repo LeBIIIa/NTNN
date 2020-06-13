@@ -1,3 +1,4 @@
+USE [NTNN]
 -- ================================================
 -- Template generated from Template Explorer using:
 -- Create Procedure (New Menu).SQL
@@ -22,6 +23,7 @@ CREATE OR ALTER PROCEDURE UpdateRegisteredDevice
 @RegisteredDevicePK int,
 @Name nvarchar(100),
 @Type nvarchar(50),
+@Port int,
 @Result bit out
 AS
 BEGIN
@@ -32,7 +34,7 @@ BEGIN
 	if exists( select 1 from RegisteredDevices where RegisteredDevicePK = @RegisteredDevicePK )
 	begin
 		SET @Result = 1
-		update RegisteredDevices SET [Name] = @Name, [Type] = @Type where RegisteredDevicePK = @RegisteredDevicePK
+		update RegisteredDevices SET [Name] = @Name, [Type] = @Type, [Port] = @Port where RegisteredDevicePK = @RegisteredDevicePK
 	end;
 	else
 	begin

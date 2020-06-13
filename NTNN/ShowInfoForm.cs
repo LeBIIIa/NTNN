@@ -5,6 +5,7 @@ using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 
 using NTNN.Helpers;
+using NTNN.LogClasses;
 
 using SnmpSharpNet;
 
@@ -14,6 +15,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -22,9 +24,10 @@ namespace NTNN
     public partial class ShowInfoForm : Form
     {
         readonly RegisteredDevice device;
-        const int MAXItems = 10;
+        const int MAXItems = 20;
         readonly ChartValues<ObservableValue> CPUValues = new ChartValues<ObservableValue>();
         readonly ChartValues<ObservableValue> RAMValues = new ChartValues<ObservableValue>();
+        readonly Dictionary<string, ChartValues<ObservableValue>> Interfaces = new Dictionary<string, ChartValues<ObservableValue>>();
         static readonly string lblFormat = "{0}% / 100%";
 
         public ShowInfoForm(RegisteredDevice device)
@@ -55,7 +58,7 @@ namespace NTNN
                 MaxValue = 100,
                 MinValue = 0
             });
-            CPU_RAM_usage.LegendLocation = LiveCharts.LegendLocation.Right;
+            CPU_RAM_usage.LegendLocation = LegendLocation.Right;
             CPU_RAM_usage.Series.Add(new LineSeries()
             {
                 Values = RAMValues,
@@ -66,6 +69,18 @@ namespace NTNN
                 Values = CPUValues,
                 Title = "CPU",
             });
+
+            chartInterfaces.AxisX.Add(new Axis
+            {
+                Title = "Time",
+                ShowLabels = false,
+            });
+            chartInterfaces.AxisY.Add(new Axis
+            {
+                Title = "In/Out",
+                MinValue = 0
+            });
+            chartInterfaces.LegendLocation = LegendLocation.Right;
 
             this.device = device;
 
@@ -174,7 +189,7 @@ namespace NTNN
                                 bulkPdu.VbList.Clear();
                                 oids.ForEach(oid => bulkPdu.VbList.Add(oid));
 
-                                if (Helper.SendSNMPRequest(bulkPdu, deviceIP, out var res, timeout: 3000) && res.Pdu.VbCount > 0)
+                                if (Helper.SendSNMPRequest(bulkPdu, deviceIP, out var res, timeout: Properties.Settings.Default.Timeout, retry: Properties.Settings.Default.Attempts, port: device.Port) && res.Pdu.VbCount > 0)
                                 {
                                     var vblist = res.Pdu.VbList.ToList();
                                     var retList = vblist.DistinctBy(s => s.Oid).ToList();
@@ -215,11 +230,22 @@ namespace NTNN
                                         storUsed += new BigInteger(ValidationSNMPHelper.GetInteger(storUsedVb[i].Value, 0) * (double)storAllocArr[i]);
                                     }
                                     var storUsage = (int)(double)BigInteger.Divide(storUsed * 100, storSize);
+
+                                    LogBase router = new LogRouter()
+                                    {
+                                        RegisteredDeviceFK = device.RegisteredDevicePK,
+                                        StorageUsage = storUsage,
+                                        CPUUsage = cpuUsage,
+                                        Interfaces = interZIP
+                                    };
+
+                                    router.Log();
+
                                     UpdatePBandLabel(pbCPURouter, lblCPURouter, cpuUsage);
                                     UpdatePBandLabel(pbDiskRouter, lblDiskRouter, storUsage);
                                     UpdateLabel(lblUptime, upTime);
                                     UpdateLabel(lblSysInfo, $"{sysName} - {sysDesc}");
-                                    UpdateInterfaces(interZIP);
+                                    UpdateInterfaces(interZIP, index);
                                 }
                                 --index;
                                 if (index < 0)
@@ -275,7 +301,7 @@ namespace NTNN
                                 bulkPdu.VbList.Clear();
                                 oids.ForEach(oid => bulkPdu.VbList.Add(oid));
 
-                                if (Helper.SendSNMPRequest(bulkPdu, deviceIP, out var res, timeout: 3000) && res.Pdu.VbCount > 0)
+                                if (Helper.SendSNMPRequest(bulkPdu, deviceIP, out var res, timeout: Properties.Settings.Default.Timeout, retry: Properties.Settings.Default.Attempts, port: device.Port) && res.Pdu.VbCount > 0)
                                 {
                                     var vblist = res.Pdu.VbList.ToList();
                                     var retList = vblist.DistinctBy(s => s.Oid).ToList();
@@ -301,6 +327,19 @@ namespace NTNN
                                         storUsed += new BigInteger(ValidationSNMPHelper.GetInteger(storUsedVb[i].Value, 0) * (double)storAllocArr[i]);
                                     }
                                     var storUsage = (int)(double)BigInteger.Divide(storUsed * 100, storSize);
+
+                                    LogBase logPC = new LogPC()
+                                    {
+                                        RegisteredDeviceFK = device.RegisteredDevicePK,
+                                        CPUSystemUsage = cpuSystem,
+                                        CPUUserUsage = cpuUser,
+                                        CPUUsage = cpuUsage,
+                                        RAMUsage = ramUsage,
+                                        StorageUsage = storUsage
+                                    };
+
+                                    logPC.Log();
+                                    
                                     UpdatePBandLabel(pbCPU, lblCPU, cpuUsage);
                                     UpdatePBandLabel(pbRAM, lblRAM, ramUsage);
                                     UpdatePBandLabel(pbDisk, lblDisk, storUsage);
@@ -310,7 +349,7 @@ namespace NTNN
                                 --index;
                                 if (index < 0)
                                     index = MAXItems - 1;
-                                Thread.Sleep(1000);
+                                Thread.Sleep(2000);
                             }
                             catch (Exception ex)
                             {
@@ -322,23 +361,42 @@ namespace NTNN
             }
         }
 
-
-        private void UpdateInterfaces(List<InterfaceObject> interfaces)
+        private ChartValues<ObservableValue> createChartValuesCollection()
         {
-            lstInterfaces.ControlInvokeAction(lst => 
+            var temp = new ChartValues<ObservableValue>();
+            for (int i = 0; i < MAXItems; ++i)
             {
-                lst.Items.Clear();
+                temp.Add(new ObservableValue());
+            }
+            return temp;
+        }
 
-                foreach (var item in interfaces)
+        private void UpdateInterfaces(List<InterfaceObject> inters, int i)
+        {
+            chartInterfaces.ControlInvokeAction(chart => 
+            {
+                if (chart.Series.Count == 0)
                 {
-                    item.Deconstruct(out var collection);
-                    var lstItem = new ListViewItem();
-                    lstItem.SubItems.AddRange(Array.ConvertAll(collection, (KeyValuePair<string, string> i) =>
+                    foreach(var inter in inters)
                     {
-                        return new ListViewItem.ListViewSubItem() { Text = i.Value, Name = i.Key };
-                    }));
-                    lstItem.SubItems.RemoveAt(0);
-                    lst.Items.Add(lstItem);
+                        Interfaces.Add($"{inter.Desc}_IN", createChartValuesCollection());
+                        Interfaces.Add($"{inter.Desc}_OUT", createChartValuesCollection());
+                        chart.Series.Add(new LineSeries()
+                        {
+                            Values = Interfaces[$"{inter.Desc}_IN"],
+                            Title = $"{inter.Desc}_IN"
+                        }); ;
+                        chart.Series.Add(new LineSeries()
+                        {
+                            Values = Interfaces[$"{inter.Desc}_OUT"],
+                            Title = $"{inter.Desc}_OUT"
+                        });
+                    }
+                }
+                foreach (var inter in inters)
+                {
+                    Interfaces[$"{inter.Desc}_IN"][i].Value = inter.In;
+                    Interfaces[$"{inter.Desc}_OUT"][i].Value = inter.Out;
                 }
             });
         }

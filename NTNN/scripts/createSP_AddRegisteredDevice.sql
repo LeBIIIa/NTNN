@@ -1,3 +1,4 @@
+USE [NTNN]
 -- ================================================
 -- Template generated from Template Explorer using:
 -- Create Procedure (New Menu).SQL
@@ -22,14 +23,15 @@ CREATE OR ALTER PROCEDURE AddRegisteredDevice
 @IP nvarchar(15),
 @Name nvarchar(100),
 @Hostname nvarchar(100),
-@Type nvarchar(50)
+@Type nvarchar(50),
+@Port int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	insert into RegisteredDevices([IP], [Name], [Hostname], [Type])
-	values(dbo.fnBinaryIPv4(@IP), @Name, @Hostname, @Type)
+	insert into RegisteredDevices([IP], [Name], [Hostname], [Type], [Port])
+	values(dbo.fnBinaryIPv4(@IP), @Name, @Hostname, @Type, @Port)
 END
 GO

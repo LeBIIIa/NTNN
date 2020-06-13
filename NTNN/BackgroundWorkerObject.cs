@@ -117,7 +117,7 @@ namespace NTNN
             catch (Exception ex)
             {
                 ShowMessage(ex.Message);
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
         }
         private void Ping(string host, int attempts, int timeout, CancellationToken ct)
@@ -144,7 +144,7 @@ namespace NTNN
                         }
                         catch (Exception ex)
                         {
-                            LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                            LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                         }
                     });
                     th.Start();
@@ -197,7 +197,7 @@ namespace NTNN
             }
             catch (SocketException ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
             return Helper.DefaultHost;
         }

@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
 
 using WebSocketSharp;
 
@@ -63,7 +64,7 @@ namespace NTNN
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
         }
 
@@ -80,9 +81,26 @@ namespace NTNN
                     result = false;
                 }
                 if (Properties.Settings.Default.Attempts < Helper.AttemptsMin ||
-                                    Properties.Settings.Default.Attempts > Helper.AttemptsMax)
+                    Properties.Settings.Default.Attempts > Helper.AttemptsMax)
                 {
                     failMessage += " Attempts \n";
+                    result = false;
+                }
+                if (Properties.Settings.Default.HighCPULoad < Helper.CPULoadMin ||
+                    Properties.Settings.Default.HighCPULoad > Helper.CPULoadMax)
+                {
+                    failMessage += " CPU Load \n";
+                    result = false;
+                }
+                if (Properties.Settings.Default.HighRAMLoad < Helper.RAMLoadMin &&
+                    Properties.Settings.Default.HighRAMLoad > Helper.RAMLoadMax)
+                {
+                    failMessage += " RAM Load \n";
+                    result = false;
+                }
+                if (!ValidationHelper.IsEmail(Properties.Settings.Default.NotifyEmail))
+                {
+                    failMessage += " Notify Email \n";
                     result = false;
                 }
                 if (result)
@@ -90,7 +108,7 @@ namespace NTNN
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                 result = false;
                 failMessage = "Internal Error! Check log file";
             }
@@ -198,7 +216,7 @@ namespace NTNN
             catch (Exception ex)
             {
                 MessageBox.Show("Internal error occur! Check log file.");
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
         }
         private void btnStartStop_Click(object sender, EventArgs e)
@@ -488,7 +506,7 @@ namespace NTNN
             }
             catch (Exception ex)
             {
-                LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                 MessageBox.Show("Internal error! Check log file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -496,68 +514,6 @@ namespace NTNN
         private void tabControl_Selecting(object sender, TabControlCancelEventArgs e)
         {
             e.Cancel = IsWorkingBW();
-        }
-
-        private void ForRegisterDevicesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (IsWorkingBW())
-                return;
-            TypeOfWork? work = null;
-            NameValueCollection nameValue = new NameValueCollection();
-
-            if (sender == addToRegisteredDeviceListToolStripMenuItem)
-            {
-                var sel = listVAddr.SelectedItems[0];
-                nameValue.Add("IP", sel.SubItems["IP"].Text);
-                nameValue.Add("Hostname", sel.SubItems["Hostname"].Text);
-                work = TypeOfWork.FromScannedDevice;
-            }
-            else if (sender == addToolStripMenuItem)
-            {
-                work = TypeOfWork.AddDevice;
-            }
-            else if (sender == updateDeviceToolStripMenuItem)
-            {
-                var sel = lstRegisterDevices.SelectedItems[0];
-                nameValue.Add("IP", sel.SubItems["IP"].Text);
-                nameValue.Add("Hostname", sel.SubItems["Hostname"].Text);
-                nameValue.Add("Name", sel.SubItems["Name"].Text);
-                nameValue.Add("Type", sel.SubItems["Type"].Text);
-                nameValue.Add("RegisteredDevicePK", sel.SubItems["RegisteredDevicePK"].Text);
-                work = TypeOfWork.UpdateDevice;
-            }
-            else if (sender == removeToolStripMenuItem)
-            {
-                var registeredDevicePK = int.Parse(lstRegisterDevices.SelectedItems[0].SubItems["RegisteredDevicePK"].Text);
-                var ret = RegisteredDevice.RemoveRegisteredDevice(registeredDevicePK);
-                if (ret)
-                    UpdateRegisteredDevices();
-                else
-                    MessageBox.Show("Internal error! Could not remove this device!");
-                return;
-            }
-            else if (sender == showInformationToolStripMenuItem)
-            {
-                var registeredDevicePK = int.Parse(lstRegisterDevices.SelectedItems[0].SubItems["RegisteredDevicePK"].Text);
-                var registeredDevice = registeredDevices.Find(r => r.RegisteredDevicePK == registeredDevicePK);
-                using (var form = new ShowInfoForm(registeredDevice))
-                {
-                    form.ShowDialog();
-                }
-                return;
-            }
-
-            if (!work.HasValue)
-            {
-                return;
-            }
-
-            using (var form = new RegisterForm(work.Value, nameValue))
-            {
-                var ret = form.ShowDialog();
-                if (ret == DialogResult.OK)
-                    UpdateRegisteredDevices();
-            }
         }
 
         private void contextMenuScannedDevices_Opening(object sender, CancelEventArgs e)
@@ -568,20 +524,6 @@ namespace NTNN
                 foreach (ToolStripItem item in strip.Items)
                     item.Enabled = !bwo.IsCancelled
                         || !(bwo.IsCancelled && listVAddr.Items.Count > 0);
-            }
-        }
-
-        private void contextMenuRegisteredDevices_Opening(object sender, CancelEventArgs e)
-        {
-            if (sender is ContextMenuStrip strip)
-            {
-                foreach (ToolStripItem item in strip.Items)
-                {
-                    if (item == addToolStripMenuItem)
-                        item.Enabled = lstRegisterDevices.SelectedItems.Count == 0;
-                    else
-                        item.Enabled = lstRegisterDevices.SelectedItems.Count > 0;
-                }
             }
         }
 
@@ -614,6 +556,86 @@ namespace NTNN
                 bwCheckDevices.CancelAsync();
             else if (enableMonitoring && !bwCheckDevices.IsBusy)
                 bwCheckDevices.RunWorkerAsync();
+        }
+
+        private void ToolBtnsForRegisteredDevices_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (IsWorkingBW())
+                {
+                    MessageBox.Show("Some of the workers are load. Please wait...");
+                    return;
+                }
+                if ( !(new object[] { addToRegisteredDeviceListToolStripMenuItem, btnAddDevice }.Any(s => s == sender)) &&
+                    lstRegisterDevices.SelectedItems.Count != 1)
+                {
+                    MessageBox.Show("Before perform operations with devices, select one!", "Error", MessageBoxButtons.OK);
+                    return;
+                }
+
+                TypeOfWork? work = null;
+                NameValueCollection nameValue = new NameValueCollection();
+                if (sender == addToRegisteredDeviceListToolStripMenuItem)
+                {
+                    var sel = listVAddr.SelectedItems[0];
+                    nameValue.Add("IP", sel.SubItems["IP"].Text);
+                    nameValue.Add("Hostname", sel.SubItems["Hostname"].Text);
+                    work = TypeOfWork.FromScannedDevice;
+                }
+                else if (sender == btnAddDevice)
+                {
+                    work = TypeOfWork.AddDevice;
+                }
+                else if (sender == btnShowDeviceInf)
+                {
+                    var registeredDevicePK = int.Parse(lstRegisterDevices.SelectedItems[0].SubItems["RegisteredDevicePK"].Text);
+                    var registeredDevice = registeredDevices.Find(r => r.RegisteredDevicePK == registeredDevicePK);
+                    using (var form = new ShowInfoForm(registeredDevice))
+                    {
+                        form.ShowDialog();
+                    }
+                    return;
+                }
+                else if (sender == btnUpdDevice)
+                {
+                    var sel = lstRegisterDevices.SelectedItems[0];
+                    nameValue.Add("RegisteredDevicePK", sel.SubItems["RegisteredDevicePK"].Text);
+                    nameValue.Add("IP", sel.SubItems["IP"].Text);
+                    nameValue.Add("Hostname", sel.SubItems["Hostname"].Text);
+                    nameValue.Add("Name", sel.SubItems["Name"].Text);
+                    nameValue.Add("Type", sel.SubItems["Type"].Text);
+                    nameValue.Add("Port", sel.SubItems["Port"].Text);
+                    work = TypeOfWork.UpdateDevice;
+                }
+                else if (sender == btnDelDevice)
+                {
+                    var registeredDevicePK = int.Parse(lstRegisterDevices.SelectedItems[0].SubItems["RegisteredDevicePK"].Text);
+                    var ret = RegisteredDevice.RemoveRegisteredDevice(registeredDevicePK);
+                    if (ret)
+                        UpdateRegisteredDevices();
+                    else
+                        MessageBox.Show("Internal error! Could not remove this device!");
+                    return;
+                }
+
+                if (!work.HasValue)
+                {
+                    return;
+                }
+
+                using (var form = new RegisterForm(work.Value, nameValue))
+                {
+                    var ret = form.ShowDialog();
+                    if (ret == DialogResult.OK)
+                        UpdateRegisteredDevices();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Internal error occur! {ex.Message}");
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
+            }
         }
     }
 }

@@ -70,5 +70,41 @@ namespace NTNN.Properties {
                 this["EnableMonitoring"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string NotifyEmail {
+            get {
+                return ((string)(this["NotifyEmail"]));
+            }
+            set {
+                this["NotifyEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte HighCPULoad {
+            get {
+                return ((byte)(this["HighCPULoad"]));
+            }
+            set {
+                this["HighCPULoad"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte HighRAMLoad {
+            get {
+                return ((byte)(this["HighRAMLoad"]));
+            }
+            set {
+                this["HighRAMLoad"] = value;
+            }
+        }
     }
 }

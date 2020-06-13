@@ -178,7 +178,7 @@ namespace NTNN
                     }
                     catch (Exception ex)
                     {
-                        LoggingHelper.LogEntry(SystemCategories.GeneralError, ex.Message + " " + ex.StackTrace);
+                        LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
                     }
                     --i;
                     if (i < 0)
