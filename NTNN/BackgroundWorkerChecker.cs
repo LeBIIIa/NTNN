@@ -63,7 +63,7 @@ namespace NTNN
             {
                 var pdu = new Pdu(PduType.Get);
                 pdu.VbList.Add(sysDesc);
-                if (Helper.SendSNMPRequest(pdu, device.GetIPAddress, out _))
+                if (Helper.SendSNMPRequest(pdu, device.GetIPAddress, out _, port: device.Port, timeout: Properties.Settings.Default.Timeout, retry: Properties.Settings.Default.Attempts))
                 {
                     if (device.Type == DeviceType.PC)
                     {
