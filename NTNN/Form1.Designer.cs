@@ -69,13 +69,6 @@
             this.Hostname = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MacAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.contextMenuGNS3 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsStart = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsStop = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsSuspend = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsReload = new System.Windows.Forms.ToolStripMenuItem();
-            this.bwGNS3_API = new System.ComponentModel.BackgroundWorker();
-            this.bwListener = new System.ComponentModel.BackgroundWorker();
             this.menuStrip = new System.Windows.Forms.ToolStrip();
             this.tsBtnSettings = new System.Windows.Forms.ToolStripButton();
             this.bwCheckDevices = new System.ComponentModel.BackgroundWorker();
@@ -90,7 +83,6 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.contextMenuGNS3.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -493,53 +485,6 @@
             this.Status.Text = "Status";
             this.Status.Width = 50;
             // 
-            // contextMenuGNS3
-            // 
-            this.contextMenuGNS3.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuGNS3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsStart,
-            this.tsStop,
-            this.tsSuspend,
-            this.tsReload});
-            this.contextMenuGNS3.Name = "contextMenuStrip1";
-            this.contextMenuGNS3.Size = new System.Drawing.Size(275, 100);
-            this.contextMenuGNS3.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
-            // 
-            // tsStart
-            // 
-            this.tsStart.Name = "tsStart";
-            this.tsStart.Size = new System.Drawing.Size(274, 24);
-            this.tsStart.Text = "Start";
-            // 
-            // tsStop
-            // 
-            this.tsStop.Name = "tsStop";
-            this.tsStop.Size = new System.Drawing.Size(274, 24);
-            this.tsStop.Text = "Stop";
-            // 
-            // tsSuspend
-            // 
-            this.tsSuspend.Name = "tsSuspend";
-            this.tsSuspend.Size = new System.Drawing.Size(274, 24);
-            this.tsSuspend.Text = "Suspend(Only for routers, etc)";
-            // 
-            // tsReload
-            // 
-            this.tsReload.Name = "tsReload";
-            this.tsReload.Size = new System.Drawing.Size(274, 24);
-            this.tsReload.Text = "Reload";
-            // 
-            // bwGNS3_API
-            // 
-            this.bwGNS3_API.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwGNS3_API_DoWork);
-            this.bwGNS3_API.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwGNS3_API_RunWorkerCompleted);
-            // 
-            // bwListener
-            // 
-            this.bwListener.WorkerSupportsCancellation = true;
-            this.bwListener.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwListener_DoWork);
-            this.bwListener.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwListener_RunWorkerCompleted);
-            // 
             // menuStrip
             // 
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -596,7 +541,6 @@
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.contextMenuGNS3.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -621,13 +565,6 @@
         private System.Windows.Forms.ColumnHeader MacAddress;
         private System.Windows.Forms.ColumnHeader Status;
         private System.Windows.Forms.Label lblError;
-        private System.Windows.Forms.ContextMenuStrip contextMenuGNS3;
-        private System.Windows.Forms.ToolStripMenuItem tsStart;
-        private System.Windows.Forms.ToolStripMenuItem tsStop;
-        private System.Windows.Forms.ToolStripMenuItem tsSuspend;
-        private System.Windows.Forms.ToolStripMenuItem tsReload;
-        private System.ComponentModel.BackgroundWorker bwGNS3_API;
-        private System.ComponentModel.BackgroundWorker bwListener;
         private System.Windows.Forms.ToolStrip menuStrip;
         private System.Windows.Forms.ToolStripButton tsBtnSettings;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
