@@ -157,11 +157,6 @@ namespace NTNN
         #endregion
 
         #region Updating UI
-        private void SetTextLabel1(SystemCategories category, string text)
-        {
-            lblStatus1.ToolStripStatusInvokeAction(t => t.Text = text);
-            LoggingHelper.LogEntry(category, text);
-        }
         private void SetTextLabel1(string text)
         {
             lblStatus1.ToolStripStatusInvokeAction(t => t.Text = text);
@@ -209,10 +204,6 @@ namespace NTNN
         {
             MessageBox.Show(text);
         }
-        private bool ShowMessageBoxWithResult(string text)
-        {
-            return MessageBox.Show(text, "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes;
-        }
 
         private void UpdateRegisteredDevices()
         {
@@ -235,7 +226,18 @@ namespace NTNN
         #endregion
 
         #region background workers
-
+        private void bwCheckDevices_DoWork(object sender, DoWorkEventArgs e)
+        {
+            checker.StartCheckDevices(registeredDevices);
+            while (true)
+            {
+                if (bwCheckDevices.CancellationPending)
+                {
+                    checker.Cancel();
+                    break;
+                }
+            }
+        }
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             if (e.Argument is BackgroundWorkerObject bwo)
@@ -331,19 +333,6 @@ namespace NTNN
             {
                 e.Cancel = true;
                 e.NewWidth = lstRegisterDevices.Columns[e.ColumnIndex].Width;
-            }
-        }
-
-        private void bwCheckDevices_DoWork(object sender, DoWorkEventArgs e)
-        {
-            checker.StartCheckDevices(registeredDevices);
-            while (true)
-            {
-                if (bwCheckDevices.CancellationPending)
-                {
-                    checker.Cancel();
-                    break;
-                }
             }
         }
 
