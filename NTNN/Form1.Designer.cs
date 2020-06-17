@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -46,6 +44,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl3();
             this.label2 = new System.Windows.Forms.Label();
             this.btnScan = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
@@ -70,47 +69,16 @@
             this.Hostname = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MacAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabGNS3 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.txtProjectName = new System.Windows.Forms.TextBox();
-            this.lblProjectName = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.txtHost = new System.Windows.Forms.TextBox();
-            this.lblHost = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.txtPort = new System.Windows.Forms.TextBox();
-            this.lblPort = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.lblUserName = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.btnFind = new System.Windows.Forms.Button();
-            this.lstNodes = new System.Windows.Forms.ListView();
-            this.columnHost = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnPort = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuGNS3 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsStart = new System.Windows.Forms.ToolStripMenuItem();
             this.tsStop = new System.Windows.Forms.ToolStripMenuItem();
             this.tsSuspend = new System.Windows.Forms.ToolStripMenuItem();
             this.tsReload = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtbConsole = new System.Windows.Forms.RichTextBox();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnStartStop = new System.Windows.Forms.Button();
-            this.btnReloadStatus = new System.Windows.Forms.Button();
-            this.btnGraphics = new System.Windows.Forms.Button();
             this.bwGNS3_API = new System.ComponentModel.BackgroundWorker();
             this.bwListener = new System.ComponentModel.BackgroundWorker();
             this.menuStrip = new System.Windows.Forms.ToolStrip();
             this.tsBtnSettings = new System.Windows.Forms.ToolStripButton();
             this.bwCheckDevices = new System.ComponentModel.BackgroundWorker();
-            this.txtIP = new NTNN.ExtendedControls.IPAddressControl.IPAddressControl3();
-            this.txtUserName = new NTNN.ExtendedControls.WaterMarkTextBox();
-            this.txtPassword = new NTNN.ExtendedControls.WaterMarkTextBox();
             this.statusStrip.SuspendLayout();
             this.contextMenuScannedDevices.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -122,16 +90,7 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabGNS3.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel5.SuspendLayout();
-            this.panel6.SuspendLayout();
             this.contextMenuGNS3.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -199,13 +158,12 @@
             // tabControl
             // 
             this.tabControl.Controls.Add(this.tabRealData);
-            this.tabControl.Controls.Add(this.tabGNS3);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 31);
+            this.tabControl.Location = new System.Drawing.Point(0, 27);
             this.tabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(800, 505);
+            this.tabControl.Size = new System.Drawing.Size(800, 509);
             this.tabControl.TabIndex = 6;
             this.tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl_Selecting);
             // 
@@ -216,7 +174,7 @@
             this.tabRealData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabRealData.Name = "tabRealData";
             this.tabRealData.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabRealData.Size = new System.Drawing.Size(792, 476);
+            this.tabRealData.Size = new System.Drawing.Size(792, 480);
             this.tabRealData.TabIndex = 0;
             this.tabRealData.Text = "Real time simulation";
             this.tabRealData.UseVisualStyleBackColor = true;
@@ -238,7 +196,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 472);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 476);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // flowLayoutPanel1
@@ -249,7 +207,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnScan);
             this.flowLayoutPanel1.Controls.Add(this.btnStop);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 425);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 429);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(780, 45);
@@ -277,6 +235,21 @@
             this.label1.Size = new System.Drawing.Size(57, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "Subnet:";
+            // 
+            // txtIP
+            // 
+            this.txtIP.AllowInternalTab = false;
+            this.txtIP.AutoHeight = true;
+            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
+            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIP.Location = new System.Drawing.Point(96, 4);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.ReadOnly = false;
+            this.txtIP.Size = new System.Drawing.Size(84, 22);
+            this.txtIP.TabIndex = 5;
+            this.txtIP.Text = "..";
             // 
             // label2
             // 
@@ -320,7 +293,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(780, 249);
+            this.groupBox1.Size = new System.Drawing.Size(780, 252);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Registered devices";
@@ -337,7 +310,7 @@
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(774, 230);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(774, 233);
             this.tableLayoutPanel2.TabIndex = 18;
             // 
             // lstRegisterDevices
@@ -357,7 +330,7 @@
             this.lstRegisterDevices.Margin = new System.Windows.Forms.Padding(4);
             this.lstRegisterDevices.MultiSelect = false;
             this.lstRegisterDevices.Name = "lstRegisterDevices";
-            this.lstRegisterDevices.Size = new System.Drawing.Size(766, 183);
+            this.lstRegisterDevices.Size = new System.Drawing.Size(766, 186);
             this.lstRegisterDevices.TabIndex = 17;
             this.lstRegisterDevices.UseCompatibleStateImageBehavior = false;
             this.lstRegisterDevices.View = System.Windows.Forms.View.Details;
@@ -470,11 +443,11 @@
             // 
             this.groupBox2.Controls.Add(this.listVAddr);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 273);
+            this.groupBox2.Location = new System.Drawing.Point(3, 276);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(780, 148);
+            this.groupBox2.Size = new System.Drawing.Size(780, 149);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Scanned devices";
@@ -495,7 +468,7 @@
             this.listVAddr.Margin = new System.Windows.Forms.Padding(4);
             this.listVAddr.MultiSelect = false;
             this.listVAddr.Name = "listVAddr";
-            this.listVAddr.Size = new System.Drawing.Size(774, 129);
+            this.listVAddr.Size = new System.Drawing.Size(774, 130);
             this.listVAddr.TabIndex = 2;
             this.listVAddr.UseCompatibleStateImageBehavior = false;
             this.listVAddr.View = System.Windows.Forms.View.Details;
@@ -519,243 +492,6 @@
             // 
             this.Status.Text = "Status";
             this.Status.Width = 50;
-            // 
-            // tabGNS3
-            // 
-            this.tabGNS3.Controls.Add(this.tableLayoutPanel5);
-            this.tabGNS3.Location = new System.Drawing.Point(4, 25);
-            this.tabGNS3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabGNS3.Name = "tabGNS3";
-            this.tabGNS3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabGNS3.Size = new System.Drawing.Size(792, 476);
-            this.tabGNS3.TabIndex = 1;
-            this.tabGNS3.Text = "GNS3 Simulation";
-            this.tabGNS3.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.flowLayoutPanel2, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.lstNodes, 0, 1);
-            this.tableLayoutPanel5.Controls.Add(this.rtbConsole, 0, 3);
-            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 0, 2);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 2);
-            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 4;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(786, 472);
-            this.tableLayoutPanel5.TabIndex = 0;
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.AutoSize = true;
-            this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel2.Controls.Add(this.panel2);
-            this.flowLayoutPanel2.Controls.Add(this.panel3);
-            this.flowLayoutPanel2.Controls.Add(this.panel4);
-            this.flowLayoutPanel2.Controls.Add(this.panel5);
-            this.flowLayoutPanel2.Controls.Add(this.panel6);
-            this.flowLayoutPanel2.Controls.Add(this.btnFind);
-            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 2);
-            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(780, 68);
-            this.flowLayoutPanel2.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.AutoSize = true;
-            this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Controls.Add(this.txtProjectName);
-            this.panel2.Controls.Add(this.lblProjectName);
-            this.panel2.Location = new System.Drawing.Point(3, 2);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(271, 28);
-            this.panel2.TabIndex = 0;
-            // 
-            // txtProjectName
-            // 
-            this.txtProjectName.Location = new System.Drawing.Point(107, 4);
-            this.txtProjectName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtProjectName.Name = "txtProjectName";
-            this.txtProjectName.Size = new System.Drawing.Size(161, 22);
-            this.txtProjectName.TabIndex = 1;
-            // 
-            // lblProjectName
-            // 
-            this.lblProjectName.AutoSize = true;
-            this.lblProjectName.Location = new System.Drawing.Point(3, 6);
-            this.lblProjectName.Name = "lblProjectName";
-            this.lblProjectName.Size = new System.Drawing.Size(97, 17);
-            this.lblProjectName.TabIndex = 0;
-            this.lblProjectName.Text = "Project Name:";
-            // 
-            // panel3
-            // 
-            this.panel3.AutoSize = true;
-            this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel3.Controls.Add(this.txtHost);
-            this.panel3.Controls.Add(this.lblHost);
-            this.panel3.Location = new System.Drawing.Point(280, 2);
-            this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(265, 28);
-            this.panel3.TabIndex = 1;
-            // 
-            // txtHost
-            // 
-            this.txtHost.Location = new System.Drawing.Point(51, 4);
-            this.txtHost.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtHost.Name = "txtHost";
-            this.txtHost.Size = new System.Drawing.Size(211, 22);
-            this.txtHost.TabIndex = 1;
-            // 
-            // lblHost
-            // 
-            this.lblHost.AutoSize = true;
-            this.lblHost.Location = new System.Drawing.Point(3, 6);
-            this.lblHost.Name = "lblHost";
-            this.lblHost.Size = new System.Drawing.Size(41, 17);
-            this.lblHost.TabIndex = 0;
-            this.lblHost.Text = "Host:";
-            // 
-            // panel4
-            // 
-            this.panel4.AutoSize = true;
-            this.panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel4.Controls.Add(this.txtPort);
-            this.panel4.Controls.Add(this.lblPort);
-            this.panel4.Location = new System.Drawing.Point(551, 2);
-            this.panel4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(123, 28);
-            this.panel4.TabIndex = 2;
-            // 
-            // txtPort
-            // 
-            this.txtPort.Location = new System.Drawing.Point(47, 4);
-            this.txtPort.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(73, 22);
-            this.txtPort.TabIndex = 1;
-            // 
-            // lblPort
-            // 
-            this.lblPort.AutoSize = true;
-            this.lblPort.Location = new System.Drawing.Point(3, 6);
-            this.lblPort.Name = "lblPort";
-            this.lblPort.Size = new System.Drawing.Size(38, 17);
-            this.lblPort.TabIndex = 0;
-            this.lblPort.Text = "Port:";
-            // 
-            // panel5
-            // 
-            this.panel5.AutoSize = true;
-            this.panel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel5.Controls.Add(this.txtUserName);
-            this.panel5.Controls.Add(this.lblUserName);
-            this.panel5.Location = new System.Drawing.Point(3, 34);
-            this.panel5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(279, 28);
-            this.panel5.TabIndex = 4;
-            // 
-            // lblUserName
-            // 
-            this.lblUserName.AutoSize = true;
-            this.lblUserName.Location = new System.Drawing.Point(3, 6);
-            this.lblUserName.Name = "lblUserName";
-            this.lblUserName.Size = new System.Drawing.Size(81, 17);
-            this.lblUserName.TabIndex = 0;
-            this.lblUserName.Text = "User name:";
-            // 
-            // panel6
-            // 
-            this.panel6.AutoSize = true;
-            this.panel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel6.Controls.Add(this.label4);
-            this.panel6.Controls.Add(this.txtPassword);
-            this.panel6.Location = new System.Drawing.Point(288, 34);
-            this.panel6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(271, 28);
-            this.panel6.TabIndex = 5;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 6);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 17);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Password:";
-            // 
-            // btnFind
-            // 
-            this.btnFind.Location = new System.Drawing.Point(566, 36);
-            this.btnFind.Margin = new System.Windows.Forms.Padding(4);
-            this.btnFind.Name = "btnFind";
-            this.btnFind.Size = new System.Drawing.Size(92, 28);
-            this.btnFind.TabIndex = 3;
-            this.btnFind.Text = "Find";
-            this.btnFind.UseVisualStyleBackColor = true;
-            this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
-            // 
-            // lstNodes
-            // 
-            this.lstNodes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHost,
-            this.columnPort,
-            this.columnName,
-            this.columnType,
-            this.columnStatus});
-            this.lstNodes.ContextMenuStrip = this.contextMenuGNS3;
-            this.lstNodes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstNodes.FullRowSelect = true;
-            this.lstNodes.HideSelection = false;
-            this.lstNodes.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2});
-            this.lstNodes.Location = new System.Drawing.Point(4, 76);
-            this.lstNodes.Margin = new System.Windows.Forms.Padding(4);
-            this.lstNodes.MultiSelect = false;
-            this.lstNodes.Name = "lstNodes";
-            this.lstNodes.Size = new System.Drawing.Size(778, 141);
-            this.lstNodes.TabIndex = 1;
-            this.lstNodes.UseCompatibleStateImageBehavior = false;
-            this.lstNodes.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHost
-            // 
-            this.columnHost.Text = "Host";
-            this.columnHost.Width = 120;
-            // 
-            // columnPort
-            // 
-            this.columnPort.Text = "Port";
-            // 
-            // columnName
-            // 
-            this.columnName.Text = "Name";
-            this.columnName.Width = 120;
-            // 
-            // columnType
-            // 
-            this.columnType.Text = "Type";
-            this.columnType.Width = 100;
-            // 
-            // columnStatus
-            // 
-            this.columnStatus.Text = "Status";
             // 
             // contextMenuGNS3
             // 
@@ -793,83 +529,6 @@
             this.tsReload.Size = new System.Drawing.Size(274, 24);
             this.tsReload.Text = "Reload";
             // 
-            // rtbConsole
-            // 
-            this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbConsole.Location = new System.Drawing.Point(4, 265);
-            this.rtbConsole.Margin = new System.Windows.Forms.Padding(4);
-            this.rtbConsole.Name = "rtbConsole";
-            this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(778, 203);
-            this.rtbConsole.TabIndex = 3;
-            this.rtbConsole.Text = "";
-            this.rtbConsole.Visible = false;
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.AutoSize = true;
-            this.tableLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel6.ColumnCount = 4;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.Controls.Add(this.btnStartStop, 3, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnReloadStatus, 2, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnGraphics, 1, 0);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 221);
-            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 1;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(786, 40);
-            this.tableLayoutPanel6.TabIndex = 4;
-            // 
-            // btnStartStop
-            // 
-            this.btnStartStop.BackColor = System.Drawing.Color.LightGreen;
-            this.btnStartStop.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnStartStop.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.btnStartStop.FlatAppearance.BorderSize = 0;
-            this.btnStartStop.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnStartStop.Location = new System.Drawing.Point(707, 4);
-            this.btnStartStop.Margin = new System.Windows.Forms.Padding(4);
-            this.btnStartStop.Name = "btnStartStop";
-            this.btnStartStop.Size = new System.Drawing.Size(75, 32);
-            this.btnStartStop.TabIndex = 2;
-            this.btnStartStop.Text = "Start";
-            this.btnStartStop.UseVisualStyleBackColor = false;
-            this.btnStartStop.Click += new System.EventHandler(this.btnStartStop_Click);
-            // 
-            // btnReloadStatus
-            // 
-            this.btnReloadStatus.AutoSize = true;
-            this.btnReloadStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnReloadStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnReloadStatus.Enabled = false;
-            this.btnReloadStatus.Location = new System.Drawing.Point(593, 2);
-            this.btnReloadStatus.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnReloadStatus.Name = "btnReloadStatus";
-            this.btnReloadStatus.Size = new System.Drawing.Size(107, 36);
-            this.btnReloadStatus.TabIndex = 3;
-            this.btnReloadStatus.Text = "Reload Status";
-            this.btnReloadStatus.UseVisualStyleBackColor = true;
-            this.btnReloadStatus.Click += new System.EventHandler(this.btnReloadStatus_Click);
-            // 
-            // btnGraphics
-            // 
-            this.btnGraphics.AutoSize = true;
-            this.btnGraphics.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGraphics.Location = new System.Drawing.Point(487, 2);
-            this.btnGraphics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnGraphics.Name = "btnGraphics";
-            this.btnGraphics.Size = new System.Drawing.Size(100, 36);
-            this.btnGraphics.TabIndex = 4;
-            this.btnGraphics.Text = "Graphics";
-            this.btnGraphics.UseVisualStyleBackColor = true;
-            this.btnGraphics.Click += new System.EventHandler(this.btnGraphics_Click);
-            // 
             // bwGNS3_API
             // 
             this.bwGNS3_API.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwGNS3_API_DoWork);
@@ -888,7 +547,7 @@
             this.tsBtnSettings});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(800, 31);
+            this.menuStrip.Size = new System.Drawing.Size(800, 27);
             this.menuStrip.TabIndex = 16;
             this.menuStrip.Text = "toolStrip1";
             // 
@@ -898,7 +557,7 @@
             this.tsBtnSettings.Image = global::NTNN.Properties.Resources.settings;
             this.tsBtnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnSettings.Name = "tsBtnSettings";
-            this.tsBtnSettings.Size = new System.Drawing.Size(29, 28);
+            this.tsBtnSettings.Size = new System.Drawing.Size(29, 24);
             this.tsBtnSettings.Text = "toolStripButton1";
             this.tsBtnSettings.Click += new System.EventHandler(this.Settings_Click);
             // 
@@ -906,43 +565,6 @@
             // 
             this.bwCheckDevices.WorkerSupportsCancellation = true;
             this.bwCheckDevices.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwCheckDevices_DoWork);
-            // 
-            // txtIP
-            // 
-            this.txtIP.AllowInternalTab = false;
-            this.txtIP.AutoHeight = true;
-            this.txtIP.BackColor = System.Drawing.SystemColors.Window;
-            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.txtIP.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtIP.Location = new System.Drawing.Point(96, 4);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(5);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.ReadOnly = false;
-            this.txtIP.Size = new System.Drawing.Size(84, 22);
-            this.txtIP.TabIndex = 5;
-            this.txtIP.Text = "..";
-            // 
-            // txtUserName
-            // 
-            this.txtUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtUserName.Location = new System.Drawing.Point(91, 4);
-            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(185, 22);
-            this.txtUserName.TabIndex = 7;
-            this.txtUserName.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtUserName.WaterMarkText = "(Optional)";
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.txtPassword.Location = new System.Drawing.Point(83, 4);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(185, 22);
-            this.txtPassword.TabIndex = 6;
-            this.txtPassword.WaterMarkColor = System.Drawing.Color.Gray;
-            this.txtPassword.WaterMarkText = "(Optional)";
             // 
             // Form1
             // 
@@ -974,24 +596,7 @@
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.tabGNS3.ResumeLayout(false);
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
             this.contextMenuGNS3.ResumeLayout(false);
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -1016,43 +621,13 @@
         private System.Windows.Forms.ColumnHeader MacAddress;
         private System.Windows.Forms.ColumnHeader Status;
         private System.Windows.Forms.Label lblError;
-        private System.Windows.Forms.TabPage tabGNS3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox txtProjectName;
-        private System.Windows.Forms.Label lblProjectName;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TextBox txtHost;
-        private System.Windows.Forms.Label lblHost;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox txtPort;
-        private System.Windows.Forms.Label lblPort;
-        private System.Windows.Forms.Button btnFind;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label lblUserName;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ListView lstNodes;
-        private System.Windows.Forms.ColumnHeader columnHost;
-        private System.Windows.Forms.ColumnHeader columnPort;
-        private System.Windows.Forms.ColumnHeader columnName;
-        private System.Windows.Forms.ColumnHeader columnType;
-        private System.Windows.Forms.RichTextBox rtbConsole;
-        private ExtendedControls.WaterMarkTextBox txtUserName;
-        private ExtendedControls.WaterMarkTextBox txtPassword;
         private System.Windows.Forms.ContextMenuStrip contextMenuGNS3;
-        private System.Windows.Forms.ColumnHeader columnStatus;
         private System.Windows.Forms.ToolStripMenuItem tsStart;
         private System.Windows.Forms.ToolStripMenuItem tsStop;
         private System.Windows.Forms.ToolStripMenuItem tsSuspend;
         private System.Windows.Forms.ToolStripMenuItem tsReload;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.Button btnStartStop;
-        private System.Windows.Forms.Button btnReloadStatus;
         private System.ComponentModel.BackgroundWorker bwGNS3_API;
         private System.ComponentModel.BackgroundWorker bwListener;
-        private System.Windows.Forms.Button btnGraphics;
         private System.Windows.Forms.ToolStrip menuStrip;
         private System.Windows.Forms.ToolStripButton tsBtnSettings;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
