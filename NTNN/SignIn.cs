@@ -27,19 +27,26 @@ namespace NTNN
 
         private void btnSignIn_Click(object sender, EventArgs e)
         {
-            var login = txtLogin.Text;
-            var pass = txtPass.Text;
-            var val = SearchUser(login, pass);
-            if (val == true)
+            try
             {
-                Form1 form = new Form1();
-                this.Hide();
-                form.ShowDialog();
-                this.Close();
-            }
-            else if (val == false)
+                var login = txtLogin.Text;
+                var pass = txtPass.Text;
+                var val = SearchUser(login, pass);
+                if (val == true)
+                {
+                    Form1 form = new Form1();
+                    this.Hide();
+                    form.ShowDialog();
+                    this.Close();
+                }
+                else if (val == false)
+                {
+                    MessageBox.Show("Login or password is incorrect!");
+                }
+            }catch(Exception ex)
             {
-                MessageBox.Show("Login or password is incorrect!");
+                MessageBox.Show($"Internal error!{ex.Message}");
+                LoggingHelper.LogEntry(SystemCategories.GeneralError, $"{ex.Message} {ex.StackTrace}");
             }
         }
 
