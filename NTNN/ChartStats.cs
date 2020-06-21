@@ -168,7 +168,7 @@ namespace NTNN
                             PackageValues[i].Value = PingCompletedEventArgs.Reply.Status == IPStatus.Success ? 1 : 0;
                             double sumTime = pingReplies.Sum(v => (double) (v?.Status == IPStatus.Success ? (v?.RoundtripTime ?? 0) : 0));
                             //double sumBytes = pingReplies.Sum(v => v.Buffer.Length);
-                            InSpeedValues[i].Value = sumTime / pingReplies.Count;//sumTime > 0 ? sumBytes / sumTime : 0;
+                            InSpeedValues[i].Value = sumTime / pingReplies.Count(v => v != null);//sumTime > 0 ? sumBytes / sumTime : 0;
 
                             if (obj is Ping p)
                             {
